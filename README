@@ -1,0 +1,74 @@
+========================================
+ SOG Code Development & Run Environment
+========================================
+
+This is the root repository for development and running of the SOG_
+coupled biology-physics model of deep esturaries.
+
+.. _SOG: http://bjossa.eos.ubc.ca:9000/SOG/
+
+SOG is maintained in a set of Mercurial_ distributed version control
+repositories. The central, reference copies of those repositories are
+stored in :file:`/ocean/sallen/hg_repos/`
+
+.. _Mercurial: http://mercurial.selenic.com/
+
+If you're impatient, you can get a fresh SOG environment set up with
+the commands:
+
+.. code-block:: sh
+
+   $ hg clone /ocean/sallen/hg_repos/SOG
+   $ cd SOG
+   $ make env
+
+This will create a SOG environment in a directory called SOG. The
+environment looks like this::
+
+  SOG/
+           SOG-code-ocean/ - reference copy of the SOG-code repository
+           SOG-code-dev/ - clone of SOG-code-ocean for code development work
+           SOG-initial/ - SOG initialization data repository
+           SOG-forcing/ - SOG forcing data repository
+           SOG-project/ - directory for doing SOG runs in
+                                 profiles/ - profile output files
+                                 timeseries/ - timeseries output file
+
+For details of the recommended workflow in this environment, and how
+to customize it, read on...
+
+
+Create a SOG Environment with a Different Name
+==============================================
+
+To create a fresh SOG environment with called something other than
+`SOG` use the commands:
+
+.. code-block:: sh
+
+   $ hg clone /ocean/sallen/hg_repos/SOG newSOG
+   $ cd newSOG
+   $ make env
+
+
+Create a SOG Environment on a non-`ocean` Computer
+==================================================
+
+Assuming that you have an account on `ocean` and have :command:`ssh`
+key access set up, you can set up a fresh SOG environment with the
+commands:
+
+.. code-block:: sh
+
+   $ hg clone ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos/SOG
+   $ cd SOG
+   $ make env HG_REPOS=ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos
+
+where <user> is your `ocean` user id, and <host> is the name of one of
+the `ocean` computers; e.g. `nerka`, `grinder`, `herring`.
+
+
+..
+  Local variables:
+  mode: rst
+  End:
