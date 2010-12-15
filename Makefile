@@ -21,6 +21,7 @@ env:
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
 	hg clone $(HG_REPOS)/SOG-forcing
+	make project
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries

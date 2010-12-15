@@ -31,8 +31,11 @@ environment looks like this::
            SOG-initial/ - SOG initialization data repository
            SOG-forcing/ - SOG forcing data repository
            SOG-project/ - directory for doing SOG runs in
-                                 profiles/ - profile output files
-                                 timeseries/ - timeseries output file
+                            profiles/ - profile output files
+                            timeseries/ - timeseries output file
+
+Feel free to to rename the default `SOG-project` directory to
+something more appropriate to you project.
 
 For details of the recommended workflow in this environment, and how
 to customize it, read on...
