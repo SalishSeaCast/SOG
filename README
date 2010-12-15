@@ -44,8 +44,8 @@ to customize it, read on...
 Create a SOG Environment with a Different Name
 ==============================================
 
-To create a fresh SOG environment with called something other than
-`SOG` use the commands:
+To create a fresh SOG environment called something other than `SOG`
+use the commands:
 
 .. code-block:: sh
 
@@ -69,6 +69,18 @@ commands:
 
 where <user> is your `ocean` user id, and <host> is the name of one of
 the `ocean` computers; e.g. `nerka`, `grinder`, `herring`.
+
+
+Create a SOG Project Directory with a Different Name
+====================================================
+
+To create a fresh SOG project directory called something other than
+`SOG-project` (`SOG-hindcast`, for example) use the commands:
+
+.. code-block:: sh
+
+   $ cd SOG
+   $ make project PROJECT_NAME=SOG-hindcast
 
 
 ..
