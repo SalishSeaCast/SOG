@@ -16,11 +16,16 @@ help:
 	@echo "Set new project name with \`make project PROJECT_NAME=<name>'"
 	@echo "where <name> defaults to $(PROJECT_NAME)"
 
+HG_REMOTECMD = \\n[ui]\\nremotecmd = /home/dlatorne/ocean/.virtualenvs/buildbot-0.8.1/bin/hg
+
 env:
 	hg clone $(HG_REPOS)/SOG-code SOG-code-ocean
+	echo $(HG_REMOTECMD) >> SOG-code-ocean/.hg/hgrc
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
+	echo $(HG_REMOTECMD) >> SOG-initial/.hg/hgrc
 	hg clone $(HG_REPOS)/SOG-forcing
+	echo $(HG_REMOTECMD) >> SOG-forcing/.hg/hgrc
 	make project
 
 project:
