@@ -2,7 +2,7 @@
 
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
-BUILDBOT_ENV = /home/dlatorne/ocean/.virtualenvs/buildbot-0.8.1
+BUILDBOT_ENV = /ocean/dlatorne/.virtualenvs/buildbot-0.8.1
 HG_REMOTECMD = \\n[ui]\\nremotecmd = $(BUILDBOT_ENV)/bin/hg
 
 .PHONY:	help env project
