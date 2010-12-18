@@ -1,8 +1,9 @@
-SOG Code Development & Run Environment
+SOG Run & Code Development Environment
 --------------------------------------
 
-This is the root repository for development and running of the SOG_
-coupled biology-physics model of deep esturaries.
+This is the root repository for running the SOG_ coupled
+biology-physics model of deep estuaries, and for doing development
+work on the model.
 
 .. _SOG: http://bjossa.eos.ubc.ca:9000/SOG/
 
@@ -12,8 +13,8 @@ stored in :file:`/ocean/sallen/hg_repos/`
 
 .. _Mercurial: http://mercurial.selenic.com/
 
-If you're impatient, you can get a fresh SOG environment set up with
-the commands:
+If you're impatient, you can get a fresh SOG environment set up on one
+of the :kbd:`ocean` machines with the commands:
 
 .. code-block:: sh
 
@@ -21,8 +22,8 @@ the commands:
    $ cd SOG
    $ make env
 
-This will create a SOG environment in a directory called SOG. The
-environment looks like this::
+This will create a SOG environment in a directory called
+:file:`SOG`. The environment looks like this::
 
   SOG/
            SOG-code-ocean/ - reference copy of the SOG-code repository
@@ -36,8 +37,9 @@ environment looks like this::
 Feel free to to rename the default :file:`SOG-project` directory to
 something more appropriate to you project.
 
-For details of the recommended workflow in this environment, and how
-to customize it, read on...
+For details of how to customize this process, and links to other
+documentation like the recommended workflow in this environment, read
+on...
 
 
 Create a SOG Environment with a Different Name
@@ -50,25 +52,7 @@ use the commands:
 
    $ hg clone /ocean/sallen/hg_repos/SOG newSOG
    $ cd newSOG
-   $ make env
-
-
-Create a SOG Environment on a non-`ocean` Computer
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Assuming that you have an account on :kbd:`ocean` and have :command:`ssh`
-key access set up, you can set up a fresh SOG environment with the
-commands:
-
-.. code-block:: sh
-
-   $ hg clone ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos/SOG
-   $ cd SOG
-   $ make env HG_REPOS=ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos
-
-where :kbd:`<user>` is your :kbd:`ocean` user id, and :kbd:`<host>` is
-the name of one of the :kbd:`ocean` computers; e.g. :kbd:`nerka`,
-:kbd:`grinder`, :kbd:`herring`.
+   $ make env 
 
 
 Create a SOG Project Directory with a Different Name
@@ -83,6 +67,51 @@ commands:
    $ cd SOG
    $ make project PROJECT_NAME=SOG-hindcast
 
+
+Create a SOG Environment on a non-:kbd:`ocean` Computer
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to run SOG or work on the code on your own computer there
+are a few pre-requisites. It's pretty easy to get them set up on Linux
+or OS/X and probably a bit more of a challenge on
+Windows. Pre-requisites:
+
+* Mercurial_ >1.0; it's probably already installed
+* an account on :kbd:`ocean` with :command:`ssh` key access set up
+* g95_ FORTRAN compiler; not required to create the SOG environment,
+  but needed to compile and run the code. You'll probably need to use
+  your OS's package installer, or download and install the appropriate
+  binary.
+
+  .. _g95: http://www.g95.org/
+
+With the above in place, you can set up a fresh SOG environment with
+the commands:
+
+.. code-block:: sh
+
+   $ hg clone ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos/SOG
+   $ cd SOG
+   $ make env HG_REPOS=ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos
+
+where :kbd:`<user>` is your :kbd:`ocean` user id, and :kbd:`<host>` is
+the name of one of the :kbd:`ocean` computers; e.g. :kbd:`nerka`,
+:kbd:`grinder`, :kbd:`herring`.
+
+
+SOG Documentation
+~~~~~~~~~~~~~~~~~
+
+More documentation about SOG can be found online at
+http://eos.ubc.ca/~sallen/SOG-docs/. The source files for the
+documentation are in :file:`SOG/docs/`. The documentation includes:
+
+* recommended workflows for the environment described above
+* information about the `SOG buildbot`_ automated testing system
+* information about the `SOG trac`_ code browser and issue tracker
+
+  .. _SOG buildbot: http://bjossa.eos.ubc.ca:8010/
+  .. _SOG trac: http://bjossa.eos.ubc.ca:9000/
 
 ..
   Local variables:
