@@ -1,6 +1,5 @@
-========================================
- SOG Code Development & Run Environment
-========================================
+SOG Code Development & Run Environment
+--------------------------------------
 
 This is the root repository for development and running of the SOG_
 coupled biology-physics model of deep esturaries.
@@ -34,7 +33,7 @@ environment looks like this::
                             profiles/ - profile output files
                             timeseries/ - timeseries output file
 
-Feel free to to rename the default `SOG-project` directory to
+Feel free to to rename the default :file:`SOG-project` directory to
 something more appropriate to you project.
 
 For details of the recommended workflow in this environment, and how
@@ -42,9 +41,9 @@ to customize it, read on...
 
 
 Create a SOG Environment with a Different Name
-==============================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To create a fresh SOG environment called something other than `SOG`
+To create a fresh SOG environment called something other than :file:`SOG`
 use the commands:
 
 .. code-block:: sh
@@ -55,9 +54,9 @@ use the commands:
 
 
 Create a SOG Environment on a non-`ocean` Computer
-==================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Assuming that you have an account on `ocean` and have :command:`ssh`
+Assuming that you have an account on :kbd:`ocean` and have :command:`ssh`
 key access set up, you can set up a fresh SOG environment with the
 commands:
 
@@ -67,15 +66,17 @@ commands:
    $ cd SOG
    $ make env HG_REPOS=ssh://<user>@<host>.eos.ubc.ca//ocean/sallen/hg_repos
 
-where <user> is your `ocean` user id, and <host> is the name of one of
-the `ocean` computers; e.g. `nerka`, `grinder`, `herring`.
+where :kbd:`<user>` is your :kbd:`ocean` user id, and :kbd:`<host>` is
+the name of one of the :kbd:`ocean` computers; e.g. :kbd:`nerka`,
+:kbd:`grinder`, :kbd:`herring`.
 
 
 Create a SOG Project Directory with a Different Name
-====================================================
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To create a fresh SOG project directory called something other than
-`SOG-project` (`SOG-hindcast`, for example) use the commands:
+:file:`SOG-project` (:file:`SOG-hindcast`, for example) use the
+commands:
 
 .. code-block:: sh
 
