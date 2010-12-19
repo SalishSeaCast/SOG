@@ -9,3 +9,5 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   buildbot
+   trac

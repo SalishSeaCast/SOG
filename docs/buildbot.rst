@@ -38,5 +38,3 @@ Atom/RSS feed, or via an email list. See the docs for details.
   Local variables:
   mode: rst
   End:
-
-

@@ -107,11 +107,11 @@ http://eos.ubc.ca/~sallen/SOG-docs/. The source files for the
 documentation are in :file:`SOG/docs/`. The documentation includes:
 
 * recommended workflows for the environment described above
-* information about the `SOG buildbot`_ automated testing system
-* information about the `SOG trac`_ code browser and issue tracker
+* information about the :ref:`SOG buildbot automated testing
+  system<SOGbuildbot-section>`
+* information about the :ref:`SOG trac code browser and issue
+  tracker<SOGtrac-section>`
 
-  .. _SOG buildbot: http://bjossa.eos.ubc.ca:8010/
-  .. _SOG trac: http://bjossa.eos.ubc.ca:9000/
 
 ..
   Local variables:
