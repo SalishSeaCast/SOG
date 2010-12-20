@@ -25,7 +25,7 @@ def main(argv=[__name__]):
         hgrc = argv[1]
         buildbot_version = argv[2]
         remotecmd = (
-            '/ocean/dlatorne/.virtualenvs/buildbot-{0}'
+            '/ocean/dlatorne/.virtualenvs/buildbot-{0}/bin/hg'
             .format(buildbot_version))
         config = SafeConfigParser()
         with open(hgrc, 'rb') as fp:
