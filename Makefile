@@ -2,15 +2,16 @@
 
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
-BUILDBOT_ENV = /ocean/dlatorne/.virtualenvs/buildbot-0.8.1
-HG_REMOTECMD = \\n[ui]\\nremotecmd = $(BUILDBOT_ENV)/bin/hg
+BUILDBOT_VERSION = 0.8.1
+BUILDBOT_ENV = /ocean/dlatorne/.virtualenvs/buildbot-$(BUILDBOT_VERSION)
 
-.PHONY:	help env project
+.PHONY:	help env patch_hgrc project
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of:"
 	@echo "  env      to make a full SOG environment"
 	@echo "  project  to make a new project directory for running SOG"
+	@echo "  patch_hgrc  patch hgrc files so pushes to ocean trigger buildbot"
 	@echo ""
 	@echo "Change hg repository source with \`make env HG_REPOS=<path>'"
 	@echo "where <path> defaults to $(HG_REPOS)"
@@ -19,15 +20,18 @@ help:
 	@echo "where <name> defaults to $(PROJECT_NAME)"
 
 env:
-	echo $(HG_REMOTECMD) >> .hg/hgrc
 	hg clone $(HG_REPOS)/SOG-code SOG-code-ocean
-	echo $(HG_REMOTECMD) >> SOG-code-ocean/.hg/hgrc
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
-	echo $(HG_REMOTECMD) >> SOG-initial/.hg/hgrc
 	hg clone $(HG_REPOS)/SOG-forcing
-	echo $(HG_REMOTECMD) >> SOG-forcing/.hg/hgrc
+	make patch_hgrc
 	make project
+
+patch_hgrc:
+	python patch_hgrc.py .hg/hgrc $(BUILDBOT_VERSION)
+	python patch_hgrc.py SOG-code-ocean/.hg/hgrc $(BUILDBOT_VERSION)
+	python patch_hgrc.py SOG-initial/.hg/hgrc $(BUILDBOT_VERSION)
+	python patch_hgrc.py SOG-forcing/.hg/hgrc $(BUILDBOT_VERSION)
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
