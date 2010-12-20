@@ -25,6 +25,8 @@ env:
 	hg clone $(HG_REPOS)/SOG-initial
 	hg clone $(HG_REPOS)/SOG-forcing
 	make patch_hgrc
+	make project PROJECT_NAME=SOG-test/SOG-ocean-`date "+%Y-%m-%d"`
+	make project PROJECT_NAME=SOG-test/SOG-dev-`date "+%Y-%m-%d"`
 	make project
 
 patch_hgrc:

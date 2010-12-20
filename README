@@ -26,13 +26,20 @@ This will create a SOG environment in a directory called
 :file:`SOG`. The environment looks like this::
 
   SOG/
-           SOG-code-ocean/ - reference copy of the SOG-code repository
-           SOG-code-dev/ - clone of SOG-code-ocean for code development work
-           SOG-initial/ - SOG initialization data repository
-           SOG-forcing/ - SOG forcing data repository
-           SOG-project/ - directory for doing SOG runs in
-                            profiles/ - profile output files
-                            timeseries/ - timeseries output file
+       SOG-code-ocean/ - reference copy of the SOG-code repository
+       SOG-code-dev/ - clone of SOG-code-ocean for code development work
+       SOG-initial/ - SOG initialization data repository
+       SOG-forcing/ - SOG forcing data repository
+       SOG-test/ - directory for reference test results
+         SOG-dev-yyyy-mm-dd/ - ref test results from SOG-code-dev on yyyy-mm-dd
+                                 profiles/ - profile output files
+                                 timeseries/ - timeseries output file
+         SOG-ocean-yyyy-mm-dd/ - ref test results from SOG-code-ocean on yyyy-mm-dd
+                                 profiles/ - profile output files
+                                 timeseries/ - timeseries output file
+       SOG-project/ - directory for doing SOG runs in
+                        profiles/ - profile output files
+                        timeseries/ - timeseries output file
 
 Feel free to to rename the default :file:`SOG-project` directory to
 something more appropriate to you project.
