@@ -4,6 +4,7 @@ HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
 BUILDBOT_VERSION = 0.8.1
 BUILDBOT_ENV = /ocean/dlatorne/.virtualenvs/buildbot-$(BUILDBOT_VERSION)
+PYTHON = /usr/local/python26/bin/python
 
 .PHONY:	help env patch_hgrc project
 
@@ -24,16 +25,16 @@ env:
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
 	hg clone $(HG_REPOS)/SOG-forcing
-	make patch_hgrc
+	make patch-hgrc
 	make project PROJECT_NAME=SOG-test/SOG-ocean-`date "+%Y-%m-%d"`
 	make project PROJECT_NAME=SOG-test/SOG-dev-`date "+%Y-%m-%d"`
 	make project
 
-patch_hgrc:
-	python patch_hgrc.py .hg/hgrc $(BUILDBOT_VERSION)
-	python patch_hgrc.py SOG-code-ocean/.hg/hgrc $(BUILDBOT_VERSION)
-	python patch_hgrc.py SOG-initial/.hg/hgrc $(BUILDBOT_VERSION)
-	python patch_hgrc.py SOG-forcing/.hg/hgrc $(BUILDBOT_VERSION)
+patch-hgrc:
+	$(PYTHON) patch_hgrc.py .hg/hgrc $(BUILDBOT_VERSION)
+	$(PYTHON) patch_hgrc.py SOG-code-ocean/.hg/hgrc $(BUILDBOT_VERSION)
+	$(PYTHON) patch_hgrc.py SOG-initial/.hg/hgrc $(BUILDBOT_VERSION)
+	$(PYTHON) patch_hgrc.py SOG-forcing/.hg/hgrc $(BUILDBOT_VERSION)
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
