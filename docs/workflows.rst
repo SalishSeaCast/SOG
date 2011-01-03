@@ -7,8 +7,8 @@ Set Up Your Mercurial Configuration
 -----------------------------------
 
 Before you use Mercurial_ to track changes that you make the the SOG
-code, documentation, or intialization and forcing data you need to do
-some intial setup of your Mercurial configuration. 
+code, documentation, or initialization and forcing data you need to do
+some initial setup of your Mercurial configuration. 
 
 .. _Mercurial: http://mercurial.selenic.com/
 
@@ -165,7 +165,7 @@ Add :file:`/ocean/dlatorne/.virtualenvs/SOG-hg-buildbot` to your
 :envvar:`PYTHONPATH` environment variable, and make the Mercurial
 instance installed there your default. This ensures that the email
 notification and buildbot hooks will work properly when you push
-changes to any of the SOG respositories.  If you use :command:`bash`
+changes to any of the SOG repositories.  If you use :command:`bash`
 as your shell use:
 
 .. code-block:: sh
