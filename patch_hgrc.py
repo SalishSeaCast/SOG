@@ -1,9 +1,10 @@
 """Patch the specified hgrc file to add a ui remotecmd key that points
-to the Mercurial installed in the buildbot virtualenv on ocean. This
-is necessary to make the changeset hook in the ocean repository
-successfully send a notification to buildbot.
+to the Mercurial installed in the SOG-hg-buildbot virtualenv on
+ocean. This is necessary to make the changeset hook in the ocean
+repository successfully send a notification to buildbot when
+changesets are pushed via ssh.
 
-Usage: python patch_hgrc.py <path-to-hgrc> <buildbot-version>
+Usage: python patch_hgrc.py <path-to-hgrc>
 
 """
 from __future__ import print_function
@@ -20,13 +21,10 @@ class Usage(Exception):
 
 def main(argv=[__name__]):
     try:
-        if len(argv) < 3:
+        if len(argv) < 2:
             raise Usage('too few arguments')
         hgrc = argv[1]
-        buildbot_version = argv[2]
-        remotecmd = (
-            '/ocean/dlatorne/.virtualenvs/buildbot-{0}/bin/hg'
-            .format(buildbot_version))
+        remotecmd = '/ocean/dlatorne/.virtualenvs/SOG-hg-buildbot/bin/hg'
         config = SafeConfigParser()
         with open(hgrc, 'rb') as fp:
             config.readfp(fp)

@@ -1,10 +1,8 @@
-# Makefile for SOG Code Development & Run Environment
+# Makefile for SOG Run & Code Development Environment
 
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
-BUILDBOT_VERSION = 0.8.1
-BUILDBOT_ENV = /ocean/dlatorne/.virtualenvs/buildbot-$(BUILDBOT_VERSION)
-PYTHON = /usr/local/python26/bin/python
+PYTHON = /usr/local/python26/bin/python2.6
 
 .PHONY:	help env patch_hgrc project
 
@@ -31,10 +29,10 @@ env:
 	make project
 
 patch-hgrc:
-	$(PYTHON) patch_hgrc.py .hg/hgrc $(BUILDBOT_VERSION)
-	$(PYTHON) patch_hgrc.py SOG-code-ocean/.hg/hgrc $(BUILDBOT_VERSION)
-	$(PYTHON) patch_hgrc.py SOG-initial/.hg/hgrc $(BUILDBOT_VERSION)
-	$(PYTHON) patch_hgrc.py SOG-forcing/.hg/hgrc $(BUILDBOT_VERSION)
+	$(PYTHON) patch_hgrc.py .hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-code-ocean/.hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-initial/.hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-forcing/.hg/hgrc
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
