@@ -26,6 +26,8 @@ env:
 	make patch-hgrc
 	make project PROJECT_NAME=SOG-test/SOG-ocean-`date "+%Y-%m-%d"`
 	make project PROJECT_NAME=SOG-test/SOG-dev-`date "+%Y-%m-%d"`
+	(cd SOG-test && ln -s ../SOG-initial SOG-initial)
+	(cd SOG-test && ln -s ../SOG-forcing SOG-forcing)
 	make project
 
 patch-hgrc:
