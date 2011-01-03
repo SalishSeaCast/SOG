@@ -113,7 +113,8 @@ More documentation about SOG can be found online at
 http://eos.ubc.ca/~sallen/SOG-docs/. The source files for the
 documentation are in :file:`SOG/docs/`. The documentation includes:
 
-* recommended workflows for the environment described above
+* :ref:`recommended workflows<workflows-section>` for the environment
+  described above
 * information about the :ref:`SOG buildbot automated testing
   system<SOGbuildbot-section>`
 * information about the :ref:`SOG trac code browser and issue

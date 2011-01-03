@@ -9,5 +9,6 @@ Contents:
    :maxdepth: 2
 
    quickstart
+   workflows
    buildbot
    trac
