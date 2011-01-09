@@ -186,6 +186,140 @@ editor.
    take effect whenever you log in.
 
 
+Using Mercurial
+---------------
+
+If you're not familiar with Mercurial you should read at least
+`Chapter 2`_ of the `Mercurial - The Definitive Guide`_ book *right
+now*.
+
+.. _Chapter 2: http://hgbook.red-bean.com/read/a-tour-of-mercurial-the-basics.html
+.. _Mercurial - The Definitive Guide: http://hgbook.red-bean.com/
+
+
+.. _SharedRepos-section:
+
+Shared Repositories in the SOG Environment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Your SOG working environment includes clones of 4 shared Mercurial
+repositories from the EOS ocean file server:
+
+* :file:`SOG`
+    The top level repository that contains the Makefile for managing
+    your SOG environment, the source files for this documentation, and
+    the other 3 repository clones as sub-directories.
+* :file:`SOG-code`
+    The SOG source code which is cloned to :file:`SOG-code-ocean` in
+    tour environment.
+* :file:`SOG-initial`
+    The SOG initial conditions data repository that contains CTD and
+    nutrient data files used to initialize SOG runs.
+* :file:`SOG-forcing`
+    The SOG forcing data repository that contains meteorological,
+    river flow, wind, and bottom conditions data files used provide
+    forcing terms at each time-step in SOG runs.
+
+
+.. _SubscribingToEmailNotifications-section:
+
+Subscribing to Email Notifications
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To keep tabs on changes that other users are making to
+:ref:`SharedRepos-section` you should subscribe to email notifications
+for each repository. You can ask Doug or Susan to do that for you, or
+you can do it yourself with the following commands:
+
+.. code-block:: sh
+
+   $ cd SOG
+   $ hg clone /ocean/sallen/hg_repos/notify
+   $ cd notify
+   $ emacs notify.conf
+
+Add your email address to the comma separated list of addresses for
+each repository in the :kbd:`[reposubs]` section of
+:file:`notify.conf` and save the file. Commit the change in your local
+repository and push it to ocean:
+
+.. code-block:: sh
+
+   $ hg commit
+   $ hg push
+
+A Mercurial hook in the :file:`/ocean/sallen/hg_repos/notify`
+repository will update the :file:`notify.conf` file there and you
+should receive an email message for each changeset that you, or any
+other user pushes to the  :file:`/ocean/sallen/hg_repos/SOG*`
+repositories that you subscribed to.
+
+:file:`notify.conf` also contains a subscription list for changes to
+the :ref:`SOGbuildbot-section` code and docs that you can join if you
+are interested.
+
+
+Keeping Your Repository Clones Up To Date
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you have :ref:`subscribed to email notifications
+<SubscribingToEmailNotifications-section>`, you will receive an
+message from :kbd:`hg_repos@eos.ubc.ca` for each changeset that you
+or any other user pushes to the shared repositories on ocean. The
+subject of the message will indicate that it is a Mercurial update
+message, tell you which repositories it applies to, and give you 50
+characters (or so) of the commit message; example::
+
+  HG update: SOG-code: Delete unused new_year.f90 source code file.
+
+The message contains details of the changeset and a link to the
+changeset in the :ref:`SOGtrac-section`.
+
+When you receive 1 or more changeset notification messages for a
+repository you should pull you should pull the changes into your local
+copy of the repository and update it. Recalling that the
+:file:`SOG-code` repository on ocean is cloned to
+:file:`SOG-code-ocean` in your SOG environment, after receiving the
+message above you should:
+
+.. code-block:: sh
+   
+   $ cd SOG-code-ocean
+   $ hg pull
+   $ hg update
+
+If the update results in a merge Mercurial will do as much as the
+merge as it can automatically and remind you to commit the result of
+the merge when it is done. If a manual merge is necessary, Mercurial
+will launch emacs to help you do the merge and remind you to commit
+the result of the merge when you are done.
+
+If you haven't :ref:`subscribed to email notifications
+<SubscribingToEmailNotifications-section>`, think you may have
+missed some, or just want to be absolutely certain that your
+repositories clones are up to date you can get a listing of any
+incoming changesets by going into each repository directory and
+issuing the :command:`hg incoming` command; example:
+
+.. code-block:: sh
+   
+   $ cd SOG-code-ocean
+   $ hg incoming
+
+If there are any changes you can pull them in and update your
+repository with:
+
+.. code-block:: sh
+   
+   $ hg pull
+   $ hg update
+
+If the update results in a merge Mercurial will do as much as the
+merge as it can automatically and remind you to commit the result of
+the merge when it is done. If a manual merge is necessary, Mercurial
+will launch emacs to help you do the merge and remind you to commit
+the result of the merge when you are done.
+
 ..
   Local variables:
   mode: rst
