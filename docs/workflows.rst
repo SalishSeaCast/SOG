@@ -8,7 +8,7 @@ Set Up Your Mercurial Configuration
 
 Before you use Mercurial_ to track changes that you make the the SOG
 code, documentation, or initialization and forcing data you need to do
-some initial setup of your Mercurial configuration. 
+some initial setup of your Mercurial configuration.
 
 .. _Mercurial: http://mercurial.selenic.com/
 
@@ -28,7 +28,7 @@ editor.
 
    .. code-block:: sh
 
-      $ export EDITOR=emacs 
+      $ export EDITOR=emacs
       $ export VISUAL=emacs
 
    and add the same commands to your :file:`~/.bash_profile` file so that
@@ -37,7 +37,7 @@ editor.
 
    .. code-block:: csh
 
-      $ setenv EDITOR emacs 
+      $ setenv EDITOR emacs
       $ setenv VISUAL emacs
 
    and add the same commands to your :file:`~/.cshrc` file so that
@@ -127,7 +127,7 @@ editor.
 
       Restore ()
       {
-          cp "$BACKUP" "$LOCAL" 
+          cp "$BACKUP" "$LOCAL"
       }
 
       ExitOK ()
@@ -142,7 +142,7 @@ editor.
       if which merge > /dev/null 2>&1 ; then
           if merge "$LOCAL" "$BASE" "$OTHER" 2> /dev/null; then
           # success!
-          ExitOK 
+          ExitOK
           fi
           Restore
       elif which diff3 > /dev/null 2>&1 ; then
@@ -153,13 +153,19 @@ editor.
           Restore
       fi
 
-      if emacs -q --no-site-file --eval "(ediff-merge-with-ancestor \"$BACKUP\" \"$OTHER\" \"$BASE\" nil \"$LOCAL\")" 
-      then       
+      if emacs -q --no-site-file --eval "(ediff-merge-with-ancestor \"$BACKUP\" \"$OTHER\" \"$BASE\" nil \"$LOCAL\")"
+      then
           ExitOK
       fi
 
       echo "emacs-merge: failed to merge files"
       exit 1
+
+   Make :file:`emacs-merge.sh` executable with:
+
+   .. code-block:: sh
+
+      $ chmod u+x ~/bin/emacs-merge.sh
 
 #. Add :file:`/ocean/dlatorne/.virtualenvs/SOG-hg-buildbot` to your
    :envvar:`PYTHONPATH` environment variable, and make the Mercurial
