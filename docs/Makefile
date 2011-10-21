@@ -5,13 +5,13 @@
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 BUILDDIR      = _build
-EOS_HOST	  = grinder
+EOS_HOST	  = nerka
 
 # Internal variables.
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(SPHINXOPTS) .
 EOS_WEB = /home/sallen/public_html/SOG-docs/
 
-.PHONY: help clean html 
+.PHONY: help clean html
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
