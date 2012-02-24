@@ -18,13 +18,13 @@ some initial setup of your Mercurial configuration.
    before you push changes to the central, shared repositories so that
    the email notification and buildbot hooks will work properly.
 
-These instructions assume that you use :command:`emacs` as your
+These instructions assume that you use :program:`emacs` as your
 editor.
 
 #. Set the :envvar:`EDITOR` and :envvar:`VISUAL` environment variables
-   to :command:`emacs` to ensure that Mercurial will take you into
-   :command:`emacs`, not :command:`vi` for creation of commit
-   messages, etc.  If you use :command:`bash` as your shell use:
+   to :program:`emacs` to ensure that Mercurial will take you into
+   :program:`emacs`, not :program:`vi` for creation of commit
+   messages, etc.  If you use :program:`bash` as your shell use:
 
    .. code-block:: sh
 
@@ -33,7 +33,7 @@ editor.
 
    and add the same commands to your :file:`~/.bash_profile` file so that
    the environment variables are set whenever you log in. If you use
-   :command:`csh` as your shell use:
+   :program:`csh` as your shell use:
 
    .. code-block:: csh
 
@@ -60,7 +60,7 @@ editor.
    * Tell Mercurial to find your list of globally ignored files in
      :file:`~/.hgignore` (see below)
    * Tell Mercurial to use the :file:`emacs-merge.sh` shell script (see
-     below) to hook into :command:`emacs` as your merge resolution tool
+     below) to hook into :program:`emacs` as your merge resolution tool
 
 #. Create a :file:`.hgignore` file in your home directory containing:
 
@@ -72,7 +72,7 @@ editor.
       syntax: regexp
       (.*/)?\#[^/]*\#$
 
-   These lines will cause Mercurial to ignore :command:`emacs` temporary
+   These lines will cause Mercurial to ignore :program:`emacs` temporary
    and backup files in all of your Mercurial repositories (not just the
    SOG ones).
 
@@ -83,7 +83,7 @@ editor.
 
       $ mkdir ~/bin
 
-   Add :file:`~/bin` to your path. If you use :command:`bash` as your
+   Add :file:`~/bin` to your path. If you use :program:`bash` as your
    shell use:
 
    .. code-block:: sh
@@ -92,7 +92,7 @@ editor.
 
    and add the same command to your :file:`~/.bash_profile` file so that
    :file:`~/bin` is added to your path whenever you log in. If you use
-   :command:`csh` as your shell use:
+   :program:`csh` as your shell use:
 
    .. code-block:: csh
 
@@ -171,7 +171,7 @@ editor.
    :envvar:`PYTHONPATH` environment variable, and make the Mercurial
    instance installed there your default. This ensures that the email
    notification and buildbot hooks will work properly when you push
-   changes to any of the SOG repositories.  If you use :command:`bash`
+   changes to any of the SOG repositories.  If you use :program:`bash`
    as your shell use:
 
    .. code-block:: sh
@@ -181,7 +181,7 @@ editor.
 
    and add the same 1st command to your :file:`~/.bash_profile`, and the
    end to your :file:`~/.bashrc` file so that they take effect whenever
-   you log in. If you use :command:`csh` as your shell use:
+   you log in. If you use :program:`csh` as your shell use:
 
    .. code-block:: csh
 
@@ -340,7 +340,7 @@ repository Mercurial will tell you that you need to do a merge. It
 will refuse to do the merge if you have any uncommitted changes in
 your repository, so clean up before you pull. Mercurial is pretty good
 at merging files automatically, but sometimes it needs help and it
-will open :command:`emacs` in :kbd:`ediff` mode for you to manually
+will open :program:`emacs` in :kbd:`ediff` mode for you to manually
 merge the changes in a file where it find unresolvable conflicts. Once
 a merge is finished, Mercurial will remind you to commit the result of
 the merge. Use a commit message something like::
@@ -352,7 +352,188 @@ For more information about merging see `Chapter 3`_ of the
 
 .. _Chapter 3: http://hgbook.red-bean.com/read/a-tour-of-mercurial-merging-work.html
 
+
+.. _Using_gfortran-section:
+
+Using :program:`gfortran`
+-------------------------
+
+These are work in progress notes on changing the SOG build tool chain
+from using g95_ to using gfortran_.
+
+.. note::
+
+   :program:`gfortran` is not (yet) installed on the ocean
+   machines. For now these notes documents Doug's development work on
+   OS/X 10.6 (Snow Leopard).
+
+.. _g95: http://www.g95.org/
+.. _gfortran: http://gcc.gnu.org/wiki/GFortran
+
+Development of the :program:`g95` Fortran 95 compiler appears to have
+ceased (or at least gone on hiatus) in late-2008. On the other hand,
+compared to its moribund state in 2006, the :program:`gfortran`
+compiler is under active development and appears to have become the
+free/open-source Fortran 95 compiler of choice.
+
+
+Installing :program:`gfortran` on OS/X
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are a variety of options described on the `gfortran binaries`_
+page. These notes are based on an installation from the
+
+* Snow Leopard (10.6) on Intel 64-bit processors (gfortran 4.6.2):
+  download (released on 2011-10-21)
+
+link.
+
+.. _gfortran binaries: http://gcc.gnu.org/wiki/GFortranBinaries
+
+Installation of the disk image from that link puts the ditribution in
+:file:`/usr/local/gfortran` with executable links in
+:file:`/usr/local/bin`. Make sure that :file:`/usr/local/bin` is on
+your path.
+
+
+Using :program:`gfortran`
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can do a clean :program:`gfortran` build with:
+
+.. code-block:: sh
+
+   $ make clean && make F90=gfortran LD=gfortran
+
+If/when we adopt :program:`gfortran` as the standard compiler for the
+SOG project the :file:`Mafefile` will be changed to set :makevar:`F90`
+and :makevar:`LD` variable values to :program:`gfortran`.
+
+
+:file:`Makefile` Changes
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+* :program:`gfortran` doesn't recognize the :program:`g95`
+  :option:`-ftrace=full` option in the :makevar:`FFLAGS_DEV` variable,
+  it uses :option:`-fbacktrace` instead
+
+* The :program:`g95` :option:`-fbounds-check` in the
+  :makevar:`FFLAGS-DEV` needs to be changed to the more general
+  :option:`-fcheck=all` that includes bounds checking
+
+
+Code Changes
+~~~~~~~~~~~~
+
+The code at Mercurial changeset 8ff28b078730_ builds cleanly with
+:program:`g95`. The changes below were required to get a clean build
+with :program:`gfortran`.
+
+.. _8ff28b078730: http://bjossa.eos.ubc.ca:9000/SOG/changeset/8ff28b078730714e008944df6794cdd0778f646b/SOG-code
+
+Errors
+++++++
+
+Compiling with :program:`gfortran` produces::
+
+  air_sea_fluxes.f90:160.29:
+
+      h_latent = max(h_latent, 0)
+                               1
+  Error: 'a2' argument of 'max' intrinsic at (1) must be REAL(8)
+
+Changing that line to:
+
+.. code-block:: fortran
+
+   h_latent = max(h_latent, 0.0d0)
+
+resolves the compile time error and diffs clean for a 300 hour infile
+run when compiled with :program:`g95`. However, running the
+:program:`gfortran` compiled code produces the runtime error::
+
+  At line 443 of file grid.f90
+  Fortran runtime error: Array bound mismatch for dimension 1 of array 'indices' (82/81)
+
+That error is from :meth:`interp_value` and arises when that
+subroutine is used to interpolate on quantities defined at grid
+interfaces rather than grid points. Fixing it causes the
+:program:`g95` compiled code to not diff clean.
+
+The next runtime error that arises in the :program:`gfortran` compiled
+code is::
+
+  At line 546 of file turbulence.f90
+  Fortran runtime error: Index '81' of dimension 1 of array 'nu' outside of expected range (80:1)
+
+That error is due to a mistake in the code for the vectorized
+calculation of the smoothed sheer diffusivity. The :program:`g95`
+compiled code diffs clean with this error fixed.
+
+The next runtime error from the :program:`gfortran` compiled code is::
+
+  At line 299 of file physics_eqn_builder.f90
+  Fortran runtime error: Array bound mismatch for dimension 1 of array 'p_grad' (80/81)
+
+That error is due to a mistake in the code for the calculation of the
+Coriolis and baroclinic pressure gradient components of the RHS vector
+for the physics equations. The :program:`g95` compiled code diffs
+clean with this error fixed.
+
+
+Warnings
+++++++++
+
+Compiling with :program:`gfortran` produces several warnings.
+
+::
+
+  forcing.f90:172.66:
+
+      use_average_forcing_data = getpars("use average/hist forcing")
+                                                                    1
+  Warning: CHARACTER expression will be truncated in assignment (8/80) at (1)
+
+Changing the declaration of ``use_average_forcing_data`` to
+``character*80`` resolves that.
+
+::
+
+  baroclinic_pressure.f90:183.18:
+
+      gridbotsurf = 15./0.25
+                    1
+  Warning: Possible change of value in conversion from REAL(4) to INTEGER(4) at (1)
+
+This warning was resolved by refactoring the
+``baroclinic_P_gradient()`` subroutine in
+:file:`baroclinic_pressure.f90` to change the surface layer depth to a
+parameter and make the calculation of its grid point index valid for
+any grid spacing; see changeset adf1c51fb6e4_.
+
+.. _adf1c51fb6e4: http://bjossa.eos.ubc.ca:9000/SOG/changeset/adf1c51fb6e4e2b07d0f0e2e5db3ab628b5620a1/SOG-code
+
+::
+
+  upwelling.f90:64.37:
+
+    subroutine upwelling_profile(Qriver)
+                                       1
+  Warning: Unused dummy argument 'qriver' at (1)
+
+This was one of many warnings about unused dummy arguments. They were
+all resolved by deleting the unused arguments.
+
+
+Noted in Passing
+~~~~~~~~~~~~~~~~
+
+* :file:`air_sea_fluxes.f90` contains lots of real literals that are
+  not explicitly specified to be double precision
+
+
 ..
   Local variables:
   mode: rst
+  mode: auto-fill
   End:
