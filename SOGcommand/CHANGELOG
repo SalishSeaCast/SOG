@@ -1,0 +1,16 @@
+Changelog
+---------
+
+v1.0c1
+~~~~~~
+
+* :command:`SOG run` command to run SOG with a given infile and
+  various options. See :command:`SOG help run` for details.
+
+* SOG command processor framework based on:
+
+  * stdlib cmd module for first level command handling, help text,
+    etc.
+  * argparse module for argument and option handling for individual
+    commands. argparse is a 3rd party library for Python 2.6, in
+    stdlib for Python >=2.7 and >=3.2.

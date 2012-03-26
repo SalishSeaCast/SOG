@@ -1,0 +1,38 @@
+SOG Command Processor
+=====================
+
+:Author: Doug Latornell <djl@douglatornell.ca>
+:License: BSD, see LICENSE file
+
+The SOG command processor, :command:`SOG`, is a command line tool for
+doing various operations associated with the SOG bio-physical model of
+deep estuaries.
+
+Use :command:`SOG help` to get a list of the commands available for
+doing things with and related to SOG. Use :command:`SOG help
+<command>` to get a synopsis of what a command does, what its required
+arguments are, and what options are available to control the command.
+
+
+Installation
+------------
+
+*Comming Soon*
+
+
+User Docs
+---------
+
+*Comming Soon*
+
+
+Source Code and Issue Tracker
+-----------------------------
+
+Code repository: :file:`/ocean/sallen/hg_repos/SOG
+
+Source browser: http://bjossa.eos.ubc.ca:9000/SOG/browser/SOG (login
+required)
+
+Issue tracker: http://bjossa.eos.ubc.ca:9000/SOG/report (login
+required)

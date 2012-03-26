@@ -1,0 +1,4 @@
+syntax: glob
+SOGcommand.egg-info
+build
+dist

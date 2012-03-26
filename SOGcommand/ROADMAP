@@ -1,0 +1,46 @@
+Coming Soon
+-----------
+
+* User docs in repository and rendered at
+  http://eos.ubc.ca/~sallen/SOG-docs/SOGcommand
+
+* Installation docs in repository and rendered at
+  http://eos.ubc.ca/~sallen/SOG-docs/quickstart.html#sog-command-processor
+
+
+Ideas
+-----
+
+* A command to convert existing infiles to YAML format for use in
+  conjunction with changing :command:`SOG run` to accept YAML infiles
+  and process them into the stricter, less expressive format that SOG
+  expects.
+
+* Change :command:`SOG run` to accept an infile and an optional list
+  of transformations to apply to it. The infile and the transformation
+  will all be in YAML.  (i.e. do a SOG run with a base infile that has
+  1 or more "edits" applied to it). Overall, YAML files processed
+  through Python are much easier to do machine manipulation on than
+  the current infile format.
+
+* Change :command:`SOG run` to accept a "stem" option that would be
+  used to transform the names of the output files. This is a
+  convenience feature to reduce the content of YAML infile
+  transformations.
+
+* Add a :command:`SOG batch` command to run a list of SOG
+  runs. Initially this wiil be limited to the local machine, but could
+  be extended to a message queue based manager/workers architecture
+  that would allow the runs to be distributed over multiple core
+  and/or machines.
+
+* Buildbot should shift to using :command:`SOG run`.
+
+* Make the :command:`compare_graphs.py` and :command:`check_diff.py`
+  commands used by buildbot available as :command:`SOG` commands.
+
+* Implement genetic algorithm optimization of infile parameters so
+  that SOG predicts blooms after the first spring diatom
+  bloom. :command:`SOG evolve`, perhaps. GA optimization will be
+  facilitated by easily manipulable YAML infiles and distributed batch
+  runs.
