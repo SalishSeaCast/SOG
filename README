@@ -59,7 +59,7 @@ use the commands:
 
    $ hg clone /ocean/sallen/hg_repos/SOG newSOG
    $ cd newSOG
-   $ make env 
+   $ make env
 
 
 Create a SOG Project Directory with a Different Name
@@ -104,6 +104,76 @@ the commands:
 where :kbd:`<user>` is your :kbd:`ocean` user id, and :kbd:`<host>` is
 the name of one of the :kbd:`ocean` computers; e.g. :kbd:`nerka`,
 :kbd:`grinder`, :kbd:`herring`.
+
+
+SOG Command Processor
+~~~~~~~~~~~~~~~~~~~~~
+
+The SOG command processor, :command:`SOG`, is a command line tool for
+doing various operations associated with SOG.
+
+At the very least you will want to use :command:`SOG run` to run SOG.
+
+Installation
+++++++++++++
+
+The SOG command processor is a Python package called
+``SOGcommand``. To install it so that you can use it:
+
+#. Confirm that you are using Python 2.6 by default. The response to
+   the commmand:
+
+   .. code-block:: sh
+
+      $ python --version
+
+   should be something like :kbd:`Python 2.6.5`. If not, create an
+   alias:
+
+   .. code-block:: sh
+
+      $ alias python '/usr/local/python26/bin/python2.6'
+
+   if you use :command:`csh`, or
+
+   .. code-block:: sh
+
+      $ alias python='/usr/local/python26/bin/python2.6'
+
+   if you use :command:`bash`. Add the same command to your
+   :file:`~/.cshrc` or :file:`~/.bashrc` file so that the alias takes
+   effect every time you log in or create a new shell.
+
+#. Create your personal Python 2.6 packages directory:
+
+   .. code-block:: sh
+
+      $ mkdir -p ~/.local/lib/python2.6/site-packages
+
+#. Install ``SOGcommand`` in development mode so that updates will
+   take effect automatically:
+
+   .. code-block:: sh
+
+      $ cd SOG
+      $ python setup.py develop
+
+#. Test it with :kbd:`~/.local/bin/SOG help` or :kbd:`~/.local/bin/SOG
+   --version`.
+
+#. Add :file:`~/.local/bin` to your path, both at the command line,
+   and in your :file:`~/.cshrc` or :file:`~/.bashrc` file so that the
+   :command:`SOG` command is available every time you log in or create
+   a new shell.
+
+
+Use
++++
+
+Use :command:`SOG help` to get a list of the commands available for
+doing things with and related to SOG. Use :command:`SOG help
+<command>` to get a synopsis of what a command does, what its required
+arguments are, and what options are available to control the command.
 
 
 SOG Documentation
