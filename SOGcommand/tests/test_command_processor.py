@@ -7,21 +7,22 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # NOQA
-from command_processor import SOGcommand
+from .. import command_processor
+from ..command_processor import SOGcommand
 
 
 class TestEntryPoint(unittest.TestCase):
     """Unit tests for the SOG command processor entry point function.
     """
     def _call_entry_point(self):
-        from command_processor import run
+        from ..command_processor import run
         run()
 
     @patch.object(SOGcommand, 'onecmd')
     def test_run_calls_onecmd_w_1_arg(self, mock_onecmd):
         """run call SOGcommand.onecmd w/ empty str when 1 cmd line arg
         """
-        with patch('command_processor.sys') as mock_sys:
+        with patch.object(command_processor, 'sys') as mock_sys:
             mock_sys.argv = ['SOG']
             self._call_entry_point()
         mock_onecmd.assert_called_once_with('')
@@ -30,7 +31,7 @@ class TestEntryPoint(unittest.TestCase):
     def test_run_calls_onecmd_w_2_args(self, mock_onecmd):
         """run call SOGcommand.onecmd w/ 2nd arg when 2 cmd line arg
         """
-        with patch('command_processor.sys') as mock_sys:
+        with patch.object(command_processor, 'sys') as mock_sys:
             mock_sys.argv = 'SOG run'.split()
             self._call_entry_point()
         mock_onecmd.assert_called_once_with('run')
@@ -39,7 +40,7 @@ class TestEntryPoint(unittest.TestCase):
     def test_run_calls_onecmd_w_3_args(self, mock_onecmd):
         """run call SOGcommand.onecmd w/ spaced args when >2 cmd line arg
         """
-        with patch('command_processor.sys') as mock_sys:
+        with patch.object(command_processor, 'sys') as mock_sys:
             mock_sys.argv = 'SOG run infile'.split()
             self._call_entry_point()
         mock_onecmd.assert_called_once_with('run infile')
@@ -48,7 +49,7 @@ class TestEntryPoint(unittest.TestCase):
     def test_run_w_1_arg_calls_emptyline(self, mock_emptyline):
         """run called w/ 1 arg passes through to SOGcommand.emptyline method
         """
-        with patch('command_processor.sys') as mock_sys:
+        with patch.object(command_processor, 'sys') as mock_sys:
             mock_sys.argv = ['SOG']
             self._call_entry_point()
         mock_emptyline.assert_called_once()
@@ -57,7 +58,7 @@ class TestEntryPoint(unittest.TestCase):
     def test_run_unknown_command_calls_default(self, mock_default):
         """run called with an unknown SOG command passes to SOGcommand.default
         """
-        with patch('command_processor.sys') as mock_sys:
+        with patch.object(command_processor, 'sys') as mock_sys:
             mock_sys.argv = 'SOG foo'.split()
             self._call_entry_point()
         mock_default.assert_called_once_with('foo')
@@ -67,7 +68,7 @@ class TestSOGcommand(unittest.TestCase):
     """Unit tests for generic elements of SOG command processor.
     """
     def _get_target_class(self):
-        from command_processor import SOGcommand
+        from ..command_processor import SOGcommand
         return SOGcommand
 
     def _make_one(self):
@@ -92,7 +93,7 @@ class TestSOGcommand(unittest.TestCase):
     def test_SOGcommand_default_version_arg(self, mock_stdout):
         """default method called w/ --version prints SOGcommand version str
         """
-        from __version__ import version
+        from ..__version__ import version
         processor = self._make_one()
         processor.default('--version')
         self.assertEqual(mock_stdout.getvalue().strip(), version)
@@ -120,7 +121,7 @@ class Test_run(unittest.TestCase):
     """Unit tests for run command.
     """
     def _get_target_class(self):
-        from command_processor import SOGcommand
+        from ..command_processor import SOGcommand
         return SOGcommand
 
     def _make_one(self):
@@ -193,7 +194,7 @@ class Test_run(unittest.TestCase):
         args = parser.parse_args('./SOG infile'.split())
         self.assertFalse(args.watch)
 
-    @patch('command_processor.Popen')
+    @patch.object(command_processor, 'Popen')
     def test_do_run_default(self, mock_Popen):
         """do_run spawns expected command for default args
         """
@@ -210,7 +211,7 @@ class Test_run(unittest.TestCase):
         processor.do_run('./SOG infile --dry-run')
         mock_run_dry_run.assert_called_once()
 
-    @patch('command_processor.Popen', return_value=Mock(name='proc'))
+    @patch.object(command_processor, 'Popen', return_value=Mock(name='proc'))
     def test_do_run_default_waits_for_end_of_run(self, mock_Popen):
         """do_run waits for end of run by default
         """
@@ -219,7 +220,7 @@ class Test_run(unittest.TestCase):
         mock_Popen().wait.assert_called_once()
 
     @patch.object(SOGcommand, 'watch_outfile')
-    @patch('command_processor.Popen')
+    @patch.object(command_processor, 'Popen')
     def test_do_run_watch_calls_watch_outfile(self, mock_Popen, mock_watch):
         """do_run calls watch_outfile when --watch option is used
         """
