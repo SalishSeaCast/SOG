@@ -108,3 +108,56 @@ class TestLoad(unittest.TestCase):
         result, {'maxdepth': {'value': '40.0d0',
                               'description': 'depth of modelled domain',
                               'units': 'm'}})
+
+
+class TestDump(unittest.TestCase):
+    """Unit tests for SOG infile emitter.
+    """
+    def _call_dump(self, data, key_order, stream):
+        from ..SOG_infile import dump
+        return dump(data, key_order, stream)
+
+    def test_dump_line_w_units(self):
+        """dump produces expected line for data structure w/ units
+        """
+        data = {
+            'maxdepth': {
+                'value': '40.0d0', 'description': 'depth of modelled domain',
+                'units': 'm'}}
+        key_order = ['maxdepth']
+        stream = StringIO()
+        self._call_dump(data, key_order, stream)
+        self.assertEqual(
+            stream.getvalue(),
+            '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n')
+
+    def test_dump_line_wo_units(self):
+        """dump produces expected line for data structure w/o units
+        """
+        data = {
+            'gridsize': {
+                'value': '80', 'description': 'number of grid points',
+                'units': None}}
+        key_order = ['gridsize']
+        stream = StringIO()
+        self._call_dump(data, key_order, stream)
+        self.assertEqual(
+            stream.getvalue(), '"gridsize"  80  "number of grid points"\n')
+
+    def test_dump_line_order(self):
+        """dump produces lines in correct order
+        """
+        data = {
+            'gridsize': {
+                'value': '80', 'description': 'number of grid points',
+                'units': None},
+            'maxdepth': {
+                'value': '40.0d0', 'description': 'depth of modelled domain',
+                'units': 'm'}}
+        key_order = 'maxdepth gridsize'.split()
+        stream = StringIO()
+        self._call_dump(data, key_order, stream)
+        self.assertEqual(
+            stream.getvalue(),
+            '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n'
+            '"gridsize"  80  "number of grid points"\n')

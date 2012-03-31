@@ -84,3 +84,37 @@ def load(stream):
                 'value': value, 'description': description, 'units': units}
         except StopIteration:
             return result
+
+def dump(data, key_order, stream):
+    """Dump the Python data structure to the stream using the
+    key_order to control the order of the lines in the stream.
+
+    :arg data: Python data structure containing the infile content.
+    :type data: dict of dicts
+
+    :arg key_order: Iterable of infile key strings that defines the
+                    order in which the SOG infile lines are written.
+    :type key_order: iterable
+
+    :arg stream: File-like object to which the SOG infile lines are
+                 written.
+    :type stream: file-like obejct
+
+    Given a dict item that looks like::
+
+      'maxdepth': {'value': '40.0d0', 'description': 'depth of modelled domain'
+                   'units': 'm'}
+
+    the resulting SOG infile line would be::
+
+      "maxdepth"  40.0d0  "depth of modelled domain [m]"
+
+    If the units item in the dict is None the square bracketed term
+    will be excluded from the description phrase in the SOG infile
+    line.
+    """
+    for key in key_order:
+        line = '"{0}"  {1[value]}  "{1[description]}'.format(key, data[key])
+        if data[key]['units'] is not None:
+            line = '{0} [{1[units]}]'.format(line, data[key])
+        stream.write('{0}"\n'.format(line))
