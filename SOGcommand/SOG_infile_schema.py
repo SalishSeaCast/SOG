@@ -8,6 +8,7 @@ The :func:`infile_to_yaml` function transforms elements in a SOG
 Fortran-ish infile data structure into those of a SOG YAML infile data
 structure that is defined in :mod:`SOG_YAML_schema`.
 """
+from datetime import datetime
 import colander
 
 
@@ -47,11 +48,37 @@ class _SOG_Int(_SOG_InfileBase):
     value = colander.SchemaNode(colander.Int())
 
 
+class _Datetime(object):
+    """SOG datetime type.
+
+    Text representation has the format `"yyyy-mm-dd hh:mm:ss"` expected
+    by SOG.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, datetime):
+            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+        return '"{0:%Y-%m-%d %H:%M:%S}"'.format(appstruct)
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, basestring):
+            raise colander.Invalid(node, '{0} is not a string'.format(node))
+        return datetime.strptime(cstruct, '%Y-%m-%d %H:%M:%S')
+
+
+class _SOG_Datetime(_SOG_InfileBase):
+    value = colander.SchemaNode(_Datetime())
+
+
 class SOG_Infile(colander.MappingSchema):
     latitude = _SOG_RealDP()
     maxdepth = _SOG_RealDP()
     gridsize = _SOG_Int()
     lambda_factor = _SOG_RealDP(name='lambda')
+    init_datetime = _SOG_Datetime(name='init datetime')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

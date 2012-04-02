@@ -1,16 +1,17 @@
 """Unit tests for SOG Fortran-ish infile schema and data structure
 transformation function.
 """
-import colander
-from mock import Mock
+from datetime import datetime
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # NOQA
+from mock import Mock
+import colander
 
 
 class TestRealDP(unittest.TestCase):
-    """Unit tests for RealDP schema type.
+    """Unit tests for _RealDP schema type.
     """
     def _make_schema(self):
         from ..SOG_infile_schema import _RealDP
@@ -20,46 +21,98 @@ class TestRealDP(unittest.TestCase):
         return Schema()
 
     def test_RealDP_serialize_null(self):
-        """RealDP serialization of null returns null
+        """_RealDP serialization of null returns null
         """
         schema = self._make_schema()
         result = schema.serialize({'value': colander.null})
         self.assertEqual(result, {'value': colander.null})
 
     def test_RealDP_serialize_raises_invalid(self):
-        """RealDP serialization of non-number raises Invalid exception
+        """_RealDP serialization of non-number raises Invalid exception
         """
         schema = self._make_schema()
         self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
 
     def test_RealDP_serialize_e_format_with_d(self):
-        """RealDP serialization of nummber is Fortran real(kind=dp) notation
+        """_RealDP serialization of nummber is Fortran real(kind=dp) notation
         """
         schema = self._make_schema()
         result = schema.serialize({'value': 42})
         self.assertEqual(result, {'value': '4.200000d+01'})
 
     def test_RealDP_deserialize_null(self):
-        """RealDP deserialization of null raises Invalid exception
+        """_RealDP deserialization of null raises Invalid exception
         """
         schema = self._make_schema()
         self.assertRaises(
             colander.Invalid, schema.deserialize, {'value': colander.null})
 
     def test_RealDP_deserialize_raises_invalid(self):
-        """RealDP deserialization of non-string raises Invalid exception
+        """_RealDP deserialization of non-string raises Invalid exception
         """
         schema = self._make_schema()
         self.assertRaises(
             colander.Invalid, schema.deserialize, {'value': 42})
 
     def test_RealDP_deserialize_d_format_to_float(self):
-        """RealDP deserialization of Fortran real(kind=dp) string is float
+        """_RealDP deserialization of Fortran real(kind=dp) string is float
         """
         schema = self._make_schema()
         result = schema.deserialize({'value': '42.0d0'})
         self.assertEqual(result, {'value': 42.0})
         self.assertTrue(isinstance(result['value'], float))
+
+
+class TestDatetime(unittest.TestCase):
+    """Unit tests for _Datetime schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_infile_schema import _Datetime
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_Datetime())
+        return Schema()
+
+    def test_Datetime_serialize_null(self):
+        """_Datetime serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_Datetime_serialize_raises_invalid(self):
+        """_Datetime serialization of non-datetime raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_Datetime_serialize_datetime_to_string(self):
+        """_Datetime serialization of datetime is SOG datetime format string
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': datetime(2012, 4, 1, 19, 9)})
+        self.assertEqual(result, {'value': '"2012-04-01 19:09:00"'})
+
+    def test_Datetime_deserialize_null(self):
+        """_Datetime deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_Datetime_deserialize_raises_invalid(self):
+        """_Datetime deserialization of non-datetime raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_Datetime_deserialize_string_to_datetime(self):
+        """_Datetime deserialization of SOG datetime string is datetime object
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': '2012-04-01 19:14:00'})
+        self.assertEqual(result, {'value': datetime(2012, 4, 1, 19, 14)})
 
 
 class TestInfileToYAML(unittest.TestCase):

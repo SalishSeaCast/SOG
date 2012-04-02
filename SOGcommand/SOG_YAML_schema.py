@@ -8,6 +8,7 @@ The :func:`yaml_to_infile` function transforms elements in a SOG YAML
 infile data structure into those of a SOG Fortran-ish infile data
 structure that is defined in :mod:`SOG_infile_schema`.
 """
+from datetime import datetime
 import colander
 
 
@@ -19,26 +20,53 @@ class _SOG_YAML_Base(colander.MappingSchema):
     description = colander.SchemaNode(colander.String())
 
 
-class _ModelDepth(_SOG_YAML_Base):
+class _Float(_SOG_YAML_Base):
     value = colander.SchemaNode(colander.Float())
 
 
-class _GridSize(_SOG_YAML_Base):
+class _Int(_SOG_YAML_Base):
     value = colander.SchemaNode(colander.Int())
 
 
-class _LambdaFactor(_SOG_YAML_Base):
-    value = colander.SchemaNode(colander.Float())
+class _DateTime(object):
+    """Replacement for Colander's ISO8601 DateTime type.
+
+    We don't care about time zone, and want the string representation
+    of a datetime to be `yyy-mm-dd hh:mm:ss`.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, datetime):
+            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+        return '{0:%Y-%m-%d %H:%M:%S}'.format(appstruct)
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, datetime):
+            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+        return cstruct
+
+
+class _SOG_Datetime(_SOG_YAML_Base):
+    value = colander.SchemaNode(_DateTime())
 
 
 class _Grid(colander.MappingSchema):
-    model_depth = _ModelDepth(infile_key='maxdepth', var_name='grid%D')
-    grid_size = _GridSize(infile_key='gridsize', var_name='grid%M')
-    lambda_factor = _LambdaFactor(infile_key='lambda', var_name='lambda')
+    model_depth = _Float(infile_key='maxdepth', var_name='grid%D')
+    grid_size = _Int(infile_key='gridsize', var_name='grid%M')
+    lambda_factor = _Float(infile_key='lambda', var_name='lambda')
+
+
+class _InitialConditions(colander.MappingSchema):
+    init_datetime = _SOG_Datetime(
+        infile_key='init datetime', var_name='initDatetime')
 
 
 class YAML_Infile(colander.MappingSchema):
     grid = _Grid()
+    init_conditions = _InitialConditions(name='initial conditions')
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):
@@ -58,8 +86,11 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
     :rtype: nested dicts
     """
     def get_element(part):
-        return yaml_schema.get_value(
+        value = yaml_schema.get_value(
             yaml_struct, '{0.name}.{1.name}.{2}'.format(node, child, part))
+        if isinstance(value, datetime):
+            value = '"{0}"'.format(value)
+        return value
 
     result = {}
     for node in nodes:

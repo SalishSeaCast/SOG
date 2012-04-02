@@ -1,12 +1,65 @@
 """Unit tests for SOG YAML infile schema and data structure
 transformation function.
 """
-import colander
-from mock import Mock
+from datetime import datetime
 try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # NOQA
+from mock import Mock
+import colander
+
+
+class TestDateTime(unittest.TestCase):
+    """Unit tests for _DateTime schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_YAML_schema import _DateTime
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_DateTime())
+        return Schema()
+
+    def test_DateTime_serialize_null(self):
+        """_DateTime serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_DateTime_serialize_raises_invalid(self):
+        """_DateTime serialization of non-datetime raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_DateTime_serialize_datetime_to_string(self):
+        """_DateTime serialization of datetime is yyyy-mm-dd hh:mm:ss
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': datetime(2012, 4, 1, 20, 47)})
+        self.assertEqual(result, {'value': '2012-04-01 20:47:00'})
+
+    def test_DateTime_deserialize_null(self):
+        """_DateTime deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_DateTime_deserialize_raises_invalid(self):
+        """_DateTime deserialization of non-datetime raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_DateTime_deserialize_string_to_datetime(self):
+        """_DateTime deserialization of datetime is datetime object
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': datetime(2012, 4, 1, 20, 49)})
+        self.assertEqual(result, {'value': datetime(2012, 4, 1, 20, 49)})
 
 
 class TestYAMLtoInfile(unittest.TestCase):
@@ -20,8 +73,8 @@ class TestYAMLtoInfile(unittest.TestCase):
         from ..SOG_YAML_schema import yaml_to_infile
         return yaml_to_infile(*args)
 
-    def test_yaml_to_infile(self):
-        """yaml_to_infile returns expected result
+    def test_yaml_to_infile_number(self):
+        """yaml_to_infile returns expected result for number value
         """
         mock_node = Mock(spec=colander.SchemaNode)
         mock_node.configure_mock(name='grid')
@@ -41,3 +94,27 @@ class TestYAMLtoInfile(unittest.TestCase):
             {'maxdepth': {
                 'value': 40, 'units': 'm',
                 'description': 'depth of modelled domain'}})
+
+    def test_yaml_to_infile_datetime(self):
+        """yaml_to_infile returns expected result for datetime value
+        """
+        mock_node = Mock(spec=colander.SchemaNode)
+        mock_node.configure_mock(name='initial conditions')
+        mock_child = Mock(spec=colander.SchemaNode)
+        mock_child.configure_mock(
+            name='init_datetime', infile_key='init datetime',
+            var_name='initDatetime')
+        mock_node.children = [mock_child]
+        nodes = [mock_node]
+        schema = self._make_schema()
+        yaml_struct = {'initial conditions': {
+                'init_datetime': {
+                    'value': datetime(2012, 4, 1, 21, 4), 'units': None,
+                    'variable name': 'initDatetime',
+                    'description': 'initialization CTD profile date/time'}}}
+        result = self._call_yaml_to_infile(nodes, schema, yaml_struct)
+        self.assertEqual(
+            result,
+            {'init datetime': {
+                'value': '"2012-04-01 21:04:00"', 'units': None,
+                'description': 'initialization CTD profile date/time'}})
