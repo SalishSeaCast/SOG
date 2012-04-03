@@ -67,6 +67,8 @@ class _InitialConditions(colander.MappingSchema):
 class YAML_Infile(colander.MappingSchema):
     grid = _Grid()
     init_conditions = _InitialConditions(name='initial conditions')
+    end_datetime = _SOG_Datetime(
+        name='end datetime', infile_key='end datetime', var_name='endDatetime')
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):
@@ -85,16 +87,28 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
     :returns: SOG YAML infile data structure.
     :rtype: nested dicts
     """
-    def get_element(part):
-        return yaml_schema.get_value(
-            yaml_struct, '{0.name}.{1.name}.{2}'.format(node, child, part))
+    def get_element(key, path):
+        return yaml_schema.get_value(yaml_struct, '.'.join((path, key)))
+
+    def transform(node, path):
+        return {
+            node.infile_key: {
+                'value': get_element('value', path),
+                'description': get_element('description', path),
+                'units': get_element('units', path),
+        }}
+
+    def walk_subnodes(node, path):
+        result = {}
+        if any(child.name == 'value' for child in node.children):
+            return transform(node, path)
+        else:
+            for child in node.children:
+                result.update(
+                    walk_subnodes(child, '.'.join((path, child.name))))
+            return result
 
     result = {}
     for node in nodes:
-        for child in node.children:
-            result[child.infile_key] = {
-                'value': get_element('value'),
-                'description': get_element('description'),
-                'units': get_element('units'),
-            }
+        result.update(walk_subnodes(node, node.name))
     return result

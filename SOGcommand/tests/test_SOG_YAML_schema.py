@@ -76,15 +76,18 @@ class TestYAMLtoInfile(unittest.TestCase):
     def test_yaml_to_infile_number(self):
         """yaml_to_infile returns expected result for number value
         """
-        mock_node = Mock(spec=colander.SchemaNode)
-        mock_node.configure_mock(name='grid')
-        mock_child = Mock(spec=colander.SchemaNode)
+        mock_grand_child = Mock()
+        mock_grand_child.configure_mock(name='value')
+        mock_child = Mock()
         mock_child.configure_mock(
-            name='model_depth', infile_key='maxdepth', var_name='grid%D')
-        mock_node.children = [mock_child]
+            name='model_depth', infile_key='maxdepth', var_name='grid%D',
+            children=[mock_grand_child])
+        mock_node = Mock()
+        mock_node.configure_mock(name='grid', children=[mock_child])
         nodes = [mock_node]
         schema = self._make_schema()
-        yaml_struct = {'grid': {
+        yaml_struct = {
+            'grid': {
                 'model_depth': {
                     'value': 40, 'units': 'm', 'variable name': 'grid%D',
                     'description': 'depth of modelled domain'}}}
@@ -98,16 +101,19 @@ class TestYAMLtoInfile(unittest.TestCase):
     def test_yaml_to_infile_datetime(self):
         """yaml_to_infile returns expected result for datetime value
         """
-        mock_node = Mock(spec=colander.SchemaNode)
-        mock_node.configure_mock(name='initial conditions')
-        mock_child = Mock(spec=colander.SchemaNode)
+        mock_grand_child = Mock()
+        mock_grand_child.configure_mock(name='value')
+        mock_child = Mock()
         mock_child.configure_mock(
             name='init_datetime', infile_key='init datetime',
-            var_name='initDatetime')
-        mock_node.children = [mock_child]
+            var_name='initDatetime', children=[mock_grand_child])
+        mock_node = Mock()
+        mock_node.configure_mock(
+            name='initial conditions', children=[mock_child])
         nodes = [mock_node]
         schema = self._make_schema()
-        yaml_struct = {'initial conditions': {
+        yaml_struct = {
+            'initial conditions': {
                 'init_datetime': {
                     'value': datetime(2012, 4, 1, 21, 4), 'units': None,
                     'variable name': 'initDatetime',
@@ -118,3 +124,26 @@ class TestYAMLtoInfile(unittest.TestCase):
             {'init datetime': {
                 'value': datetime(2012, 4, 1, 21, 4), 'units': None,
                 'description': 'initialization CTD profile date/time'}})
+
+    def test_yaml_to_infile_unnested_element(self):
+        """yaml_to_infile returns expected result for unnested element
+        """
+        mock_child = Mock()
+        mock_child.configure_mock(name='value')
+        mock_node = Mock()
+        mock_node.configure_mock(
+            name='end datetime', infile_key='end datetime',
+            var_name='endDatetime', children=[mock_child])
+        nodes = [mock_node]
+        schema = self._make_schema()
+        yaml_struct = {
+            'end datetime': {
+                'value': datetime(2012, 4, 2, 21, 21), 'units': None,
+                'variable name': 'initDatetime',
+                'description': 'end of run date/time'}}
+        result = self._call_yaml_to_infile(nodes, schema, yaml_struct)
+        self.assertEqual(
+            result,
+            {'end datetime': {
+                'value': datetime(2012, 4, 2, 21, 21), 'units': None,
+                'description': 'end of run date/time'}})

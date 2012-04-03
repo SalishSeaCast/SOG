@@ -129,12 +129,14 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_with_units(self):
         """infile_to_yaml returns expected result for element with units
         """
-        mock_node = Mock(spec=colander.SchemaNode)
-        mock_node.configure_mock(name='grid')
-        mock_child = Mock(spec=colander.SchemaNode)
+        mock_grand_child = Mock()
+        mock_grand_child.configure_mock(name='value')
+        mock_child = Mock()
         mock_child.configure_mock(
-            name='model_depth', infile_key='maxdepth', var_name='grid%D')
-        mock_node.children = [mock_child]
+            name='model_depth', infile_key='maxdepth', var_name='grid%D',
+            children=[mock_grand_child])
+        mock_node = Mock()
+        mock_node.configure_mock(name='grid', children=[mock_child])
         nodes = [mock_node]
         schema = self._make_schema()
         infile_struct = {'maxdepth': {
@@ -151,12 +153,14 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_without_units(self):
         """infile_to_yaml returns expected result for element without units
         """
-        mock_node = Mock(spec=colander.SchemaNode)
-        mock_node.configure_mock(name='grid')
-        mock_child = Mock(spec=colander.SchemaNode)
+        mock_grand_child = Mock()
+        mock_grand_child.configure_mock(name='value')
+        mock_child = Mock()
         mock_child.configure_mock(
-            name='grid_size', infile_key='gridsize', var_name='grid%M')
-        mock_node.children = [mock_child]
+            name='grid_size', infile_key='gridsize', var_name='grid%M',
+            children=[mock_grand_child])
+        mock_node = Mock()
+        mock_node.configure_mock(name='grid', children=[mock_child])
         nodes = [mock_node]
         schema = self._make_schema()
         infile_struct = {'gridsize': {
@@ -169,3 +173,25 @@ class TestInfileToYAML(unittest.TestCase):
                 'grid_size': {
                     'value': 80, 'variable name': 'grid%M',
                     'description': 'number of grid points'}}})
+
+    def test_infile_to_yaml_unnested_element(self):
+        """infile_to_yaml returns expected result for unnested element
+        """
+        mock_child = Mock()
+        mock_child.configure_mock(name='value')
+        mock_node = Mock()
+        mock_node.configure_mock(
+            name='end_datetime', infile_key='end datetime',
+            var_name='endDatetime', children=[mock_child])
+        nodes = [mock_node]
+        schema = self._make_schema()
+        infile_struct = {'end datetime': {
+            'value': datetime(2012, 4, 2, 19, 1), 'units': None,
+            'description': 'end of run date/time'}}
+        result = self._call_infile_to_yaml(nodes, schema, infile_struct)
+        self.assertEqual(
+            result,
+            {'end_datetime': {
+                'value': datetime(2012, 4, 2, 19, 1),
+                'variable name': 'endDatetime',
+                'description': 'end of run date/time'}})

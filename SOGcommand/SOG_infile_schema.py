@@ -79,6 +79,7 @@ class SOG_Infile(colander.MappingSchema):
     gridsize = _SOG_Int()
     lambda_factor = _SOG_RealDP(name='lambda')
     init_datetime = _SOG_Datetime(name='init datetime')
+    end_datetime = _SOG_Datetime(name='end datetime')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):
@@ -97,20 +98,31 @@ def infile_to_yaml(nodes, infile_schema, infile_struct):
     :returns: SOG YAML infile data structure.
     :rtype: nested dicts
     """
-    def get_element(key):
+    def get_element(node, key):
         return infile_schema.get_value(
-            infile_struct, '{0.infile_key}.{1}'.format(child, key))
+            infile_struct, '{0.infile_key}.{1}'.format(node, key))
+
+    def transform(node):
+        result = {
+            'value': get_element(node, 'value'),
+            'description': str(get_element(node, 'description')),
+            'variable name': node.var_name,
+        }
+        units = get_element(node, 'units')
+        if units is not None:
+            result['units'] = str(units)
+        return result
+
+    def walk_subnodes(node):
+        result = {}
+        if any(child.name == 'value' for child in node.children):
+            return transform(node)
+        else:
+            for child in node.children:
+                result.update({child.name: walk_subnodes(child)})
+            return result
 
     result = {}
     for node in nodes:
-        result[node.name] = {}
-        for child in node.children:
-            result[node.name][child.name] = {
-                'value': get_element('value'),
-                'description': str(get_element('description')),
-                'variable name': child.var_name,
-            }
-            units = get_element('units')
-            if units is not None:
-                result[node.name][child.name]['units'] = str(units)
+        result.update({node.name: walk_subnodes(node)})
     return result
