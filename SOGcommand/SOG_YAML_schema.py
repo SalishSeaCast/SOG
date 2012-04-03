@@ -39,7 +39,7 @@ class _DateTime(object):
             return colander.null
         if not isinstance(appstruct, datetime):
             raise colander.Invalid(node, '{0} is not a datetime'.format(node))
-        return '{0:%Y-%m-%d %H:%M:%S}'.format(appstruct)
+        return appstruct
 
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
@@ -86,11 +86,8 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
     :rtype: nested dicts
     """
     def get_element(part):
-        value = yaml_schema.get_value(
+        return yaml_schema.get_value(
             yaml_struct, '{0.name}.{1.name}.{2}'.format(node, child, part))
-        if isinstance(value, datetime):
-            value = '"{0}"'.format(value)
-        return value
 
     result = {}
     for node in nodes:

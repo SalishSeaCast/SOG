@@ -31,5 +31,6 @@ if __name__ == '__main__':
     infile_struct = yaml_to_infile(YAML_Infile.nodes, YAML, yaml_struct)
     key_order = ['maxdepth',  'gridsize', 'lambda', 'init datetime']
     buffer = StringIO()
-    SOG_infile.dump(infile_struct, key_order, buffer)
+    data = SOG.serialize(infile_struct)
+    SOG_infile.dump(data, key_order, buffer)
     print buffer.getvalue()

@@ -33,12 +33,12 @@ class TestDateTime(unittest.TestCase):
         schema = self._make_schema()
         self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
 
-    def test_DateTime_serialize_datetime_to_string(self):
+    def test_DateTime_serialize_datetime_to_datetime(self):
         """_DateTime serialization of datetime is yyyy-mm-dd hh:mm:ss
         """
         schema = self._make_schema()
         result = schema.serialize({'value': datetime(2012, 4, 1, 20, 47)})
-        self.assertEqual(result, {'value': '2012-04-01 20:47:00'})
+        self.assertEqual(result, {'value': datetime(2012, 4, 1, 20, 47)})
 
     def test_DateTime_deserialize_null(self):
         """_DateTime deserialization of null raises Invalid exception
@@ -54,7 +54,7 @@ class TestDateTime(unittest.TestCase):
         self.assertRaises(
             colander.Invalid, schema.deserialize, {'value': 42})
 
-    def test_DateTime_deserialize_string_to_datetime(self):
+    def test_DateTime_deserialize_datetime_to_datetime(self):
         """_DateTime deserialization of datetime is datetime object
         """
         schema = self._make_schema()
@@ -116,5 +116,5 @@ class TestYAMLtoInfile(unittest.TestCase):
         self.assertEqual(
             result,
             {'init datetime': {
-                'value': '"2012-04-01 21:04:00"', 'units': None,
+                'value': datetime(2012, 4, 1, 21, 4), 'units': None,
                 'description': 'initialization CTD profile date/time'}})
