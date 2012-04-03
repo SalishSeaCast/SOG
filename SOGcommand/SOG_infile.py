@@ -85,6 +85,7 @@ def load(stream):
         except StopIteration:
             return result
 
+
 def dump(data, key_order, stream):
     """Dump the Python data structure to the stream using the
     key_order to control the order of the lines in the stream.

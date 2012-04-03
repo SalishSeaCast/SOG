@@ -129,12 +129,10 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_with_units(self):
         """infile_to_yaml returns expected result for element with units
         """
-        mock_grand_child = Mock()
-        mock_grand_child.configure_mock(name='value')
         mock_child = Mock()
         mock_child.configure_mock(
             name='model_depth', infile_key='maxdepth', var_name='grid%D',
-            children=[mock_grand_child])
+            children=[Mock(children=[])])
         mock_node = Mock()
         mock_node.configure_mock(name='grid', children=[mock_child])
         nodes = [mock_node]
@@ -153,12 +151,10 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_without_units(self):
         """infile_to_yaml returns expected result for element without units
         """
-        mock_grand_child = Mock()
-        mock_grand_child.configure_mock(name='value')
         mock_child = Mock()
         mock_child.configure_mock(
             name='grid_size', infile_key='gridsize', var_name='grid%M',
-            children=[mock_grand_child])
+            children=[Mock(children=[])])
         mock_node = Mock()
         mock_node.configure_mock(name='grid', children=[mock_child])
         nodes = [mock_node]
@@ -177,12 +173,10 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_unnested_element(self):
         """infile_to_yaml returns expected result for unnested element
         """
-        mock_child = Mock()
-        mock_child.configure_mock(name='value')
         mock_node = Mock()
         mock_node.configure_mock(
             name='end_datetime', infile_key='end datetime',
-            var_name='endDatetime', children=[mock_child])
+            var_name='endDatetime', children=[Mock(children=[])])
         nodes = [mock_node]
         schema = self._make_schema()
         infile_struct = {'end datetime': {

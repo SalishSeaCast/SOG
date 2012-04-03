@@ -100,7 +100,7 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
 
     def walk_subnodes(node, path):
         result = {}
-        if any(child.name == 'value' for child in node.children):
+        if not any(child.children for child in node.children):
             return transform(node, path)
         else:
             for child in node.children:

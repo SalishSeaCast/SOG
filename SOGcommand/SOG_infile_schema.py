@@ -115,7 +115,7 @@ def infile_to_yaml(nodes, infile_schema, infile_struct):
 
     def walk_subnodes(node):
         result = {}
-        if any(child.name == 'value' for child in node.children):
+        if not any(child.children for child in node.children):
             return transform(node)
         else:
             for child in node.children:
