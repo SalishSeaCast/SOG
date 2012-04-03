@@ -137,7 +137,7 @@ class TestDump(unittest.TestCase):
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': None}}
+                'units': 'None'}}
         key_order = ['gridsize']
         stream = StringIO()
         self._call_dump(data, key_order, stream)
@@ -150,7 +150,7 @@ class TestDump(unittest.TestCase):
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': None},
+                'units': 'None'},
             'maxdepth': {
                 'value': '40.0d0', 'description': 'depth of modelled domain',
                 'units': 'm'}}

@@ -115,6 +115,6 @@ def dump(data, key_order, stream):
     """
     for key in key_order:
         line = '"{0}"  {1[value]}  "{1[description]}'.format(key, data[key])
-        if data[key]['units'] is not None:
+        if data[key]['units'] != 'None':
             line = '{0} [{1[units]}]'.format(line, data[key])
         stream.write('{0}"\n'.format(line))
