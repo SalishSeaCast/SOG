@@ -29,14 +29,16 @@ class _RealDP(object):
         if appstruct is colander.null:
             return colander.null
         if not isinstance(appstruct, (int, float)):
-            raise colander.Invalid(node, '{0} is not a number'.format(node))
+            raise colander.Invalid(
+                node, '{0} is not a number'.format(appstruct))
         return '{0:e}'.format(appstruct).replace('e', 'd')
 
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
         if not isinstance(cstruct, basestring):
-            raise colander.Invalid(node, '{0} is not a string'.format(node))
+            raise colander.Invalid(
+                node, '{0} is not a string'.format(cstruct))
         return float(cstruct.replace('d', 'e'))
 
 
@@ -58,19 +60,49 @@ class _Datetime(object):
         if appstruct is colander.null:
             return colander.null
         if not isinstance(appstruct, datetime):
-            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+            raise colander.Invalid(
+                node, '{!r} is not a datetime'.format(appstruct))
         return '"{0:%Y-%m-%d %H:%M:%S}"'.format(appstruct)
 
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
         if not isinstance(cstruct, basestring):
-            raise colander.Invalid(node, '{0} is not a string'.format(node))
+            raise colander.Invalid(
+                node, '{!r} is not a string'.format(cstruct))
         return datetime.strptime(cstruct, '%Y-%m-%d %H:%M:%S')
 
 
 class _SOG_Datetime(_SOG_InfileBase):
     value = colander.SchemaNode(_Datetime())
+
+
+class _Boolean(object):
+    """SOG boolean type.
+
+    Text representation is Fortran syntax: `.true.` or `.false.`.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, bool):
+            raise colander.Invalid(
+                node, '{!r} is not a boolean'.format(appstruct))
+        return appstruct and '.true.' or '.false.'
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, basestring):
+            raise colander.Invalid(
+                node, '{!r} is not a string'.format(cstruct))
+        if cstruct.lower() == '.true.':
+            return True
+        return False
+
+
+class _SOG_Boolean(_SOG_InfileBase):
+    value = colander.SchemaNode(_Boolean())
 
 
 class SOG_Infile(colander.MappingSchema):
@@ -83,6 +115,10 @@ class SOG_Infile(colander.MappingSchema):
     dt = _SOG_Int()
     chem_dt = _SOG_Int()
     max_iter = _SOG_Int()
+    vary_wind = _SOG_Boolean(name='vary%wind%enabled')
+    vary_cloud_fraction = _SOG_Boolean(name='vary%cf%enabled')
+    vary_river_flows = _SOG_Boolean(name='vary%rivers%enabled')
+    vary_temperature = _SOG_Boolean(name='vary%temperature%enabled')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

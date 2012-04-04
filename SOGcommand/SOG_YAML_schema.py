@@ -28,6 +28,10 @@ class _Int(_SOG_YAML_Base):
     value = colander.SchemaNode(colander.Int())
 
 
+class _Boolean(_SOG_YAML_Base):
+    value = colander.SchemaNode(colander.Boolean())
+
+
 class _DateTime(object):
     """Replacement for Colander's ISO8601 DateTime type.
 
@@ -74,6 +78,18 @@ class _Numerics(colander.MappingSchema):
     max_iter = _Int(infile_key='max_iter', var_name='max_iter')
 
 
+class _ForcingVariation(colander.MappingSchema):
+    wind = _Boolean(
+        infile_key='vary%wind%enabled', var_name='vary%wind%enabled')
+    cloud_fraction = _Boolean(
+        infile_key='vary%cf%enabled', var_name='vary%cf%enabled')
+    river_flows = _Boolean(
+        infile_key='vary%rivers%enabled', var_name='vary%rivers%enabled')
+    temperature = _Boolean(
+        infile_key='vary%temperature%enabled',
+        var_name='vary%temperature%enabled')
+
+
 class YAML_Infile(colander.MappingSchema):
     init_conditions = _InitialConditions(name='initial conditions')
     end_datetime = _SOG_Datetime(
@@ -81,6 +97,7 @@ class YAML_Infile(colander.MappingSchema):
     location = _Location()
     grid = _Grid()
     numerics = _Numerics()
+    vary = _ForcingVariation()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):

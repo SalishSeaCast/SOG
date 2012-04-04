@@ -34,7 +34,7 @@ class TestRealDP(unittest.TestCase):
         self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
 
     def test_RealDP_serialize_e_format_with_d(self):
-        """_RealDP serialization of nummber is Fortran real(kind=dp) notation
+        """_RealDP serialization of number is Fortran real(kind=dp) notation
         """
         schema = self._make_schema()
         result = schema.serialize({'value': 42})
@@ -113,6 +113,72 @@ class TestDatetime(unittest.TestCase):
         schema = self._make_schema()
         result = schema.deserialize({'value': '2012-04-01 19:14:00'})
         self.assertEqual(result, {'value': datetime(2012, 4, 1, 19, 14)})
+
+
+class TestBoolean(unittest.TestCase):
+    """Unit tests for _Boolean schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_infile_schema import _Boolean
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_Boolean())
+        return Schema()
+
+    def test_Boolean_serialize_null(self):
+        """_Boolean serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_Boolean_serialize_raises_invalid(self):
+        """_Boolean serialization of non-number raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_Boolean_serialize_true(self):
+        """_Boolean serialization of True is '.true.'
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': True})
+        self.assertEqual(result, {'value': '.true.'})
+
+    def test_Boolean_serialize_false(self):
+        """_Boolean serialization of False is '.false.'
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': False})
+        self.assertEqual(result, {'value': '.false.'})
+
+    def test_Boolean_deserialize_null(self):
+        """_Boolean deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_Boolean_deserialize_raises_invalid(self):
+        """_Boolean deserialization of non-boolean raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_Boolean_deserialize_true(self):
+        """_Boolean deserialization of .true. is True
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': '.true.'})
+        self.assertEqual(result, {'value': True})
+
+    def test_Boolean_deserialize_flase(self):
+        """_Boolean deserialization of .false. is False
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': '.faLSe.'})
+        self.assertEqual(result, {'value': False})
 
 
 class TestInfileToYAML(unittest.TestCase):
