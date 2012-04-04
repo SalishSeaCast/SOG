@@ -30,7 +30,8 @@ if __name__ == '__main__':
 
     infile_struct = yaml_to_infile(YAML_Infile.nodes, YAML, yaml_struct)
     key_order = [
-        'maxdepth',  'gridsize', 'lambda', 'init datetime', 'end datetime',
+        'latitude', 'maxdepth',  'gridsize', 'lambda', 'init datetime',
+        'end datetime', 'dt', 'chem_dt', 'max_iter', 
         ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)

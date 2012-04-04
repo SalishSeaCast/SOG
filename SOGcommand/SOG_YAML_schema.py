@@ -53,22 +53,34 @@ class _SOG_Datetime(_SOG_YAML_Base):
     value = colander.SchemaNode(_DateTime())
 
 
+class _InitialConditions(colander.MappingSchema):
+    init_datetime = _SOG_Datetime(
+        infile_key='init datetime', var_name='initDatetime')
+
+
+class _Location(colander.MappingSchema):
+    latitude = _Float(infile_key='latitude', var_name='latitude')
+
+
 class _Grid(colander.MappingSchema):
     model_depth = _Float(infile_key='maxdepth', var_name='grid%D')
     grid_size = _Int(infile_key='gridsize', var_name='grid%M')
     lambda_factor = _Float(infile_key='lambda', var_name='lambda')
 
 
-class _InitialConditions(colander.MappingSchema):
-    init_datetime = _SOG_Datetime(
-        infile_key='init datetime', var_name='initDatetime')
+class _Numerics(colander.MappingSchema):
+    dt = _Int(infile_key='dt', var_name='dt')
+    chem_dt = _Int(infile_key='chem_dt', var_name='chem_dt')
+    max_iter = _Int(infile_key='max_iter', var_name='max_iter')
 
 
 class YAML_Infile(colander.MappingSchema):
-    grid = _Grid()
     init_conditions = _InitialConditions(name='initial conditions')
     end_datetime = _SOG_Datetime(
         name='end datetime', infile_key='end datetime', var_name='endDatetime')
+    location = _Location()
+    grid = _Grid()
+    numerics = _Numerics()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):

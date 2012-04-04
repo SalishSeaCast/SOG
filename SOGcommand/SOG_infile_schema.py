@@ -80,6 +80,9 @@ class SOG_Infile(colander.MappingSchema):
     lambda_factor = _SOG_RealDP(name='lambda')
     init_datetime = _SOG_Datetime(name='init datetime')
     end_datetime = _SOG_Datetime(name='end datetime')
+    dt = _SOG_Int()
+    chem_dt = _SOG_Int()
+    max_iter = _SOG_Int()
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):
