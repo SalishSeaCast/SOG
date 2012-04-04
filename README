@@ -114,6 +114,9 @@ doing various operations associated with SOG.
 
 At the very least you will want to use :command:`SOG run` to run SOG.
 
+
+.. _SOG_CommandProcessorInstallation-section:
+
 Installation
 ++++++++++++
 
@@ -175,6 +178,8 @@ doing things with and related to SOG. Use :command:`SOG help
 <command>` to get a synopsis of what a command does, what its required
 arguments are, and what options are available to control the command.
 
+See :ref:`SOG_CommandProcessor-section` for more details.
+
 
 SOG Documentation
 ~~~~~~~~~~~~~~~~~
@@ -185,6 +190,7 @@ documentation are in :file:`SOG/docs/`. The documentation includes:
 
 * :ref:`recommended workflows<workflows-section>` for the environment
   described above
+* detailed documentation for the :ref:`SOG_CommandProcessor-section`
 * information about the :ref:`SOG buildbot automated testing
   system<SOGbuildbot-section>`
 * information about the :ref:`SOG trac code browser and issue

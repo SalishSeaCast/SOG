@@ -1,8 +1,11 @@
 Changelog
 ---------
 
-Dev
-~~~
+Next Release
+~~~~~~~~~~~~
+
+* User docs in repository and rendered at
+  http://eos.ubc.ca/~sallen/SOG-docs/SOGcommand
 
 * Installation docs in repository and rendered at
   http://eos.ubc.ca/~sallen/SOG-docs/quickstart.html#sog-command-processor

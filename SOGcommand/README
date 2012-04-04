@@ -25,16 +25,15 @@ http://eos.ubc.ca/~sallen/SOG-docs/quickstart.html#sog-command-processor
 User Docs
 ---------
 
-*Comming Soon*
+User docs are included in the code repository and rendered at
+http://eos.ubc.ca/~sallen/SOG-docs/SOGcommand.html
 
 
 Source Code and Issue Tracker
 -----------------------------
 
-Code repository: :file:`/ocean/sallen/hg_repos/SOG
+Code repository: :file:`/ocean/sallen/hg_repos/SOG`
 
-Source browser: http://bjossa.eos.ubc.ca:9000/SOG/browser/SOG (login
-required)
+Source browser: http://bjossa.eos.ubc.ca:9000/SOG/browser/SOG (login required)
 
-Issue tracker: http://bjossa.eos.ubc.ca:9000/SOG/report (login
-required)
+Issue tracker: http://bjossa.eos.ubc.ca:9000/SOG/report (login required)

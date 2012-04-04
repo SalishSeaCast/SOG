@@ -10,5 +10,6 @@ Contents:
 
    quickstart
    workflows
+   SOGcommand
    buildbot
    trac
