@@ -16,7 +16,7 @@ class _SOG_YAML_Base(colander.MappingSchema):
     """Base class for SOG YAML infile quantities.
     """
     units = colander.SchemaNode(colander.String(), default=None, missing=None)
-    var_name = colander.SchemaNode(colander.String(), name='variable name')
+    var_name = colander.SchemaNode(colander.String(), name='variable_name')
     description = colander.SchemaNode(colander.String())
 
 
@@ -91,9 +91,9 @@ class _ForcingVariation(colander.MappingSchema):
 
 
 class YAML_Infile(colander.MappingSchema):
-    init_conditions = _InitialConditions(name='initial conditions')
+    initial_conditions = _InitialConditions()
     end_datetime = _SOG_Datetime(
-        name='end datetime', infile_key='end datetime', var_name='endDatetime')
+        infile_key='end datetime', var_name='endDatetime')
     location = _Location()
     grid = _Grid()
     numerics = _Numerics()
