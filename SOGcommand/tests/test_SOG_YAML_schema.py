@@ -87,7 +87,7 @@ class TestYAMLtoInfile(unittest.TestCase):
         yaml_struct = {
             'grid': {
                 'model_depth': {
-                    'value': 40, 'units': 'm', 'variable name': 'grid%D',
+                    'value': 40, 'units': 'm', 'variable_name': 'grid%D',
                     'description': 'depth of modelled domain'}}}
         result = self._call_yaml_to_infile(nodes, schema, yaml_struct)
         self.assertEqual(
@@ -105,14 +105,14 @@ class TestYAMLtoInfile(unittest.TestCase):
             var_name='initDatetime', children=[Mock(children=[])])
         mock_node = Mock()
         mock_node.configure_mock(
-            name='initial conditions', children=[mock_child])
+            name='initial_conditions', children=[mock_child])
         nodes = [mock_node]
         schema = self._make_schema()
         yaml_struct = {
-            'initial conditions': {
+            'initial_conditions': {
                 'init_datetime': {
                     'value': datetime(2012, 4, 1, 21, 4), 'units': None,
-                    'variable name': 'initDatetime',
+                    'variable_name': 'initDatetime',
                     'description': 'initialization CTD profile date/time'}}}
         result = self._call_yaml_to_infile(nodes, schema, yaml_struct)
         self.assertEqual(
@@ -126,14 +126,14 @@ class TestYAMLtoInfile(unittest.TestCase):
         """
         mock_node = Mock()
         mock_node.configure_mock(
-            name='end datetime', infile_key='end datetime',
+            name='end_datetime', infile_key='end datetime',
             var_name='endDatetime', children=[Mock(children=[])])
         nodes = [mock_node]
         schema = self._make_schema()
         yaml_struct = {
-            'end datetime': {
+            'end_datetime': {
                 'value': datetime(2012, 4, 2, 21, 21), 'units': None,
-                'variable name': 'initDatetime',
+                'variable_name': 'initDatetime',
                 'description': 'end of run date/time'}}
         result = self._call_yaml_to_infile(nodes, schema, yaml_struct)
         self.assertEqual(
