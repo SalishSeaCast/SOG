@@ -62,6 +62,72 @@ class TestDateTime(unittest.TestCase):
         self.assertEqual(result, {'value': datetime(2012, 4, 1, 20, 49)})
 
 
+class TestFloatList(unittest.TestCase):
+    """Unit tests for _FloatList schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_YAML_schema import _FloatList
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_FloatList())
+        return Schema()
+
+    def test_FloatList_serialize_null(self):
+        """_FloatList serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_FloatList_serialize_non_list_raises_invalid(self):
+        """_FloatList serialization of non-list raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_FloatList_serialize_non_number_item_raises_invalid(self):
+        """_FloatList serialization of non-number item raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.serialize, {'value': ['foo', 42]})
+
+    def test_FloatList_serialize_list_to_list(self):
+        """_FloatList serialization of list of numbers is passed unchanged
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': [42, 43]})
+        self.assertEqual(result, {'value': [42, 43]})
+
+    def test_FloatList_deserialize_null(self):
+        """_FloatList deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_FloatList_deserialize_non_list_raises_invalid(self):
+        """_FloatList deserialization of non-list raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_FloatList_deserialize_non_number_item_raises_invalid(self):
+        """_FloatList deserialization of non-number item raises Invalid
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': [42, 'foo']})
+
+    def test_FloatList_deserialize_list_to_list(self):
+        """_FloatList deserialization of list of numbers is passed unchanged
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': [42, 24]})
+        self.assertEqual(result, {'value': [42, 24]})
+
+
 class TestYAMLtoInfile(unittest.TestCase):
     """Unit tests for yaml_to_infile data structure transformation function.
     """

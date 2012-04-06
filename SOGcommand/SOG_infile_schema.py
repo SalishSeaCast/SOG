@@ -23,7 +23,8 @@ class _RealDP(object):
     """Fortran real(kind=dp) type.
 
     Text representation must be scientific with d as exponent
-    separator so that Fortran list directed input will work properly.
+    separator so that Fortran list directed input will convert number
+    properly to real(kind=dp).
     """
     def serialize(self, node, appstruct):
         if appstruct is colander.null:
@@ -44,6 +45,41 @@ class _RealDP(object):
 
 class _SOG_RealDP(_SOG_InfileBase):
     value = colander.SchemaNode(_RealDP())
+
+
+class _RealDP_List(object):
+    """List of Fortran real(kind=dp) type.
+
+    Text representation must be a whitespace separated numbers in
+    scientific notation with d as exponent separator so that Fortran
+    list directed input will convert numbers properly to real(kind=dp).
+
+    Python representation is a list of floats.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(appstruct))
+        if not all(isinstance(item, (int, float)) for item in appstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not a number'
+                .format(appstruct))
+        return ' '.join(
+            '{0:e}'.format(item).replace('e', 'd') for item in appstruct)
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, basestring):
+            raise colander.Invalid(
+                node, '{0!r} is not a string'.format(cstruct))
+        return [float(item.replace('d', 'e')) for item in cstruct.split()]
+
+
+class _SOG_RealDP_List(_SOG_InfileBase):
+    value = colander.SchemaNode(_RealDP_List())
 
 
 class _SOG_Int(_SOG_InfileBase):
@@ -148,6 +184,10 @@ class SOG_Infile(colander.MappingSchema):
     vary_temperature = _SOG_Boolean(name='vary%temperature%enabled')
     nitrate_chl_conversion = _SOG_RealDP(name='N2chl')
     ctd_in = _SOG_String()
+    nuts_in = _SOG_String()
+    botl_in = _SOG_String()
+    chem_in = _SOG_String()
+    init_chl_split = _SOG_RealDP_List(name='initial chl split')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

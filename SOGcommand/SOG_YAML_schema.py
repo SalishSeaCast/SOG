@@ -63,10 +63,49 @@ class _SOG_Datetime(_SOG_YAML_Base):
     value = colander.SchemaNode(_DateTime())
 
 
+class _FloatList(object):
+    """SOG list of floats type.
+
+    Validates that we're working with a list of numbers.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(appstruct))
+        if not all(isinstance(item, (int, float)) for item in appstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not a number'
+                .format(appstruct))
+        return appstruct
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(cstruct))
+        if not all(isinstance(item, (int, float)) for item in cstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not a number'
+                .format(cstruct))
+        return cstruct
+
+
+class _SOG_FloatList(_SOG_YAML_Base):
+    value = colander.SchemaNode(_FloatList())
+
+
 class _InitialConditions(colander.MappingSchema):
     init_datetime = _SOG_Datetime(
         infile_key='init datetime', var_name='initDatetime')
     CTD_file = _SOG_String(infile_key='ctd_in', var_name='ctd_in')
+    nutrients_file = _SOG_String(infile_key='nuts_in', var_name='nuts_in')
+    bottle_file = _SOG_String(infile_key='botl_in', var_name='botl_in')
+    chemistry_file = _SOG_String(infile_key='chem_in', var_name='chem_in')
+    init_chl_ratios = _SOG_FloatList(
+        infile_key='initial chl split', var_name='Psplit')
     nitrate_chl_conversion = _Float(infile_key='N2chl', var_name='N2chl')
 
 

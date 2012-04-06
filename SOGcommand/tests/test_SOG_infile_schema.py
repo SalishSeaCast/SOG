@@ -59,8 +59,66 @@ class TestRealDP(unittest.TestCase):
         """
         schema = self._make_schema()
         result = schema.deserialize({'value': '42.0d0'})
-        self.assertEqual(result, {'value': 42.0})
-        self.assertTrue(isinstance(result['value'], float))
+        self.assertEqual(result, {'value': float(42)})
+
+
+class TestRealDP_List(unittest.TestCase):
+    """Unit tests for _RealDP_List schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_infile_schema import _RealDP_List
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_RealDP_List())
+        return Schema()
+
+    def test_RealDP_List_serialize_null(self):
+        """_RealDP_List serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_RealDP_List_serialize_non_list_raises_invalid(self):
+        """_RealDP_List serialization of non-list raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_RealDP_List_serialize_non_number_item_raises_invalid(self):
+        """_RealDP_List serialization of non-number list item raises Invalid
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.serialize, {'value': [42, 'foo']})
+
+    def test_RealDP_List_serialize_list_e_format_with_d(self):
+        """_RealDP_List serialization of number list is Fortran real(kind=dp)
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': [42, 43]})
+        self.assertEqual(result, {'value': '4.200000d+01 4.300000d+01'})
+
+    def test_RealDP_List_deserialize_null(self):
+        """_RealDP_List deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_RealDP_List_deserialize_raises_invalid(self):
+        """_RealDP_List deserialization of non-string raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_RealDP_List_deserialize_d_floats_to_list(self):
+        """_RealDP_List deserialization of Fortran floats string is list
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': '42.0d0 24.0d0'})
+        self.assertEqual(result, {'value': [float(42), float(24)]})
 
 
 class TestDatetime(unittest.TestCase):
