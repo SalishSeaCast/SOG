@@ -32,6 +32,10 @@ class _Boolean(_SOG_YAML_Base):
     value = colander.SchemaNode(colander.Boolean())
 
 
+class _SOG_String(_SOG_YAML_Base):
+    value = colander.SchemaNode(colander.String())
+
+
 class _DateTime(object):
     """Replacement for Colander's ISO8601 DateTime type.
 
@@ -42,14 +46,16 @@ class _DateTime(object):
         if appstruct is colander.null:
             return colander.null
         if not isinstance(appstruct, datetime):
-            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+            raise colander.Invalid(
+                node, '{0!r} is not a datetime'.format(appstruct))
         return appstruct
 
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
         if not isinstance(cstruct, datetime):
-            raise colander.Invalid(node, '{0} is not a datetime'.format(node))
+            raise colander.Invalid(
+                node, '{0!r} is not a datetime'.format(cstruct))
         return cstruct
 
 
@@ -60,6 +66,8 @@ class _SOG_Datetime(_SOG_YAML_Base):
 class _InitialConditions(colander.MappingSchema):
     init_datetime = _SOG_Datetime(
         infile_key='init datetime', var_name='initDatetime')
+    CTD_file = _SOG_String(infile_key='ctd_in', var_name='ctd_in')
+    nitrate_chl_conversion = _Float(infile_key='N2chl', var_name='N2chl')
 
 
 class _Location(colander.MappingSchema):

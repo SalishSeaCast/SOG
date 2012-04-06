@@ -181,6 +181,58 @@ class TestBoolean(unittest.TestCase):
         self.assertEqual(result, {'value': False})
 
 
+class TestString(unittest.TestCase):
+    """Unit tests for _String schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_infile_schema import _String
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_String())
+        return Schema()
+
+    def test_String_serialize_null(self):
+        """_String serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_String_serialize_raises_invalid(self):
+        """_String serialization of non-string raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 42})
+
+    def test_String_serialize_str_to_double_quoted_string(self):
+        """_String serialization of datetime is SOG datetime format string
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': 'foo bar'})
+        self.assertEqual(result, {'value': '"foo bar"'})
+
+    def test_String_deserialize_null(self):
+        """_String deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_String_deserialize_raises_invalid(self):
+        """_String deserialization of non-string raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_String_deserialize_string_to_datetime(self):
+        """_String deserialization of SOG double quoted string is str
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': "foo bar"})
+        self.assertEqual(result, {'value': 'foo bar'})
+
+
 class TestInfileToYAML(unittest.TestCase):
     """Unit tests for infile_to_yaml data structure transformation function.
     """

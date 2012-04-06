@@ -30,7 +30,7 @@ class _RealDP(object):
             return colander.null
         if not isinstance(appstruct, (int, float)):
             raise colander.Invalid(
-                node, '{0} is not a number'.format(appstruct))
+                node, '{0!r} is not a number'.format(appstruct))
         return '{0:e}'.format(appstruct).replace('e', 'd')
 
     def deserialize(self, node, cstruct):
@@ -38,7 +38,7 @@ class _RealDP(object):
             return colander.null
         if not isinstance(cstruct, basestring):
             raise colander.Invalid(
-                node, '{0} is not a string'.format(cstruct))
+                node, '{0!r} is not a string'.format(cstruct))
         return float(cstruct.replace('d', 'e'))
 
 
@@ -61,7 +61,7 @@ class _Datetime(object):
             return colander.null
         if not isinstance(appstruct, datetime):
             raise colander.Invalid(
-                node, '{!r} is not a datetime'.format(appstruct))
+                node, '{0!r} is not a datetime'.format(appstruct))
         return '"{0:%Y-%m-%d %H:%M:%S}"'.format(appstruct)
 
     def deserialize(self, node, cstruct):
@@ -69,7 +69,7 @@ class _Datetime(object):
             return colander.null
         if not isinstance(cstruct, basestring):
             raise colander.Invalid(
-                node, '{!r} is not a string'.format(cstruct))
+                node, '{0!r} is not a string'.format(cstruct))
         return datetime.strptime(cstruct, '%Y-%m-%d %H:%M:%S')
 
 
@@ -87,7 +87,7 @@ class _Boolean(object):
             return colander.null
         if not isinstance(appstruct, bool):
             raise colander.Invalid(
-                node, '{!r} is not a boolean'.format(appstruct))
+                node, '{0!r} is not a boolean'.format(appstruct))
         return appstruct and '.true.' or '.false.'
 
     def deserialize(self, node, cstruct):
@@ -95,7 +95,7 @@ class _Boolean(object):
             return colander.null
         if not isinstance(cstruct, basestring):
             raise colander.Invalid(
-                node, '{!r} is not a string'.format(cstruct))
+                node, '{0!r} is not a string'.format(cstruct))
         if cstruct.lower() == '.true.':
             return True
         return False
@@ -103,6 +103,33 @@ class _Boolean(object):
 
 class _SOG_Boolean(_SOG_InfileBase):
     value = colander.SchemaNode(_Boolean())
+
+
+class _String(object):
+    """Replacement for Colander's String type.
+
+   SOG works with plain ASCII strings, not Unicode. Serialized strings are
+   enclosed in double quotes.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, basestring):
+            raise colander.Invalid(
+                node, '{0!r} is not a string'.format(appstruct))
+        return '"{0}"'.format(appstruct)
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, basestring):
+            raise colander.Invalid(
+                node, '{0!r} is not a string'.format(cstruct))
+        return str(cstruct)
+
+
+class _SOG_String(_SOG_InfileBase):
+    value = colander.SchemaNode(_String())
 
 
 class SOG_Infile(colander.MappingSchema):
@@ -119,6 +146,8 @@ class SOG_Infile(colander.MappingSchema):
     vary_cloud_fraction = _SOG_Boolean(name='vary%cf%enabled')
     vary_river_flows = _SOG_Boolean(name='vary%rivers%enabled')
     vary_temperature = _SOG_Boolean(name='vary%temperature%enabled')
+    nitrate_chl_conversion = _SOG_RealDP(name='N2chl')
+    ctd_in = _SOG_String()
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

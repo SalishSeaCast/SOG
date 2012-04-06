@@ -33,6 +33,7 @@ if __name__ == '__main__':
         'latitude', 'maxdepth',  'gridsize', 'lambda', 'init datetime',
         'end datetime', 'dt', 'chem_dt', 'max_iter', 'vary%wind%enabled',
         'vary%cf%enabled', 'vary%rivers%enabled', 'vary%temperature%enabled',
+        'N2chl', 'ctd_in',
         ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)
