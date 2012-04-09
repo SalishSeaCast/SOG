@@ -31,8 +31,6 @@ Ideas
   architecture that would allow the runs to be distributed over
   multiple core and/or machines.
 
-* Buildbot should shift to using :command:`SOG run`.
-
 * Make the :command:`compare_graphs.py` and :command:`check_diff.py`
   commands used by buildbot available as :command:`SOG` commands.
 
