@@ -26,10 +26,16 @@ with open('SOGcommand/README', 'rt') as file_obj:
 with open('SOGcommand/CHANGELOG', 'rt') as file_obj:
     detailed_description += file_obj.read()
 
-install_requires = []
-if (sys.version_info[0] == 2 and sys.version_info[1] < 7
-    or sys.version_info[0] == 3 and sys.version_info[1] < 2):
-    install_requires.append('argparse')
+install_requires = [
+    'colander',
+    'coverage',
+    'mock',
+]
+if sys.version_info[0] == 2 and sys.version_info[1] < 7:
+    install_requires.extend([
+        'argparse',
+        'unittest2',
+    ])
 
 setup(
     name='SOGcommand',
