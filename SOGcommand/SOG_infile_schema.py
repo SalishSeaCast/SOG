@@ -188,6 +188,11 @@ class SOG_Infile(colander.MappingSchema):
     botl_in = _SOG_String()
     chem_in = _SOG_String()
     init_chl_split = _SOG_RealDP_List(name='initial chl split')
+    std_phys_ts_out = _SOG_String()
+    user_phys_ts_out = _SOG_String()
+    std_bio_ts_out = _SOG_String()
+    user_bio_ts_out = _SOG_String()
+    std_chem_ts_out = _SOG_String()
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

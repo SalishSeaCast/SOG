@@ -34,7 +34,8 @@ if __name__ == '__main__':
         'end datetime', 'dt', 'chem_dt', 'max_iter', 'vary%wind%enabled',
         'vary%cf%enabled', 'vary%rivers%enabled', 'vary%temperature%enabled',
         'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
-        'initial chl split',
+        'initial chl split', 'std_phys_ts_out', 'user_phys_ts_out',
+        'std_bio_ts_out', 'user_bio_ts_out', 'std_chem_ts_out',
         ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)

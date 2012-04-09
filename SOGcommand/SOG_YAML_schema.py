@@ -109,6 +109,19 @@ class _InitialConditions(colander.MappingSchema):
     nitrate_chl_conversion = _Float(infile_key='N2chl', var_name='N2chl')
 
 
+class _TimeSeriesResults(colander.MappingSchema):
+    std_physics = _SOG_String(
+        infile_key='std_phys_ts_out', var_name='std_phys_ts_out')
+    user_physics = _SOG_String(
+        infile_key='user_phys_ts_out', var_name='user_phys_ts_out')
+    std_biology = _SOG_String(
+        infile_key='std_bio_ts_out', var_name='std_bio_ts_out')
+    user_biology = _SOG_String(
+        infile_key='user_bio_ts_out', var_name='user_bio_ts_out')
+    std_chemistry = _SOG_String(
+        infile_key='std_chem_ts_out', var_name='std_chem_ts_out')
+
+
 class _Location(colander.MappingSchema):
     latitude = _Float(infile_key='latitude', var_name='latitude')
 
@@ -145,6 +158,7 @@ class YAML_Infile(colander.MappingSchema):
     grid = _Grid()
     numerics = _Numerics()
     vary = _ForcingVariation()
+    timeseries_results = _TimeSeriesResults()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):
