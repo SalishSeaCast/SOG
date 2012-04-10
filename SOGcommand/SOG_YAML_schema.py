@@ -97,6 +97,40 @@ class _SOG_FloatList(_SOG_YAML_Base):
     value = colander.SchemaNode(_FloatList())
 
 
+class _IntList(object):
+    """SOG list of ints type.
+
+    Validates that we're working with a list of integers.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(appstruct))
+        if not all(isinstance(item, int) for item in appstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not an integer'
+                .format(appstruct))
+        return appstruct
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(cstruct))
+        if not all(isinstance(item, int) for item in cstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not an integer'
+                .format(cstruct))
+        return cstruct
+
+
+class _SOG_IntList(_SOG_YAML_Base):
+    value = colander.SchemaNode(_IntList())
+
+
 class _InitialConditions(colander.MappingSchema):
     init_datetime = _SOG_Datetime(
         infile_key='init datetime', var_name='initDatetime')
@@ -120,6 +154,34 @@ class _TimeSeriesResults(colander.MappingSchema):
         infile_key='user_bio_ts_out', var_name='user_bio_ts_out')
     std_chemistry = _SOG_String(
         infile_key='std_chem_ts_out', var_name='std_chem_ts_out')
+
+
+class _ProfilesResults(colander.MappingSchema):
+    num_profiles = _Int(infile_key='noprof', var_name='noprof')
+    profile_days = _SOG_IntList(
+        infile_key='profday', var_name='profileDatetime%yr_day')
+    profile_times = _SOG_FloatList(
+        infile_key='proftime', var_name='profileDatetime%day_sec')
+    profile_file_base = _SOG_String(
+        infile_key='profile_base', var_name='profilesBase_fn')
+    halocline_file = _SOG_String(
+        infile_key='haloclinefile', var_name='haloclines_fn')
+    hoffmueller_file = _SOG_String(
+        infile_key='Hoffmueller file', var_name='Hoffmueller_fn')
+    hoffmueller_start_year = _Int(
+        infile_key='Hoffmueller start yr', var_name='Hoff_startyr')
+    hoffmueller_start_day = _Int(
+        infile_key='Hoffmueller start day', var_name='Hoff_startday')
+    hoffmueller_start_sec = _Int(
+        infile_key='Hoffmueller start sec', var_name='Hoff_startsec')
+    hoffmueller_end_year = _Int(
+        infile_key='Hoffmueller end yr', var_name='Hoff_endyr')
+    hoffmueller_end_day = _Int(
+        infile_key='Hoffmueller end day', var_name='Hoff_endday')
+    hoffmueller_end_sec = _Int(
+        infile_key='Hoffmueller end sec', var_name='Hoff_endsec')
+    hoffmueller_interval = _Float(
+        infile_key='Hoffmueller interval', var_name='Hoff_interval')
 
 
 class _Location(colander.MappingSchema):
@@ -159,6 +221,7 @@ class YAML_Infile(colander.MappingSchema):
     numerics = _Numerics()
     vary = _ForcingVariation()
     timeseries_results = _TimeSeriesResults()
+    profiles_results = _ProfilesResults()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):

@@ -48,7 +48,7 @@ class _SOG_RealDP(_SOG_InfileBase):
 
 
 class _RealDP_List(object):
-    """List of Fortran real(kind=dp) type.
+    """List of Fortran real(kind=dp) type values.
 
     Text representation must be a whitespace separated numbers in
     scientific notation with d as exponent separator so that Fortran
@@ -84,6 +84,40 @@ class _SOG_RealDP_List(_SOG_InfileBase):
 
 class _SOG_Int(_SOG_InfileBase):
     value = colander.SchemaNode(colander.Int())
+
+
+class _IntList(object):
+    """List of Fortran integer type values.
+
+    Text representation must be a whitespace separated integers so
+    that Fortran list directed input will convert numbers properly to
+    integer.
+
+    Python representation is a list of ints.
+    """
+    def serialize(self, node, appstruct):
+        if appstruct is colander.null:
+            return colander.null
+        if not isinstance(appstruct, list):
+            raise colander.Invalid(
+                node, '{0!r} is not a list'.format(appstruct))
+        if not all(isinstance(item, int) for item in appstruct):
+            raise colander.Invalid(
+                node, '{0!r} contains item that is not an integer'
+                .format(appstruct))
+        return ' '.join('{0:d}'.format(item) for item in appstruct)
+
+    def deserialize(self, node, cstruct):
+        if cstruct is colander.null:
+            return colander.null
+        if not isinstance(cstruct, basestring):
+            raise colander.Invalid(
+                node, '{0!r} is not a string'.format(cstruct))
+        return [int(item) for item in cstruct.split()]
+
+
+class _SOG_IntList(_SOG_InfileBase):
+    value = colander.SchemaNode(_IntList())
 
 
 class _Datetime(object):
@@ -193,6 +227,19 @@ class SOG_Infile(colander.MappingSchema):
     std_bio_ts_out = _SOG_String()
     user_bio_ts_out = _SOG_String()
     std_chem_ts_out = _SOG_String()
+    num_profiles = _SOG_Int(name='noprof')
+    profile_days = _SOG_IntList(name='profday')
+    profile_times = _SOG_RealDP_List(name='proftime')
+    halocline_file = _SOG_String(name='haloclinefile')
+    profile_file_base = _SOG_String(name='profile_base')
+    hoffmueller_file = _SOG_String(name='Hoffmueller file')
+    hoffmueller_start_year = _SOG_Int(name='Hoffmueller start yr')
+    hoffmueller_start_day = _SOG_Int(name='Hoffmueller start day')
+    hoffmueller_start_sec = _SOG_Int(name='Hoffmueller start sec')
+    hoffmueller_end_year = _SOG_Int(name='Hoffmueller end yr')
+    hoffmueller_end_day = _SOG_Int(name='Hoffmueller end day')
+    hoffmueller_end_sec = _SOG_Int(name='Hoffmueller end sec')
+    hoffmueller_interval = _SOG_RealDP(name='Hoffmueller interval')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

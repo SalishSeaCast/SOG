@@ -121,6 +121,65 @@ class TestRealDP_List(unittest.TestCase):
         self.assertEqual(result, {'value': [float(42), float(24)]})
 
 
+class TestIntList(unittest.TestCase):
+    """Unit tests for _IntList schema type.
+    """
+    def _make_schema(self):
+        from ..SOG_infile_schema import _IntList
+
+        class Schema(colander.MappingSchema):
+            value = colander.SchemaNode(_IntList())
+        return Schema()
+
+    def test_IntList_serialize_null(self):
+        """_IntList serialization of null returns null
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': colander.null})
+        self.assertEqual(result, {'value': colander.null})
+
+    def test_IntList_serialize_non_list_raises_invalid(self):
+        """_IntList serialization of non-list raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(colander.Invalid, schema.serialize, {'value': 'foo'})
+
+    def test_IntList_serialize_non_number_item_raises_invalid(self):
+        """_IntList serialization of non-number list item raises Invalid
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.serialize, {'value': [42, 'foo']})
+
+    def test_IntList_serialize_ints_to_integers(self):
+        """_IntList serialization of number list is Fortran integer
+        """
+        schema = self._make_schema()
+        result = schema.serialize({'value': [42, 43]})
+        self.assertEqual(result, {'value': '42 43'})
+
+    def test_IntList_deserialize_null(self):
+        """_IntList deserialization of null raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': colander.null})
+
+    def test_IntList_deserialize_raises_invalid(self):
+        """_IntList deserialization of non-string raises Invalid exception
+        """
+        schema = self._make_schema()
+        self.assertRaises(
+            colander.Invalid, schema.deserialize, {'value': 42})
+
+    def test_IntList_deserialize_integers_to_list(self):
+        """_IntList deserialization of Fortran integers string is list
+        """
+        schema = self._make_schema()
+        result = schema.deserialize({'value': '42 24'})
+        self.assertEqual(result, {'value': [int(42), int(24)]})
+
+
 class TestDatetime(unittest.TestCase):
     """Unit tests for _Datetime schema type.
     """

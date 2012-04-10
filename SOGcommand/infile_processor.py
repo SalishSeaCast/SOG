@@ -30,12 +30,18 @@ if __name__ == '__main__':
 
     infile_struct = yaml_to_infile(YAML_Infile.nodes, YAML, yaml_struct)
     key_order = [
-        'latitude', 'maxdepth',  'gridsize', 'lambda', 'init datetime',
-        'end datetime', 'dt', 'chem_dt', 'max_iter', 'vary%wind%enabled',
-        'vary%cf%enabled', 'vary%rivers%enabled', 'vary%temperature%enabled',
+        'latitude', 'maxdepth',  'gridsize', 'lambda',
+        'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
+        'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',
+        'vary%temperature%enabled',
         'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
-        'initial chl split', 'std_phys_ts_out', 'user_phys_ts_out',
-        'std_bio_ts_out', 'user_bio_ts_out', 'std_chem_ts_out',
+        'initial chl split',
+        'std_phys_ts_out', 'user_phys_ts_out', 'std_bio_ts_out',
+        'user_bio_ts_out', 'std_chem_ts_out',
+        'noprof', 'profday', 'proftime', 'haloclinefile', 'profile_base',
+        'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
+        'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
+        'Hoffmueller end sec', 'Hoffmueller interval',
         ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)
