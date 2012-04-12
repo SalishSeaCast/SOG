@@ -6,6 +6,7 @@ import SOG_infile
 from SOG_infile_schema import (
     SOG_Infile,
     infile_to_yaml,
+    SOG_KEYS,
     )
 from SOG_YAML_schema import (
     YAML_Infile,
@@ -29,23 +30,7 @@ if __name__ == '__main__':
     yaml_struct = YAML.deserialize(data)
 
     infile_struct = yaml_to_infile(YAML_Infile.nodes, YAML, yaml_struct)
-    key_order = [
-        'latitude', 'maxdepth',  'gridsize', 'lambda',
-        'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
-        'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',
-        'vary%temperature%enabled',
-        'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
-        'initial chl split',
-        'std_phys_ts_out', 'user_phys_ts_out', 'std_bio_ts_out',
-        'user_bio_ts_out', 'std_chem_ts_out',
-        'noprof', 'profday', 'proftime', 'haloclinefile', 'profile_base',
-        'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
-        'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
-        'Hoffmueller end sec', 'Hoffmueller interval',
-        'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
-        'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
-        ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)
-    SOG_infile.dump(data, key_order, buffer)
+    SOG_infile.dump(data, SOG_KEYS, buffer)
     print buffer.getvalue()

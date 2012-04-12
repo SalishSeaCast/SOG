@@ -253,6 +253,25 @@ class SOG_Infile(colander.MappingSchema):
     phyto_ratio_fit_coefficients = _SOG_RealDP_List(name='Ratio')
 
 
+# List of keys, in order, to create a SOG infile
+SOG_KEYS = [
+    'latitude', 'maxdepth',  'gridsize', 'lambda',
+    'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
+    'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',
+    'vary%temperature%enabled',
+    'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
+    'initial chl split',
+    'std_phys_ts_out', 'user_phys_ts_out', 'std_bio_ts_out',
+    'user_bio_ts_out', 'std_chem_ts_out',
+    'noprof', 'profday', 'proftime', 'haloclinefile', 'profile_base',
+    'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
+    'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
+    'Hoffmueller end sec', 'Hoffmueller interval',
+    'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
+    'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
+    ]
+
+
 def infile_to_yaml(nodes, infile_schema, infile_struct):
     """Transform elements in a SOG Fortran-ish infile data structure
     into those of a SOG YAML infile data structure.
