@@ -42,6 +42,8 @@ if __name__ == '__main__':
         'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
         'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
         'Hoffmueller end sec', 'Hoffmueller interval',
+        'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
+        'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
         ]
     buffer = StringIO()
     data = SOG.serialize(infile_struct)

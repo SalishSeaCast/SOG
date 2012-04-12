@@ -184,6 +184,35 @@ class _ProfilesResults(colander.MappingSchema):
         infile_key='Hoffmueller interval', var_name='Hoff_interval')
 
 
+class _BottomBoundaryConditions(colander.MappingSchema):
+    constant_temperature = _Boolean(
+        infile_key='temp_constant', var_name='temp_constant')
+    temperature_fit_coefficients = _SOG_FloatList(
+        infile_key='temperature', var_name='c(:,2)')
+    salinity_fit_coefficients = _SOG_FloatList(
+        infile_key='salinity', var_name='c(:,1)')
+    phyto_fluor_fit_coefficients = _SOG_FloatList(
+        infile_key='Phytoplankton', var_name='c(:,3)')
+    nitrate_fit_coefficients = _SOG_FloatList(
+        infile_key='Nitrate', var_name='c(:,4)')
+    silicon_fit_coefficients = _SOG_FloatList(
+        infile_key='Silicon', var_name='c(:,5)')
+    DIC_fit_coefficients = _SOG_FloatList(
+        infile_key='DIC', var_name='c(:,6)')
+    dissolved_oxygen_fit_coefficients = _SOG_FloatList(
+        infile_key='Oxy', var_name='c(:,7)')
+    alkalinity_fit_coefficients = _SOG_FloatList(
+        infile_key='Alk', var_name='c(:,8)')
+    ammonium_fit_coefficients = _SOG_FloatList(
+        infile_key='Ammonium', var_name='c(:,9)')
+    phyto_ratio_fit_coefficients = _SOG_FloatList(
+        infile_key='Ratio', var_name='c(:,10)')
+
+
+class _PhysicsParams(colander.MappingSchema):
+    bottom_boundary_conditions = _BottomBoundaryConditions()
+
+
 class _Location(colander.MappingSchema):
     latitude = _Float(infile_key='latitude', var_name='latitude')
 
@@ -222,6 +251,7 @@ class YAML_Infile(colander.MappingSchema):
     vary = _ForcingVariation()
     timeseries_results = _TimeSeriesResults()
     profiles_results = _ProfilesResults()
+    physics = _PhysicsParams()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):

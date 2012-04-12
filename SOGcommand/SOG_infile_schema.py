@@ -240,6 +240,17 @@ class SOG_Infile(colander.MappingSchema):
     hoffmueller_end_day = _SOG_Int(name='Hoffmueller end day')
     hoffmueller_end_sec = _SOG_Int(name='Hoffmueller end sec')
     hoffmueller_interval = _SOG_RealDP(name='Hoffmueller interval')
+    constant_temperature = _SOG_Boolean(name='temp_constant')
+    salinity_fit_coefficients = _SOG_RealDP_List(name='salinity')
+    temperature_fit_coefficients = _SOG_RealDP_List(name='temperature')
+    phyto_fluor_fit_coefficients = _SOG_RealDP_List(name='Phytoplankton')
+    nitrate_fit_coefficients = _SOG_RealDP_List(name='Nitrate')
+    silicon_fit_coefficients = _SOG_RealDP_List(name='Silicon')
+    DIC_fit_coefficients = _SOG_RealDP_List(name='DIC')
+    dissolved_oxygen_fit_coefficients = _SOG_RealDP_List(name='Oxy')
+    alkalinity_fit_coefficients = _SOG_RealDP_List(name='Alk')
+    ammonium_fit_coefficients = _SOG_RealDP_List(name='Ammonium')
+    phyto_ratio_fit_coefficients = _SOG_RealDP_List(name='Ratio')
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):
