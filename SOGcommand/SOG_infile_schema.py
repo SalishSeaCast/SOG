@@ -251,6 +251,9 @@ class SOG_Infile(colander.MappingSchema):
     alkalinity_fit_coefficients = _SOG_RealDP_List(name='Alk')
     ammonium_fit_coefficients = _SOG_RealDP_List(name='Ammonium')
     phyto_ratio_fit_coefficients = _SOG_RealDP_List(name='Ratio')
+    minor_axis = _SOG_RealDP(name='Lx')
+    major_axis = _SOG_RealDP(name='Ly')
+    open_ended_estuary = _SOG_Boolean(name='openEnd')
 
 
 # List of keys, in order, to create a SOG infile
@@ -269,6 +272,7 @@ SOG_KEYS = [
     'Hoffmueller end sec', 'Hoffmueller interval',
     'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
     'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
+    'Lx', 'Ly', 'openEnd',
     ]
 
 

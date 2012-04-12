@@ -215,6 +215,9 @@ class _PhysicsParams(colander.MappingSchema):
 
 class _Location(colander.MappingSchema):
     latitude = _Float(infile_key='latitude', var_name='latitude')
+    minor_axis = _Float(infile_key='Lx', var_name='Lx')
+    major_axis = _Float(infile_key='Ly', var_name='Ly')
+    open_ended_estuary = _Boolean(infile_key='openEnd', var_name='openEnd')
 
 
 class _Grid(colander.MappingSchema):
