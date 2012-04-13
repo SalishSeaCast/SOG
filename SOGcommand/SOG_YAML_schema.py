@@ -209,8 +209,18 @@ class _BottomBoundaryConditions(colander.MappingSchema):
         infile_key='Ratio', var_name='c(:,10)')
 
 
+class _Turbulence(colander.MappingSchema):
+    momentum_wave_break_diffusivity = _Float(
+        infile_key='nu_w_m', var_name='nu%m%int_wave')
+    scalar_wave_break_diffusivity = _Float(
+        infile_key='nu_w_s', var_name='nu%T%int_wave, nu%S%int_wave')
+    shear_diffusivity_smoothing = _SOG_FloatList(
+        infile_key='shear smooth', var_name='shear_diff_smooth')
+
+
 class _PhysicsParams(colander.MappingSchema):
     bottom_boundary_conditions = _BottomBoundaryConditions()
+    turbulence = _Turbulence()
 
 
 class _Location(colander.MappingSchema):

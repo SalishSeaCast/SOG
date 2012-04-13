@@ -254,6 +254,9 @@ class SOG_Infile(colander.MappingSchema):
     minor_axis = _SOG_RealDP(name='Lx')
     major_axis = _SOG_RealDP(name='Ly')
     open_ended_estuary = _SOG_Boolean(name='openEnd')
+    momentum_wave_break_diffusivity = _SOG_RealDP(name='nu_w_m')
+    scalar_wave_break_diffusivity = _SOG_RealDP(name='nu_w_s')
+    shear_diffusivity_smoothing = _SOG_RealDP_List(name='shear smooth')
 
 
 # List of keys, in order, to create a SOG infile
@@ -273,6 +276,7 @@ SOG_KEYS = [
     'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
     'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
     'Lx', 'Ly', 'openEnd',
+    'nu_w_m', 'nu_w_s', 'shear smooth',
     ]
 
 
