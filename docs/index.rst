@@ -11,5 +11,6 @@ Contents:
    quickstart
    workflows
    SOGcommand
+   SOG-YAML
    buildbot
    trac
