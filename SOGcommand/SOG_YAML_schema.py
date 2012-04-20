@@ -218,9 +218,20 @@ class _Turbulence(colander.MappingSchema):
         infile_key='shear smooth', var_name='shear_diff_smooth')
 
 
+class _Upwelling(colander.MappingSchema):
+    max_upwelling_velocity = _Float(
+        infile_key='upwell_const', var_name='upwell_const')
+    variation_depth_param = _Float(infile_key='d', var_name='d')
+
+
+class _FreshWater(colander.MappingSchema):
+    upwelling = _Upwelling()
+
+
 class _PhysicsParams(colander.MappingSchema):
     bottom_boundary_conditions = _BottomBoundaryConditions()
     turbulence = _Turbulence()
+    fresh_water = _FreshWater()
 
 
 class _Location(colander.MappingSchema):
