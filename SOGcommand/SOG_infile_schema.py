@@ -258,8 +258,15 @@ class SOG_Infile(colander.MappingSchema):
     scalar_wave_break_diffusivity = _SOG_RealDP(name='nu_w_s')
     shear_diffusivity_smoothing = _SOG_RealDP_List(name='shear smooth')
     max_upwelling_velocity = _SOG_RealDP(name='upwell_const')
-
     variation_depth_param = _SOG_RealDP(name='d')
+    mean_total_flow = _SOG_RealDP(name='Qbar')
+    common_exponent = _SOG_RealDP(name='F_SOG')
+    SoG_exponent = _SOG_RealDP(name='F_RI')
+    scale_factor = _SOG_RealDP(name='Fw_scale')
+    add_freshwater_on_surface = _SOG_Boolean(name='Fw_surface')
+    distribution_depth = _SOG_RealDP(name='Fw_depth')
+    northern_return_flow = _SOG_Boolean(name='northern_return_flow_on')
+    include_fresh_water_nutrients = _SOG_Boolean(name='use_Fw_nutrients')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -279,7 +286,8 @@ SOG_KEYS = [
     'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
     'Lx', 'Ly', 'openEnd',
     'nu_w_m', 'nu_w_s', 'shear smooth',
-    'upwell_const',
+    'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
+    'Fw_depth', 'use_Fw_nutrients', 'northern_return_flow_on',
 
     'd',
     ]

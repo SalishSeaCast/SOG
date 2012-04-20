@@ -218,14 +218,29 @@ class _Turbulence(colander.MappingSchema):
         infile_key='shear smooth', var_name='shear_diff_smooth')
 
 
-class _Upwelling(colander.MappingSchema):
+class _FreshWaterUpwelling(colander.MappingSchema):
     max_upwelling_velocity = _Float(
         infile_key='upwell_const', var_name='upwell_const')
     variation_depth_param = _Float(infile_key='d', var_name='d')
 
 
+class _FreshWaterFlux(colander.MappingSchema):
+    mean_total_flow = _Float(infile_key='Qbar', var_name='Qbar')
+    common_exponent = _Float(infile_key='F_SOG', var_name='F_SOG')
+    SoG_exponent = _Float(infile_key='F_RI', var_name='F_RI')
+    scale_factor = _Float(infile_key='Fw_scale', var_name='Fw_scale')
+    add_freshwater_on_surface = _Boolean(
+        infile_key='Fw_surface', var_name='Fw_surface')
+    distribution_depth = _Float(infile_key='Fw_depth', var_name='Fw_depth')
+    northern_return_flow = _Boolean(
+        infile_key='northern_return_flow_on', var_name='Northern_return')
+    include_fresh_water_nutrients = _Boolean(
+        infile_key='use_Fw_nutrients', var_name='use_Fw_nutrients')
+
+
 class _FreshWater(colander.MappingSchema):
-    upwelling = _Upwelling()
+    upwelling = _FreshWaterUpwelling()
+    flux = _FreshWaterFlux()
 
 
 class _PhysicsParams(colander.MappingSchema):
