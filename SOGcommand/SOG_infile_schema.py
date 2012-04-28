@@ -272,6 +272,12 @@ class SOG_Infile(colander.MappingSchema):
     alpha2 = _SOG_RealDP(name='calpha2')
     gamma = _SOG_RealDP(name='cgamma')
     beta = _SOG_RealDP(name='cbeta')
+    ialpha = _SOG_RealDP()
+    ibeta = _SOG_RealDP()
+    igamma = _SOG_RealDP()
+    isigma = _SOG_RealDP()
+    itheta = _SOG_RealDP()
+    idl = _SOG_RealDP()
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -294,7 +300,7 @@ SOG_KEYS = [
     'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
     'Fw_depth', 'use_Fw_nutrients', 'northern_return_flow_on',
     'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
-
+    'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
     'd',
     ]
 

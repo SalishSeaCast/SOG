@@ -252,10 +252,20 @@ class _FreshWater(colander.MappingSchema):
     salinity_fit = _SalinityFit()
 
 
+class _K_PAR_Fit(colander.MappingSchema):
+    ialpha = _Float(infile_key='ialpha', var_name='ialpha')
+    ibeta = _Float(infile_key='ibeta', var_name='ibeta')
+    igamma = _Float(infile_key='igamma', var_name='igamma')
+    isigma = _Float(infile_key='isigma', var_name='isigma')
+    itheta = _Float(infile_key='itheta', var_name='itheta')
+    idl = _Float(infile_key='idl', var_name='idl')
+
+
 class _PhysicsParams(colander.MappingSchema):
     bottom_boundary_conditions = _BottomBoundaryConditions()
     turbulence = _Turbulence()
     fresh_water = _FreshWater()
+    K_PAR_fit = _K_PAR_Fit()
 
 
 class _Location(colander.MappingSchema):
