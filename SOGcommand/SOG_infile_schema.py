@@ -267,6 +267,11 @@ class SOG_Infile(colander.MappingSchema):
     distribution_depth = _SOG_RealDP(name='Fw_depth')
     northern_return_flow = _SOG_Boolean(name='northern_return_flow_on')
     include_fresh_water_nutrients = _SOG_Boolean(name='use_Fw_nutrients')
+    bottom_salinity = _SOG_RealDP(name='cbottom')
+    alpha = _SOG_RealDP(name='calpha')
+    alpha2 = _SOG_RealDP(name='calpha2')
+    gamma = _SOG_RealDP(name='cgamma')
+    beta = _SOG_RealDP(name='cbeta')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -288,6 +293,7 @@ SOG_KEYS = [
     'nu_w_m', 'nu_w_s', 'shear smooth',
     'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
     'Fw_depth', 'use_Fw_nutrients', 'northern_return_flow_on',
+    'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
 
     'd',
     ]

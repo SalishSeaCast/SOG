@@ -238,9 +238,18 @@ class _FreshWaterFlux(colander.MappingSchema):
         infile_key='use_Fw_nutrients', var_name='use_Fw_nutrients')
 
 
+class _SalinityFit(colander.MappingSchema):
+    bottom_salinity = _Float(infile_key='cbottom', var_name='cbottom')
+    alpha = _Float(infile_key='calpha', var_name='calpha')
+    alpha2 = _Float(infile_key='calpha2', var_name='calpha2')
+    beta = _Float(infile_key='cbeta', var_name='cbeta')
+    gamma = _Float(infile_key='cgamma', var_name='cgamma')
+
+
 class _FreshWater(colander.MappingSchema):
     upwelling = _FreshWaterUpwelling()
     flux = _FreshWaterFlux()
+    salinity_fit = _SalinityFit()
 
 
 class _PhysicsParams(colander.MappingSchema):
