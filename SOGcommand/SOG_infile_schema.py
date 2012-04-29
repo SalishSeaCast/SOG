@@ -278,6 +278,10 @@ class SOG_Infile(colander.MappingSchema):
     isigma = _SOG_RealDP()
     itheta = _SOG_RealDP()
     idl = _SOG_RealDP()
+    include_flagellates = _SOG_Boolean(name='flagellates_on')
+    include_remineralization = _SOG_Boolean(name='remineralization')
+    include_microzooplankton = _SOG_Boolean(name='use microzooplankton')
+    single_species_light = _SOG_Boolean(name='single species light')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -302,6 +306,8 @@ SOG_KEYS = [
     'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
     'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
     'd',
+    'flagellates_on', 'remineralization', 'use microzooplankton',
+    'single species light',
     ]
 
 

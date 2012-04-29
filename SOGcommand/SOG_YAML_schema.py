@@ -268,6 +268,17 @@ class _PhysicsParams(colander.MappingSchema):
     K_PAR_fit = _K_PAR_Fit()
 
 
+class _BiologyParams(colander.MappingSchema):
+    include_flagellates = _Boolean(
+        infile_key='flagellates_on', var_name='flagellates')
+    include_remineralization = _Boolean(
+        infile_key='remineralization', var_name='remineralization')
+    include_microzooplankton = _Boolean(
+        infile_key='use microzooplankton', var_name='microzooplankton')
+    single_species_light = _Boolean(
+        infile_key='single species light', var_name='strong_limitation')
+
+
 class _Location(colander.MappingSchema):
     latitude = _Float(infile_key='latitude', var_name='latitude')
     minor_axis = _Float(infile_key='Lx', var_name='Lx')
@@ -310,6 +321,7 @@ class YAML_Infile(colander.MappingSchema):
     timeseries_results = _TimeSeriesResults()
     profiles_results = _ProfilesResults()
     physics = _PhysicsParams()
+    biology = _BiologyParams()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):
