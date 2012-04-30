@@ -282,6 +282,41 @@ class SOG_Infile(colander.MappingSchema):
     include_remineralization = _SOG_Boolean(name='remineralization')
     include_microzooplankton = _SOG_Boolean(name='use microzooplankton')
     single_species_light = _SOG_Boolean(name='single species light')
+    mesozoo_winter_conc = _SOG_RealDP(name='Mesozoo, winter conc')
+    mesozoo_summer_conc = _SOG_RealDP(name='Mesozoo, summer conc')
+    mesozoo_summer_peak_magnitudes = _SOG_RealDP_List(
+        name='Mesozoo, summer peak mag')
+    mesozoo_summer_peak_days = _SOG_RealDP_List(
+        name='Mesozoo, summer peak pos')
+    mesozoo_summer_peak_widths = _SOG_RealDP_List(
+        name='Mesozoo, summer peak wid')
+    mesozoo_max_ingestion = _SOG_RealDP(name='Mesozoo, max ingestion')
+    mesozoo_grazing_limit = _SOG_RealDP(name='Mesozoo, pred slope')
+    mesozoo_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, half-sat')
+    mesozoo_diatom_preference = _SOG_RealDP(
+        name='Mesozoo, pref for diatoms')
+    mesozoo_diatom_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, micro pred slope')
+    mesozoo_diatom_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, micro half-sat')
+    mesozoo_nano_preference = _SOG_RealDP(name='Mesozoo, pref for nano')
+    mesozoo_nano_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, nano pred slope')
+    mesozoo_nano_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, nano half-sat')
+    mesozoo_PON_preference = _SOG_RealDP(
+        name='Mesozoo, pref for PON')
+    mesozoo_PON_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, PON pred slope')
+    mesozoo_PON_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, PON half-sat')
+    mesozoo_microzoo_preference = _SOG_RealDP(
+        name='Mesozoo, pref for uZoo')
+    mesozoo_microzoo_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, uZoo pred slope')
+    mesozoo_microzoo_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, uZoo half-sat')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -308,6 +343,18 @@ SOG_KEYS = [
     'd',
     'flagellates_on', 'remineralization', 'use microzooplankton',
     'single species light',
+    'Mesozoo, winter conc',
+    'Mesozoo, summer conc', 'Mesozoo, summer peak mag',
+    'Mesozoo, summer peak pos', 'Mesozoo, summer peak wid',
+    'Mesozoo, max ingestion', 'Mesozoo, pred slope', 'Mesozoo, half-sat',
+    'Mesozoo, pref for diatoms', 'Mesozoo, micro pred slope',
+    'Mesozoo, micro half-sat',
+    'Mesozoo, pref for nano', 'Mesozoo, nano pred slope',
+    'Mesozoo, nano half-sat',
+    'Mesozoo, pref for PON', 'Mesozoo, PON pred slope',
+    'Mesozoo, PON half-sat',
+    'Mesozoo, pref for uZoo', 'Mesozoo, uZoo pred slope',
+    'Mesozoo, uZoo half-sat',
     ]
 
 

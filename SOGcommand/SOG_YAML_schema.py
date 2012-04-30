@@ -268,6 +268,69 @@ class _PhysicsParams(colander.MappingSchema):
     K_PAR_fit = _K_PAR_Fit()
 
 
+class _Mesozooplankton(colander.MappingSchema):
+    mesozoo_winter_conc = _Float(
+        infile_key='Mesozoo, winter conc',
+        var_name='rate_mesozoo%winterconc')
+    mesozoo_summer_conc = _Float(
+        infile_key='Mesozoo, summer conc',
+        var_name='rate_mesozoo%summerconc')
+    mesozoo_summer_peak_magnitudes = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak mag',
+        var_name='rate_mesozoo%sumpeakval')
+    mesozoo_summer_peak_days = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak pos',
+        var_name='rate_mesozoo%sumpeakpos')
+    mesozoo_summer_peak_widths = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak wid',
+        var_name='rate_mesozoo%sumpeakwid')
+    mesozoo_max_ingestion = _Float(
+        infile_key='Mesozoo, max ingestion',
+        var_name='rate_mesozoo%R')
+    mesozoo_grazing_limit = _Float(
+        infile_key='Mesozoo, pred slope',
+        var_name='rate_mesozoo%PredSlope')
+    mesozoo_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, half-sat',
+        var_name='rate_mesozoo%HalfSat')
+    mesozoo_diatom_preference = _Float(
+        infile_key='Mesozoo, pref for diatoms',
+        var_name='rate_mesozoo%MicroPref')
+    mesozoo_diatom_grazing_limit = _Float(
+        infile_key='Mesozoo, micro pred slope',
+        var_name='rate_mesozoo%MicroPredSlope')
+    mesozoo_diatom_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, micro half-sat',
+        var_name='rate_mesozoo%MicroHalfSat')
+    mesozoo_nano_preference = _Float(
+        infile_key='Mesozoo, pref for nano',
+        var_name='rate_mesozoo%NanoPref')
+    mesozoo_nano_grazing_limit = _Float(
+        infile_key='Mesozoo, nano pred slope',
+        var_name='rate_mesozoo%NanoPredSlope')
+    mesozoo_nano_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, nano half-sat',
+        var_name='rate_mesozoo%NanoHalfSat')
+    mesozoo_PON_preference = _Float(
+        infile_key='Mesozoo, pref for PON',
+        var_name='rate_mesozoo%PON_Pref')
+    mesozoo_PON_grazing_limit = _Float(
+        infile_key='Mesozoo, PON pred slope',
+        var_name='rate_mesozoo%PON_PredSlope')
+    mesozoo_PON_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, PON half-sat',
+        var_name='rate_mesozoo%PON_HalfSat')
+    mesozoo_microzoo_preference = _Float(
+        infile_key='Mesozoo, pref for uZoo',
+        var_name='rate_mesozoo%Z_Pref')
+    mesozoo_microzoo_grazing_limit = _Float(
+        infile_key='Mesozoo, uZoo pred slope',
+        var_name='rate_mesozoo%Z_PredSlope')
+    mesozoo_microzoo_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, uZoo half-sat',
+        var_name='rate_mesozoo%Z_HalfSat')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -277,6 +340,7 @@ class _BiologyParams(colander.MappingSchema):
         infile_key='use microzooplankton', var_name='microzooplankton')
     single_species_light = _Boolean(
         infile_key='single species light', var_name='strong_limitation')
+    mesozooplankton = _Mesozooplankton()
 
 
 class _Location(colander.MappingSchema):
