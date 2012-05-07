@@ -69,9 +69,12 @@ as a separator:
    description: depth of modelled domain
 
 
-
 .. _ExampleSOG-YAMLinfile-section:
 
 Example SOG YAML infile
 -----------------------
 
+This is a snapshot of :file:`SOG-code/infile.yaml` as of |today|.
+
+.. literalinclude:: ../SOG-code-ocean/infile.yaml
+   :language: yaml
