@@ -25,7 +25,7 @@ if __name__ == '__main__':
     yaml_struct = infile_to_yaml(YAML_Infile.nodes, SOG, infile_struct)
     print yaml.dump(yaml_struct, default_flow_style=False)
 
-    with open('SOGcommand/infile.yaml', 'rt') as f:
+    with open('SOG-code-dev/infile.yaml', 'rt') as f:
         data = yaml.load(f)
     yaml_struct = YAML.deserialize(data)
 

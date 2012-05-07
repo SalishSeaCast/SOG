@@ -209,8 +209,138 @@ class _BottomBoundaryConditions(colander.MappingSchema):
         infile_key='Ratio', var_name='c(:,10)')
 
 
+class _Turbulence(colander.MappingSchema):
+    momentum_wave_break_diffusivity = _Float(
+        infile_key='nu_w_m', var_name='nu%m%int_wave')
+    scalar_wave_break_diffusivity = _Float(
+        infile_key='nu_w_s', var_name='nu%T%int_wave, nu%S%int_wave')
+    shear_diffusivity_smoothing = _SOG_FloatList(
+        infile_key='shear smooth', var_name='shear_diff_smooth')
+
+
+class _FreshWaterUpwelling(colander.MappingSchema):
+    max_upwelling_velocity = _Float(
+        infile_key='upwell_const', var_name='upwell_const')
+    variation_depth_param = _Float(infile_key='d', var_name='d')
+
+
+class _FreshWaterFlux(colander.MappingSchema):
+    mean_total_flow = _Float(infile_key='Qbar', var_name='Qbar')
+    common_exponent = _Float(infile_key='F_SOG', var_name='F_SOG')
+    SoG_exponent = _Float(infile_key='F_RI', var_name='F_RI')
+    scale_factor = _Float(infile_key='Fw_scale', var_name='Fw_scale')
+    add_freshwater_on_surface = _Boolean(
+        infile_key='Fw_surface', var_name='Fw_surface')
+    distribution_depth = _Float(infile_key='Fw_depth', var_name='Fw_depth')
+    northern_return_flow = _Boolean(
+        infile_key='northern_return_flow_on', var_name='Northern_return')
+    include_fresh_water_nutrients = _Boolean(
+        infile_key='use_Fw_nutrients', var_name='use_Fw_nutrients')
+
+
+class _SalinityFit(colander.MappingSchema):
+    bottom_salinity = _Float(infile_key='cbottom', var_name='cbottom')
+    alpha = _Float(infile_key='calpha', var_name='calpha')
+    alpha2 = _Float(infile_key='calpha2', var_name='calpha2')
+    beta = _Float(infile_key='cbeta', var_name='cbeta')
+    gamma = _Float(infile_key='cgamma', var_name='cgamma')
+
+
+class _FreshWater(colander.MappingSchema):
+    upwelling = _FreshWaterUpwelling()
+    flux = _FreshWaterFlux()
+    salinity_fit = _SalinityFit()
+
+
+class _K_PAR_Fit(colander.MappingSchema):
+    ialpha = _Float(infile_key='ialpha', var_name='ialpha')
+    ibeta = _Float(infile_key='ibeta', var_name='ibeta')
+    igamma = _Float(infile_key='igamma', var_name='igamma')
+    isigma = _Float(infile_key='isigma', var_name='isigma')
+    itheta = _Float(infile_key='itheta', var_name='itheta')
+    idl = _Float(infile_key='idl', var_name='idl')
+
+
 class _PhysicsParams(colander.MappingSchema):
     bottom_boundary_conditions = _BottomBoundaryConditions()
+    turbulence = _Turbulence()
+    fresh_water = _FreshWater()
+    K_PAR_fit = _K_PAR_Fit()
+
+
+class _Mesozooplankton(colander.MappingSchema):
+    mesozoo_winter_conc = _Float(
+        infile_key='Mesozoo, winter conc',
+        var_name='rate_mesozoo%winterconc')
+    mesozoo_summer_conc = _Float(
+        infile_key='Mesozoo, summer conc',
+        var_name='rate_mesozoo%summerconc')
+    mesozoo_summer_peak_magnitudes = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak mag',
+        var_name='rate_mesozoo%sumpeakval')
+    mesozoo_summer_peak_days = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak pos',
+        var_name='rate_mesozoo%sumpeakpos')
+    mesozoo_summer_peak_widths = _SOG_FloatList(
+        infile_key='Mesozoo, summer peak wid',
+        var_name='rate_mesozoo%sumpeakwid')
+    mesozoo_max_ingestion = _Float(
+        infile_key='Mesozoo, max ingestion',
+        var_name='rate_mesozoo%R')
+    mesozoo_grazing_limit = _Float(
+        infile_key='Mesozoo, pred slope',
+        var_name='rate_mesozoo%PredSlope')
+    mesozoo_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, half-sat',
+        var_name='rate_mesozoo%HalfSat')
+    mesozoo_diatom_preference = _Float(
+        infile_key='Mesozoo, pref for diatoms',
+        var_name='rate_mesozoo%MicroPref')
+    mesozoo_diatom_grazing_limit = _Float(
+        infile_key='Mesozoo, micro pred slope',
+        var_name='rate_mesozoo%MicroPredSlope')
+    mesozoo_diatom_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, micro half-sat',
+        var_name='rate_mesozoo%MicroHalfSat')
+    mesozoo_nano_preference = _Float(
+        infile_key='Mesozoo, pref for nano',
+        var_name='rate_mesozoo%NanoPref')
+    mesozoo_nano_grazing_limit = _Float(
+        infile_key='Mesozoo, nano pred slope',
+        var_name='rate_mesozoo%NanoPredSlope')
+    mesozoo_nano_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, nano half-sat',
+        var_name='rate_mesozoo%NanoHalfSat')
+    mesozoo_PON_preference = _Float(
+        infile_key='Mesozoo, pref for PON',
+        var_name='rate_mesozoo%PON_Pref')
+    mesozoo_PON_grazing_limit = _Float(
+        infile_key='Mesozoo, PON pred slope',
+        var_name='rate_mesozoo%PON_PredSlope')
+    mesozoo_PON_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, PON half-sat',
+        var_name='rate_mesozoo%PON_HalfSat')
+    mesozoo_microzoo_preference = _Float(
+        infile_key='Mesozoo, pref for uZoo',
+        var_name='rate_mesozoo%Z_Pref')
+    mesozoo_microzoo_grazing_limit = _Float(
+        infile_key='Mesozoo, uZoo pred slope',
+        var_name='rate_mesozoo%Z_PredSlope')
+    mesozoo_microzoo_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, uZoo half-sat',
+        var_name='rate_mesozoo%Z_HalfSat')
+
+
+class _BiologyParams(colander.MappingSchema):
+    include_flagellates = _Boolean(
+        infile_key='flagellates_on', var_name='flagellates')
+    include_remineralization = _Boolean(
+        infile_key='remineralization', var_name='remineralization')
+    include_microzooplankton = _Boolean(
+        infile_key='use microzooplankton', var_name='microzooplankton')
+    single_species_light = _Boolean(
+        infile_key='single species light', var_name='strong_limitation')
+    mesozooplankton = _Mesozooplankton()
 
 
 class _Location(colander.MappingSchema):
@@ -255,6 +385,7 @@ class YAML_Infile(colander.MappingSchema):
     timeseries_results = _TimeSeriesResults()
     profiles_results = _ProfilesResults()
     physics = _PhysicsParams()
+    biology = _BiologyParams()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):

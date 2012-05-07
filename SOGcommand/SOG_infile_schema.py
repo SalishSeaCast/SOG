@@ -254,7 +254,69 @@ class SOG_Infile(colander.MappingSchema):
     minor_axis = _SOG_RealDP(name='Lx')
     major_axis = _SOG_RealDP(name='Ly')
     open_ended_estuary = _SOG_Boolean(name='openEnd')
-
+    momentum_wave_break_diffusivity = _SOG_RealDP(name='nu_w_m')
+    scalar_wave_break_diffusivity = _SOG_RealDP(name='nu_w_s')
+    shear_diffusivity_smoothing = _SOG_RealDP_List(name='shear smooth')
+    max_upwelling_velocity = _SOG_RealDP(name='upwell_const')
+    variation_depth_param = _SOG_RealDP(name='d')
+    mean_total_flow = _SOG_RealDP(name='Qbar')
+    common_exponent = _SOG_RealDP(name='F_SOG')
+    SoG_exponent = _SOG_RealDP(name='F_RI')
+    scale_factor = _SOG_RealDP(name='Fw_scale')
+    add_freshwater_on_surface = _SOG_Boolean(name='Fw_surface')
+    distribution_depth = _SOG_RealDP(name='Fw_depth')
+    northern_return_flow = _SOG_Boolean(name='northern_return_flow_on')
+    include_fresh_water_nutrients = _SOG_Boolean(name='use_Fw_nutrients')
+    bottom_salinity = _SOG_RealDP(name='cbottom')
+    alpha = _SOG_RealDP(name='calpha')
+    alpha2 = _SOG_RealDP(name='calpha2')
+    gamma = _SOG_RealDP(name='cgamma')
+    beta = _SOG_RealDP(name='cbeta')
+    ialpha = _SOG_RealDP()
+    ibeta = _SOG_RealDP()
+    igamma = _SOG_RealDP()
+    isigma = _SOG_RealDP()
+    itheta = _SOG_RealDP()
+    idl = _SOG_RealDP()
+    include_flagellates = _SOG_Boolean(name='flagellates_on')
+    include_remineralization = _SOG_Boolean(name='remineralization')
+    include_microzooplankton = _SOG_Boolean(name='use microzooplankton')
+    single_species_light = _SOG_Boolean(name='single species light')
+    mesozoo_winter_conc = _SOG_RealDP(name='Mesozoo, winter conc')
+    mesozoo_summer_conc = _SOG_RealDP(name='Mesozoo, summer conc')
+    mesozoo_summer_peak_magnitudes = _SOG_RealDP_List(
+        name='Mesozoo, summer peak mag')
+    mesozoo_summer_peak_days = _SOG_RealDP_List(
+        name='Mesozoo, summer peak pos')
+    mesozoo_summer_peak_widths = _SOG_RealDP_List(
+        name='Mesozoo, summer peak wid')
+    mesozoo_max_ingestion = _SOG_RealDP(name='Mesozoo, max ingestion')
+    mesozoo_grazing_limit = _SOG_RealDP(name='Mesozoo, pred slope')
+    mesozoo_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, half-sat')
+    mesozoo_diatom_preference = _SOG_RealDP(
+        name='Mesozoo, pref for diatoms')
+    mesozoo_diatom_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, micro pred slope')
+    mesozoo_diatom_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, micro half-sat')
+    mesozoo_nano_preference = _SOG_RealDP(name='Mesozoo, pref for nano')
+    mesozoo_nano_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, nano pred slope')
+    mesozoo_nano_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, nano half-sat')
+    mesozoo_PON_preference = _SOG_RealDP(
+        name='Mesozoo, pref for PON')
+    mesozoo_PON_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, PON pred slope')
+    mesozoo_PON_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, PON half-sat')
+    mesozoo_microzoo_preference = _SOG_RealDP(
+        name='Mesozoo, pref for uZoo')
+    mesozoo_microzoo_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, uZoo pred slope')
+    mesozoo_microzoo_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, uZoo half-sat')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -273,6 +335,26 @@ SOG_KEYS = [
     'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
     'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
     'Lx', 'Ly', 'openEnd',
+    'nu_w_m', 'nu_w_s', 'shear smooth',
+    'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
+    'Fw_depth', 'use_Fw_nutrients', 'northern_return_flow_on',
+    'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
+    'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
+    'd',
+    'flagellates_on', 'remineralization', 'use microzooplankton',
+    'single species light',
+    'Mesozoo, winter conc',
+    'Mesozoo, summer conc', 'Mesozoo, summer peak mag',
+    'Mesozoo, summer peak pos', 'Mesozoo, summer peak wid',
+    'Mesozoo, max ingestion', 'Mesozoo, pred slope', 'Mesozoo, half-sat',
+    'Mesozoo, pref for diatoms', 'Mesozoo, micro pred slope',
+    'Mesozoo, micro half-sat',
+    'Mesozoo, pref for nano', 'Mesozoo, nano pred slope',
+    'Mesozoo, nano half-sat',
+    'Mesozoo, pref for PON', 'Mesozoo, PON pred slope',
+    'Mesozoo, PON half-sat',
+    'Mesozoo, pref for uZoo', 'Mesozoo, uZoo pred slope',
+    'Mesozoo, uZoo half-sat',
     ]
 
 
