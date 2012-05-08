@@ -331,6 +331,21 @@ class _Mesozooplankton(colander.MappingSchema):
         var_name='rate_mesozoo%Z_HalfSat')
 
 
+class _MesodiniumRubrum(colander.MappingSchema):
+    mesorub_max_ingestion = _Float(
+        infile_key='Mesorub, max ingestion',
+        var_name='rate_mesorub%R')
+    mesorub_chloroplast_assim_eff = _Float(
+        infile_key='Mesorub, assimilation eff',
+        var_name='rate_mesorub%eff')
+    mesorub_grazing_limit = _Float(
+        infile_key='Mesorub, nano predslope',
+        var_name='rate_mesorub%PicoPredSlope')
+    mesorub_grazing_half_saturation = _Float(
+        infile_key='Mesorub, nano half-sat',
+        var_name='rate_mesorub%PicoHalfSat')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -341,6 +356,7 @@ class _BiologyParams(colander.MappingSchema):
     single_species_light = _Boolean(
         infile_key='single species light', var_name='strong_limitation')
     mesozooplankton = _Mesozooplankton()
+    mesodinium_rubrum = _MesodiniumRubrum()
 
 
 class _Location(colander.MappingSchema):

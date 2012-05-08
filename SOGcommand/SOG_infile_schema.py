@@ -317,6 +317,13 @@ class SOG_Infile(colander.MappingSchema):
         name='Mesozoo, uZoo pred slope')
     mesozoo_microzoo_grazing_half_saturation = _SOG_RealDP(
         name='Mesozoo, uZoo half-sat')
+    mesorub_max_ingestion = _SOG_RealDP(name='Mesorub, max ingestion')
+    mesorub_chloroplast_assim_eff = _SOG_RealDP(
+        name='Mesorub, assimilation eff')
+    mesorub_grazing_limit = _SOG_RealDP(
+        name='Mesorub, nano predslope')
+    mesorub_grazing_half_saturation = _SOG_RealDP(
+        name='Mesorub, nano half-sat')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -355,6 +362,8 @@ SOG_KEYS = [
     'Mesozoo, PON half-sat',
     'Mesozoo, pref for uZoo', 'Mesozoo, uZoo pred slope',
     'Mesozoo, uZoo half-sat',
+    'Mesorub, max ingestion', 'Mesorub, assimilation eff',
+    'Mesorub, nano half-sat', 'Mesorub, nano predslope',
     ]
 
 
