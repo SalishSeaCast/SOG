@@ -31,7 +31,7 @@ Some of the software benefits of using YAML
 
 The SOG command processor uses the PyYAML_ library to process YAML
 infiles in Python,
-so the recommended reference for YAML syntax it the
+so the recommended reference for YAML syntax is the
 `PyYAML documentation`_
 
 .. _PyYAML: http://pyyaml.org/
