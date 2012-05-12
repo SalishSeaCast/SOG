@@ -335,7 +335,7 @@ class _MesodiniumRubrum(colander.MappingSchema):
     mesorub_max_ingestion = _Float(
         infile_key='Mesorub, max ingestion',
         var_name='rate_mesorub%R')
-    mesorub_chloroplast_assim_eff = _Float(
+    mesorub_assimilation_efficiency = _Float(
         infile_key='Mesorub, assimilation eff',
         var_name='rate_mesorub%eff')
     mesorub_grazing_limit = _Float(
@@ -344,6 +344,72 @@ class _MesodiniumRubrum(colander.MappingSchema):
     mesorub_grazing_half_saturation = _Float(
         infile_key='Mesorub, nano half-sat',
         var_name='rate_mesorub%PicoHalfSat')
+
+
+class _Microzooplankton(colander.MappingSchema):
+    microzoo_max_ingestion = _Float(
+        infile_key='Microzoo, max ingestion',
+        var_name='rate_uzoo%R')
+    microzoo_assimilation_efficiency = _Float(
+        infile_key='Microzoo, assimil. eff',
+        var_name='rate_uzoo%eff')
+    microzoo_natural_mortality = _Float(
+        infile_key='Microzoo, nat mort',
+        var_name='rate_uzoo%Rm')
+    microzoo_excretion = _Float(
+        infile_key='Microzoo, excretion',
+        var_name='rate_uzoo%excr')
+    microzoo_grazing_limit = _Float(
+        infile_key='Microzoo, pred slope',
+        var_name='rate_uzoo%PredSlope')
+    microzoo_grazing_half_saturation = _Float(
+        infile_key='Microzoo, half-sat',
+        var_name='Microzoo, half-sat')
+    microzoo_pico_preference = _Float(
+        infile_key='Microzoo, pref for Pico',
+        var_name='rate_uzoo%PicoPref')
+    microzoo_pico_grazing_limit = _Float(
+        infile_key='uzoo, Pico pred slope',
+        var_name='rate_uzoo%PicoPredSlope')
+    microzoo_pico_grazing_half_saturation = _Float(
+        infile_key='uzoo, Pico half-sat',
+        var_name='rate_uzoo%PicoHalfSat')
+    microzoo_micro_preference = _Float(
+        infile_key='Microzoo, pref for Micro',
+        var_name='rate_uzoo%MicroPref')
+    microzoo_micro_grazing_limit = _Float(
+        infile_key='uzoo, Micro pred slope',
+        var_name='rate_uzoo%MicroPredSlope')
+    microzoo_micro_grazing_half_saturation = _Float(
+        infile_key='Microzoo, Micro half-sat',
+        var_name='rate_uzoo%MicroHalfSat')
+    microzoo_nano_preference = _Float(
+        infile_key='Microzoo, pref for nano',
+        var_name='rate_uzoo%NanoPref')
+    microzoo_nano_grazing_limit = _Float(
+        infile_key='Microzoo, nano pred slope',
+        var_name='rate_uzoo%NanoPredSlope')
+    microzoo_nano_grazing_half_saturation = _Float(
+        infile_key='Microzoo, nano half-sat',
+        var_name='rate_uzoo%NanoHalfSat')
+    microzoo_PON_preference = _Float(
+        infile_key='Microzoo, pref for PON',
+        var_name='rate_uzoo%PON_Pref')
+    microzoo_PON_grazing_limit = _Float(
+        infile_key='Microzoo, PON pred slope',
+        var_name='rate_uzoo%PON_PredSlope')
+    microzoo_PON_grazing_half_saturation = _Float(
+        infile_key='Microzoo, PON half-sat',
+        var_name='rate_uzoo%PON_HalfSat')
+    microzoo_microzoo_preference = _Float(
+        infile_key='Microzoo, pref for uZoo',
+        var_name='rate_uzoo%PON_Pref')
+    microzoo_microzoo_grazing_limit = _Float(
+        infile_key='Microzoo, uZoo pred slope',
+        var_name='rate_uzoo%PON_PredSlope')
+    microzoo_microzoo_grazing_half_saturation = _Float(
+        infile_key='Microzoo, uZoo half-sat',
+        var_name='rate_uzoo%PON_HalfSat')
 
 
 class _BiologyParams(colander.MappingSchema):
@@ -357,6 +423,7 @@ class _BiologyParams(colander.MappingSchema):
         infile_key='single species light', var_name='strong_limitation')
     mesozooplankton = _Mesozooplankton()
     mesodinium_rubrum = _MesodiniumRubrum()
+    microzooplankton = _Microzooplankton()
 
 
 class _Location(colander.MappingSchema):

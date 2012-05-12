@@ -318,12 +318,54 @@ class SOG_Infile(colander.MappingSchema):
     mesozoo_microzoo_grazing_half_saturation = _SOG_RealDP(
         name='Mesozoo, uZoo half-sat')
     mesorub_max_ingestion = _SOG_RealDP(name='Mesorub, max ingestion')
-    mesorub_chloroplast_assim_eff = _SOG_RealDP(
+    mesorub_assimilation_efficiency = _SOG_RealDP(
         name='Mesorub, assimilation eff')
     mesorub_grazing_limit = _SOG_RealDP(
         name='Mesorub, nano predslope')
     mesorub_grazing_half_saturation = _SOG_RealDP(
         name='Mesorub, nano half-sat')
+    microzoo_max_ingestion = _SOG_RealDP(
+        name='Microzoo, max ingestion')
+    microzoo_assimilation_efficiency = _SOG_RealDP(
+        name='Microzoo, assimil. eff')
+    microzoo_natural_mortality = _SOG_RealDP(
+        name='Microzoo, nat mort')
+    microzoo_excretion = _SOG_RealDP(
+       name='Microzoo, excretion')
+    microzoo_grazing_limit = _SOG_RealDP(
+        name='Microzoo, pred slope')
+    microzoo_grazing_half_saturation = _SOG_RealDP(
+        name='Microzoo, half-sat')
+    microzoo_pico_preference = _SOG_RealDP(
+        name='Microzoo, pref for Pico')
+    microzoo_pico_grazing_limit = _SOG_RealDP(
+        name='uzoo, Pico pred slope')
+    microzoo_pico_grazing_half_saturation = _SOG_RealDP(
+        name='uzoo, Pico half-sat')
+    microzoo_micro_preference = _SOG_RealDP(
+        name='Microzoo, pref for Micro')
+    microzoo_micro_grazing_limit = _SOG_RealDP(
+        name='uzoo, Micro pred slope')
+    microzoo_micro_grazing_half_saturation = _SOG_RealDP(
+        name='Microzoo, Micro half-sat')
+    microzoo_nano_preference = _SOG_RealDP(
+        name='Microzoo, pref for nano')
+    microzoo_nano_grazing_limit = _SOG_RealDP(
+        name='Microzoo, nano pred slope')
+    microzoo_nano_grazing_half_saturation = _SOG_RealDP(
+        name='Microzoo, nano half-sat')
+    microzoo_PON_preference = _SOG_RealDP(
+        name='Microzoo, pref for PON')
+    microzoo_PON_grazing_limit = _SOG_RealDP(
+        name='Microzoo, PON pred slope')
+    microzoo_PON_grazing_half_saturation = _SOG_RealDP(
+        name='Microzoo, PON half-sat')
+    microzoo_microzoo_preference = _SOG_RealDP(
+        name='Microzoo, pref for uZoo')
+    microzoo_microzoo_grazing_limit = _SOG_RealDP(
+        name='Microzoo, uZoo pred slope')
+    microzoo_microzoo_grazing_half_saturation = _SOG_RealDP(
+        name='Microzoo, uZoo half-sat')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -364,6 +406,18 @@ SOG_KEYS = [
     'Mesozoo, uZoo half-sat',
     'Mesorub, max ingestion', 'Mesorub, assimilation eff',
     'Mesorub, nano half-sat', 'Mesorub, nano predslope',
+    'Microzoo, max ingestion', 'Microzoo, assimil. eff',
+    'Microzoo, nat mort', 'Microzoo, excretion',
+    'Microzoo, pred slope', 'Microzoo, half-sat',
+    'Microzoo, pref for Pico', 'uzoo, Pico pred slope', 'uzoo, Pico half-sat',
+    'Microzoo, pref for Micro', 'uzoo, Micro pred slope',
+    'Microzoo, Micro half-sat',
+    'Microzoo, pref for nano', 'Microzoo, nano pred slope',
+    'Microzoo, nano half-sat',
+    'Microzoo, pref for PON', 'Microzoo, PON pred slope',
+    'Microzoo, PON half-sat',
+    'Microzoo, pref for uZoo', 'Microzoo, uZoo pred slope',
+    'Microzoo, uZoo half-sat',
     ]
 
 
