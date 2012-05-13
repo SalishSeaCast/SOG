@@ -366,6 +366,48 @@ class SOG_Infile(colander.MappingSchema):
         name='Microzoo, uZoo pred slope')
     microzoo_microzoo_grazing_half_saturation = _SOG_RealDP(
         name='Microzoo, uZoo half-sat')
+    micro_max_growth = _SOG_RealDP(name='Micro, max growth')
+    nano_max_growth = _SOG_RealDP(name='Nano, max growth')
+    pico_max_growth = _SOG_RealDP(name='Pico, max growth')
+    micro_optimal_light = _SOG_RealDP(name='Micro, I_opt')
+    nano_optimal_light = _SOG_RealDP(name='Nano, I_opt')
+    pico_optimal_light = _SOG_RealDP(name='Pico, I_opt')
+    micro_max_temperature = _SOG_RealDP(name='Micro, max temp')
+    nano_max_temperature = _SOG_RealDP(name='Nano, max temp')
+    pico_max_temperature = _SOG_RealDP(name='Pico, max temp')
+    micro_temperature_range = _SOG_RealDP(name='Micro, temp range')
+    nano_temperature_range = _SOG_RealDP(name='Nano, temp range')
+    pico_temperature_range = _SOG_RealDP(name='Pico, temp range')
+    micro_Q10_exponent = _SOG_RealDP(name='Micro, Q10 exp')
+    nano_Q10_exponent = _SOG_RealDP(name='Nano, Q10 exp')
+    pico_Q10_exponent = _SOG_RealDP(name='Pico, Q10 exp')
+    micro_gamma_loss = _SOG_RealDP(name='Micro, gamma loss')
+    nano_gamma_loss = _SOG_RealDP(name='Nano, gamma loss')
+    pico_gamma_loss = _SOG_RealDP(name='Pico, gamma loss')
+    micro_NO3_half_saturation = _SOG_RealDP(name='Micro, NO3 k')
+    nano_NO3_half_saturation = _SOG_RealDP(name='Nano, NO3 k')
+    pico_NO3_half_saturation = _SOG_RealDP(name='Pico, NO3 k')
+    micro_NO3_vs_NH_preference = _SOG_RealDP(name='Micro, kapa')
+    nano_NO3_vs_NH_preference = _SOG_RealDP(name='Nano, kapa')
+    pico_NO3_vs_NH_preference = _SOG_RealDP(name='Pico, kapa')
+    micro_NH_inhibition_exponent = _SOG_RealDP(name='Micro, NH inhib')
+    nano_NH_inhibition_exponent = _SOG_RealDP(name='Nano, NH inhib')
+    pico_NH_inhibition_exponent = _SOG_RealDP(name='Pico, NH inhib')
+    micro_half_saturation = _SOG_RealDP(name='Micro, N_o')
+    nano_half_saturation = _SOG_RealDP(name='Nano, N_o')
+    pico_half_saturation = _SOG_RealDP(name='Pico, N_o')
+    micro_N_inhibition_exponent = _SOG_RealDP(name='Micro, N_x')
+    nano_N_inhibition_exponent = _SOG_RealDP(name='Nano, N_x')
+    pico_N_inhibition_exponent = _SOG_RealDP(name='Pico, N_x')
+    micro_Si_N_ratio = _SOG_RealDP(name='Micro, Si_ratio')
+    nano_Si_N_ratio = _SOG_RealDP(name='Nano, Si_ratio')
+    pico_Si_N_ratio = _SOG_RealDP(name='Pico, Si_ratio')
+    micro_Si_half_saturation = _SOG_RealDP(name='Micro, K_Si')
+    nano_Si_half_saturation = _SOG_RealDP(name='Nano, K_Si')
+    pico_Si_half_saturation = _SOG_RealDP(name='Pico, K_Si')
+    micro_natural_mortality = _SOG_RealDP(name='Micro, Rm')
+    nano_natural_mortality = _SOG_RealDP(name='Nano, Rm')
+    pico_natural_mortality = _SOG_RealDP(name='Pico, Rm')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -418,6 +460,20 @@ SOG_KEYS = [
     'Microzoo, PON half-sat',
     'Microzoo, pref for uZoo', 'Microzoo, uZoo pred slope',
     'Microzoo, uZoo half-sat',
+    'Micro, max growth', 'Nano, max growth', 'Pico, max growth',
+    'Micro, I_opt', 'Nano, I_opt', 'Pico, I_opt',
+    'Micro, max temp', 'Nano, max temp', 'Pico, max temp',
+    'Micro, temp range', 'Nano, temp range', 'Pico, temp range',
+    'Micro, Q10 exp', 'Nano, Q10 exp', 'Pico, Q10 exp',
+    'Micro, gamma loss', 'Nano, gamma loss', 'Pico, gamma loss',
+    'Micro, NO3 k', 'Nano, NO3 k', 'Pico, NO3 k',
+    'Micro, kapa', 'Nano, kapa', 'Pico, kapa',
+    'Micro, NH inhib', 'Nano, NH inhib', 'Pico, NH inhib',
+    'Micro, N_o', 'Nano, N_o', 'Pico, N_o',
+    'Micro, N_x', 'Nano, N_x', 'Pico, N_x',
+    'Micro, Si_ratio', 'Nano, Si_ratio', 'Pico, Si_ratio',
+    'Micro, K_Si', 'Nano, K_Si', 'Pico, K_Si',
+    'Micro, Rm', 'Nano, Rm', 'Pico, Rm',
     ]
 
 
