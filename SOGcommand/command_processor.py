@@ -25,11 +25,12 @@ def run():
 
 
 def build_parser():
-    parser = ArgumentParser()
+    parser = ArgumentParser(
+        epilog='''
+            Use `%(prog)s <sub-command> --help` to get detailed
+            help about a sub-command.''')
     add_version_arg(parser)
-    subparsers = parser.add_subparsers(
-        title='sub-commands',
-        help='type %(prog)s <sub-command> --help for details')
+    subparsers = parser.add_subparsers(title='sub-commands')
     add_run_subparser(subparsers)
     return parser
 
@@ -41,7 +42,8 @@ def add_version_arg(parser):
 def add_run_subparser(subparsers):
     """Add a sub-parser for the `SOG run` command.
     """
-    parser = subparsers.add_parser('run')
+    parser = subparsers.add_parser(
+        'run', help='Run SOG with a specified infile.')
     add_version_arg(parser)
     parser.add_argument(
         '--dry-run', action='store_true',
