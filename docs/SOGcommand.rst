@@ -16,26 +16,33 @@ See :ref:`SOG_CommandProcessorInstallation-section`.
 Available Commands
 ------------------
 
-The command :program:`SOG` or :program:`SOG help` produces a list of
-the available :program:`SOG` commands:
+The command :program:`SOG` or :program:`SOG --help` produces a list of
+the available :program:`SOG` options and sub-commands:
 
 .. code-block:: none
 
-   $ SOG help
+   $ SOG --help
+   usage: SOG [-h] [--version] {run} ...
 
-   Documented commands (type help <topic>):
-   ========================================
-   run
+   optional arguments:
+     -h, --help  show this help message and exit
+     --version   show program's version number and exit
+
+   sub-commands:
+     {run}
+       run       Run SOG with a specified infile.
+
+   Use `SOG <sub-command> --help` to get detailed help about a sub-command.
 
 For details of the arguments and options for a command use
-:program:`SOG help <command>`.
+:program:`SOG <command> --help`.
 For example:
 
 .. code-block:: none
 
-   $ SOG help run
-
-   usage: SOG run [--version] [--dry-run] [-o OUTFILE] [--nice NICE] [--watch]
+   $ SOG run --help
+   usage: SOG run [-h] [--version] [--dry-run] [-o OUTFILE] [--nice NICE]
+                  [--watch]
                   EXEC INFILE
 
    Run SOG with INFILE. Stdout from the run is stored in OUTFILE which defaults
@@ -47,6 +54,7 @@ For example:
      INFILE                infile for run
 
    optional arguments:
+     -h, --help            show this help message and exit
      --version             show program's version number and exit
      --dry-run             Don't do anything, just report what would be done.
      -o OUTFILE, --outfile OUTFILE
@@ -89,9 +97,9 @@ letting you do anything else in that shell.
 
 .. code-block:: none
 
-   $ SOG help run
-
-   usage: SOG run [--version] [--dry-run] [-o OUTFILE] [--nice NICE] [--watch]
+   $ SOG run --help
+   usage: SOG run [-h] [--version] [--dry-run] [-o OUTFILE] [--nice NICE]
+                  [--watch]
                   EXEC INFILE
 
    Run SOG with INFILE. Stdout from the run is stored in OUTFILE which defaults
@@ -103,6 +111,7 @@ letting you do anything else in that shell.
      INFILE                infile for run
 
    optional arguments:
+     -h, --help            show this help message and exit
      --version             show program's version number and exit
      --dry-run             Don't do anything, just report what would be done.
      -o OUTFILE, --outfile OUTFILE
