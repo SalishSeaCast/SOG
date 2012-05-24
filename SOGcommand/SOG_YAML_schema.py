@@ -541,6 +541,17 @@ class _PhytoplanktonGrowth(colander.MappingSchema):
         var_name='rate_pico%Rm')
 
 
+class _RemineralizationRates(colander.MappingSchema):
+    NH_remin_rate = _Float(
+        infile_key='NH remin rate', var_name='remin%NH')
+    DON_remin_rate = _Float(
+        infile_key='DON remin rate', var_name='remin%D_DON')
+    PON_remin_rate = _Float(
+        infile_key='PON remin rate', var_name='remin%D_PON')
+    bSi_remin_rate = _Float(
+        infile_key='bSi remin rate', var_name='remin%D_bSi')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -554,6 +565,7 @@ class _BiologyParams(colander.MappingSchema):
     mesodinium_rubrum = _MesodiniumRubrum()
     microzooplankton = _Microzooplankton()
     phytoplankton_growth = _PhytoplanktonGrowth()
+    remineralization_rates = _RemineralizationRates()
 
 
 class _Location(colander.MappingSchema):

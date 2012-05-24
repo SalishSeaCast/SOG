@@ -408,6 +408,10 @@ class SOG_Infile(colander.MappingSchema):
     micro_natural_mortality = _SOG_RealDP(name='Micro, Rm')
     nano_natural_mortality = _SOG_RealDP(name='Nano, Rm')
     pico_natural_mortality = _SOG_RealDP(name='Pico, Rm')
+    NH_remin_rate = _SOG_RealDP(name='NH remin rate')
+    DON_remin_rate = _SOG_RealDP(name='DON remin rate')
+    PON_remin_rate = _SOG_RealDP(name='PON remin rate')
+    bSi_remin_rate = _SOG_RealDP(name='bSi remin rate')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -474,6 +478,7 @@ SOG_KEYS = [
     'Micro, Si_ratio', 'Nano, Si_ratio', 'Pico, Si_ratio',
     'Micro, K_Si', 'Nano, K_Si', 'Pico, K_Si',
     'Micro, Rm', 'Nano, Rm', 'Pico, Rm',
+    'NH remin rate', 'DON remin rate', 'PON remin rate', 'bSi remin rate',
     ]
 
 
