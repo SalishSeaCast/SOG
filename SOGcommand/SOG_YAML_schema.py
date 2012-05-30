@@ -584,6 +584,7 @@ class _PhytoplanktonMortalityWaste(colander.MappingSchema):
     pico_mort_bSi = _Float(
         infile_key='Waste, fnm, Bsi', var_name='frac_waste_FNM%Bsi')
 
+
 class _MicrozooplanktonWaste(colander.MappingSchema):
     microzoo_mort_NH = _Float(
         infile_key='Waste, znm, NH', var_name='frac_waste_ZNM%NH')
@@ -622,7 +623,7 @@ class _BiologyParams(colander.MappingSchema):
     phytoplankton_growth = _PhytoplanktonGrowth()
     remineralization_rates = _RemineralizationRates()
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
-    micro_zooplankton_waste = _MicrozooplanktonWaste()
+    microzooplankton_waste = _MicrozooplanktonWaste()
 
 
 class _Location(colander.MappingSchema):
