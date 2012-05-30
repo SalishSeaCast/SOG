@@ -412,6 +412,21 @@ class SOG_Infile(colander.MappingSchema):
     DON_remin_rate = _SOG_RealDP(name='DON remin rate')
     PON_remin_rate = _SOG_RealDP(name='PON remin rate')
     bSi_remin_rate = _SOG_RealDP(name='bSi remin rate')
+    micro_mort_NH = _SOG_RealDP(name='Waste, dnm, NH')
+    micro_mort_DON = _SOG_RealDP(name='Waste, dnm, DON')
+    micro_mort_PON = _SOG_RealDP(name='Waste, dnm, PON')
+    micro_mort_ref = _SOG_RealDP(name='Waste, dnm, Ref')
+    micro_mort_bSi = _SOG_RealDP(name='Waste, dnm, Bsi')
+    nano_mort_NH = _SOG_RealDP(name='Waste, nnm, NH')
+    nano_mort_DON = _SOG_RealDP(name='Waste, nnm, DON')
+    nano_mort_PON = _SOG_RealDP(name='Waste, nnm, PON')
+    nano_mort_ref = _SOG_RealDP(name='Waste, nnm, Ref')
+    nano_mort_bSi = _SOG_RealDP(name='Waste, nnm, Bsi')
+    pico_mort_NH = _SOG_RealDP(name='Waste, fnm, NH')
+    pico_mort_DON = _SOG_RealDP(name='Waste, fnm, DON')
+    pico_mort_PON = _SOG_RealDP(name='Waste, fnm, PON')
+    pico_mort_ref = _SOG_RealDP(name='Waste, fnm, Ref')
+    pico_mort_bSi = _SOG_RealDP(name='Waste, fnm, Bsi')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -479,6 +494,12 @@ SOG_KEYS = [
     'Micro, K_Si', 'Nano, K_Si', 'Pico, K_Si',
     'Micro, Rm', 'Nano, Rm', 'Pico, Rm',
     'NH remin rate', 'DON remin rate', 'PON remin rate', 'bSi remin rate',
+    'Waste, dnm, NH', 'Waste, dnm, DON', 'Waste, dnm, PON', 'Waste, dnm, Ref',
+    'Waste, dnm, Bsi',
+    'Waste, nnm, NH', 'Waste, nnm, DON', 'Waste, nnm, PON', 'Waste, nnm, Ref',
+    'Waste, nnm, Bsi',
+    'Waste, fnm, NH', 'Waste, fnm, DON', 'Waste, fnm, PON', 'Waste, fnm, Ref',
+    'Waste, fnm, Bsi',
     ]
 
 

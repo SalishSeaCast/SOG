@@ -552,6 +552,39 @@ class _RemineralizationRates(colander.MappingSchema):
         infile_key='bSi remin rate', var_name='remin%D_bSi')
 
 
+class _PhytoplanktonMortalityWaste(colander.MappingSchema):
+    micro_mort_NH = _Float(
+        infile_key='Waste, dnm, NH', var_name='frac_waste_DNM%NH')
+    micro_mort_DON = _Float(
+        infile_key='Waste, dnm, DON', var_name='frac_waste_DNM%DON')
+    micro_mort_PON = _Float(
+        infile_key='Waste, dnm, PON', var_name='frac_waste_DNM%PON')
+    micro_mort_ref = _Float(
+        infile_key='Waste, dnm, Ref', var_name='frac_waste_DNM%Ref')
+    micro_mort_bSi = _Float(
+        infile_key='Waste, dnm, Bsi', var_name='frac_waste_DNM%Bsi')
+    nano_mort_NH = _Float(
+        infile_key='Waste, nnm, NH', var_name='frac_waste_NNM%NH')
+    nano_mort_DON = _Float(
+        infile_key='Waste, nnm, DON', var_name='frac_waste_NNM%DON')
+    nano_mort_PON = _Float(
+        infile_key='Waste, nnm, PON', var_name='frac_waste_NNM%PON')
+    nano_mort_ref = _Float(
+        infile_key='Waste, nnm, Ref', var_name='frac_waste_NNM%Ref')
+    nano_mort_bSi = _Float(
+        infile_key='Waste, nnm, Bsi', var_name='frac_waste_NNM%Bsi')
+    pico_mort_NH = _Float(
+        infile_key='Waste, fnm, NH', var_name='frac_waste_FNM%NH')
+    pico_mort_DON = _Float(
+        infile_key='Waste, fnm, DON', var_name='frac_waste_FNM%DON')
+    pico_mort_PON = _Float(
+        infile_key='Waste, fnm, PON', var_name='frac_waste_FNM%PON')
+    pico_mort_ref = _Float(
+        infile_key='Waste, fnm, Ref', var_name='frac_waste_FNM%Ref')
+    pico_mort_bSi = _Float(
+        infile_key='Waste, fnm, Bsi', var_name='frac_waste_FNM%Bsi')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -566,6 +599,7 @@ class _BiologyParams(colander.MappingSchema):
     microzooplankton = _Microzooplankton()
     phytoplankton_growth = _PhytoplanktonGrowth()
     remineralization_rates = _RemineralizationRates()
+    phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
 
 
 class _Location(colander.MappingSchema):
