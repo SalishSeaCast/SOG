@@ -584,6 +584,28 @@ class _PhytoplanktonMortalityWaste(colander.MappingSchema):
     pico_mort_bSi = _Float(
         infile_key='Waste, fnm, Bsi', var_name='frac_waste_FNM%Bsi')
 
+class _MicrozooplanktonWaste(colander.MappingSchema):
+    microzoo_mort_NH = _Float(
+        infile_key='Waste, znm, NH', var_name='frac_waste_ZNM%NH')
+    microzoo_mort_DON = _Float(
+        infile_key='Waste, znm, DON', var_name='frac_waste_ZNM%DON')
+    microzoo_mort_PON = _Float(
+        infile_key='Waste, znm, PON', var_name='frac_waste_ZNM%PON')
+    microzoo_mort_ref = _Float(
+        infile_key='Waste, znm, Ref', var_name='frac_waste_ZNM%Ref')
+    microzoo_mort_bSi = _Float(
+        infile_key='Waste, znm, Bsi', var_name='frac_waste_ZNM%Bsi')
+    microzoo_excrete_NH = _Float(
+        infile_key='Waste, zex, NH', var_name='frac_waste_ZEX%NH')
+    microzoo_excrete_DON = _Float(
+        infile_key='Waste, zex, DON', var_name='frac_waste_ZEX%DON')
+    microzoo_excrete_PON = _Float(
+        infile_key='Waste, zex, PON', var_name='frac_waste_ZEX%PON')
+    microzoo_excrete_ref = _Float(
+        infile_key='Waste, zex, Ref', var_name='frac_waste_ZEX%Ref')
+    microzoo_excrete_bSi = _Float(
+        infile_key='Waste, zex, Bsi', var_name='frac_waste_ZEX%Bsi')
+
 
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
@@ -600,6 +622,7 @@ class _BiologyParams(colander.MappingSchema):
     phytoplankton_growth = _PhytoplanktonGrowth()
     remineralization_rates = _RemineralizationRates()
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
+    micro_zooplankton_waste = _MicrozooplanktonWaste()
 
 
 class _Location(colander.MappingSchema):

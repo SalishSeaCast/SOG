@@ -427,6 +427,16 @@ class SOG_Infile(colander.MappingSchema):
     pico_mort_PON = _SOG_RealDP(name='Waste, fnm, PON')
     pico_mort_ref = _SOG_RealDP(name='Waste, fnm, Ref')
     pico_mort_bSi = _SOG_RealDP(name='Waste, fnm, Bsi')
+    microzoo_mort_NH = _SOG_RealDP(name='Waste, znm, NH')
+    microzoo_mort_DON = _SOG_RealDP(name='Waste, znm, DON')
+    microzoo_mort_PON = _SOG_RealDP(name='Waste, znm, PON')
+    microzoo_mort_ref = _SOG_RealDP(name='Waste, znm, Ref')
+    microzoo_mort_bSi = _SOG_RealDP(name='Waste, znm, Bsi')
+    microzoo_excrete_NH = _SOG_RealDP(name='Waste, zex, NH')
+    microzoo_excrete_DON = _SOG_RealDP(name='Waste, zex, DON')
+    microzoo_excrete_PON = _SOG_RealDP(name='Waste, zex, PON')
+    microzoo_excrete_ref = _SOG_RealDP(name='Waste, zex, Ref')
+    microzoo_excrete_bSi = _SOG_RealDP(name='Waste, zex, Bsi')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -500,6 +510,10 @@ SOG_KEYS = [
     'Waste, nnm, Bsi',
     'Waste, fnm, NH', 'Waste, fnm, DON', 'Waste, fnm, PON', 'Waste, fnm, Ref',
     'Waste, fnm, Bsi',
+    'Waste, znm, NH', 'Waste, znm, DON', 'Waste, znm, PON', 'Waste, znm, Ref',
+    'Waste, znm, Bsi',
+    'Waste, zex, NH', 'Waste, zex, DON', 'Waste, zex, PON', 'Waste, zex, Ref',
+    'Waste, zex, Bsi',
     ]
 
 
