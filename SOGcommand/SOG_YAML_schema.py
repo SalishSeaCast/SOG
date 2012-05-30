@@ -608,6 +608,49 @@ class _MicrozooplanktonWaste(colander.MappingSchema):
         infile_key='Waste, zex, Bsi', var_name='frac_waste_ZEX%Bsi')
 
 
+class _MesozooplanktonGrazingWaste(colander.MappingSchema):
+    mesozoo_microphyto_grazing_NH = _Float(
+        infile_key='Waste, dem, NH', var_name='frac_waste_DEM%NH')
+    mesozoo_microphyto_grazing_DON = _Float(
+        infile_key='Waste, dem, DON', var_name='frac_waste_DEM%DON')
+    mesozoo_microphyto_grazing_PON = _Float(
+        infile_key='Waste, dem, PON', var_name='frac_waste_DEM%PON')
+    mesozoo_microphyto_grazing_ref = _Float(
+        infile_key='Waste, dem, Ref', var_name='frac_waste_DEM%Ref')
+    mesozoo_microphyto_grazing_bSi = _Float(
+        infile_key='Waste, dem, Bsi', var_name='frac_waste_DEM%Bsi')
+    mesozoo_nanophyto_grazing_NH = _Float(
+        infile_key='Waste, nem, NH', var_name='frac_waste_NEM%NH')
+    mesozoo_nanophyto_grazing_DON = _Float(
+        infile_key='Waste, nem, DON', var_name='frac_waste_NEM%DON')
+    mesozoo_nanophyto_grazing_PON = _Float(
+        infile_key='Waste, nem, PON', var_name='frac_waste_NEM%PON')
+    mesozoo_nanophyto_grazing_ref = _Float(
+        infile_key='Waste, nem, Ref', var_name='frac_waste_NEM%Ref')
+    mesozoo_nanophyto_grazing_bSi = _Float(
+        infile_key='Waste, nem, Bsi', var_name='frac_waste_NEM%Bsi')
+    mesozoo_PON_grazing_NH = _Float(
+        infile_key='Waste, pem, NH', var_name='frac_waste_PEM%NH')
+    mesozoo_PON_grazing_DON = _Float(
+        infile_key='Waste, pem, DON', var_name='frac_waste_PEM%DON')
+    mesozoo_PON_grazing_PON = _Float(
+        infile_key='Waste, pem, PON', var_name='frac_waste_PEM%PON')
+    mesozoo_PON_grazing_ref = _Float(
+        infile_key='Waste, pem, Ref', var_name='frac_waste_PEM%Ref')
+    mesozoo_PON_grazing_bSi = _Float(
+        infile_key='Waste, pem, Bsi', var_name='frac_waste_PEM%Bsi')
+    mesozoo_microzoo_grazing_NH = _Float(
+        infile_key='Waste, zem, NH', var_name='frac_waste_ZEM%NH')
+    mesozoo_microzoo_grazing_DON = _Float(
+        infile_key='Waste, zem, DON', var_name='frac_waste_ZEM%DON')
+    mesozoo_microzoo_grazing_PON = _Float(
+        infile_key='Waste, zem, PON', var_name='frac_waste_ZEM%PON')
+    mesozoo_microzoo_grazing_ref = _Float(
+        infile_key='Waste, zem, Ref', var_name='frac_waste_ZEM%Ref')
+    mesozoo_microzoo_grazing_bSi = _Float(
+        infile_key='Waste, zem, Bsi', var_name='frac_waste_ZEM%Bsi')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -624,6 +667,7 @@ class _BiologyParams(colander.MappingSchema):
     remineralization_rates = _RemineralizationRates()
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
     microzooplankton_waste = _MicrozooplanktonWaste()
+    mesozooplankton_grazing_waste = _MesozooplanktonGrazingWaste()
 
 
 class _Location(colander.MappingSchema):
