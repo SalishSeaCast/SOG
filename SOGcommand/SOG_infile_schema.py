@@ -457,6 +457,36 @@ class SOG_Infile(colander.MappingSchema):
     mesozoo_microzoo_grazing_PON = _SOG_RealDP(name='Waste, zem, PON')
     mesozoo_microzoo_grazing_ref = _SOG_RealDP(name='Waste, zem, Ref')
     mesozoo_microzoo_grazing_bSi = _SOG_RealDP(name='Waste, zem, Bsi')
+    microzoo_microphyto_grazing_NH = _SOG_RealDP(name='Waste, dez, NH')
+    microzoo_microphyto_grazing_DON = _SOG_RealDP(name='Waste, dez, DON')
+    microzoo_microphyto_grazing_PON = _SOG_RealDP(name='Waste, dez, PON')
+    microzoo_microphyto_grazing_ref = _SOG_RealDP(name='Waste, dez, Ref')
+    microzoo_microphyto_grazing_bSi = _SOG_RealDP(name='Waste, dez, Bsi')
+    microzoo_nanophyto_grazing_NH = _SOG_RealDP(name='Waste, nez, NH')
+    microzoo_nanophyto_grazing_DON = _SOG_RealDP(name='Waste, nez, DON')
+    microzoo_nanophyto_grazing_PON = _SOG_RealDP(name='Waste, nez, PON')
+    microzoo_nanophyto_grazing_ref = _SOG_RealDP(name='Waste, nez, Ref')
+    microzoo_nanophyto_grazing_bSi = _SOG_RealDP(name='Waste, nez, Bsi')
+    microzoo_picophyto_grazing_NH = _SOG_RealDP(name='Waste, fez, NH')
+    microzoo_picophyto_grazing_DON = _SOG_RealDP(name='Waste, fez, DON')
+    microzoo_picophyto_grazing_PON = _SOG_RealDP(name='Waste, fez, PON')
+    microzoo_picophyto_grazing_ref = _SOG_RealDP(name='Waste, fez, Ref')
+    microzoo_picophyto_grazing_bSi = _SOG_RealDP(name='Waste, fez, Bsi')
+    microzoo_PON_grazing_NH = _SOG_RealDP(name='Waste, pez, NH')
+    microzoo_PON_grazing_DON = _SOG_RealDP(name='Waste, pez, DON')
+    microzoo_PON_grazing_PON = _SOG_RealDP(name='Waste, pez, PON')
+    microzoo_PON_grazing_ref = _SOG_RealDP(name='Waste, pez, Ref')
+    microzoo_PON_grazing_bSi = _SOG_RealDP(name='Waste, pez, Bsi')
+    microzoo_microzoo_grazing_NH = _SOG_RealDP(name='Waste, zez, NH')
+    microzoo_microzoo_grazing_DON = _SOG_RealDP(name='Waste, zez, DON')
+    microzoo_microzoo_grazing_PON = _SOG_RealDP(name='Waste, zez, PON')
+    microzoo_microzoo_grazing_ref = _SOG_RealDP(name='Waste, zez, Ref')
+    microzoo_microzoo_grazing_bSi = _SOG_RealDP(name='Waste, zez, Bsi')
+    mesorub_picophyto_grazing_NH = _SOG_RealDP(name='Waste, fen, NH')
+    mesorub_picophyto_grazing_DON = _SOG_RealDP(name='Waste, fen, DON')
+    mesorub_picophyto_grazing_PON = _SOG_RealDP(name='Waste, fen, PON')
+    mesorub_picophyto_grazing_ref = _SOG_RealDP(name='Waste, fen, Ref')
+    mesorub_picophyto_grazing_bSi = _SOG_RealDP(name='Waste, fen, Bsi')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -542,6 +572,18 @@ SOG_KEYS = [
     'Waste, pem, Bsi',
     'Waste, zem, NH', 'Waste, zem, DON', 'Waste, zem, PON', 'Waste, zem, Ref',
     'Waste, zem, Bsi',
+    'Waste, dez, NH', 'Waste, dez, DON', 'Waste, dez, PON', 'Waste, dez, Ref',
+    'Waste, dez, Bsi',
+    'Waste, nez, NH', 'Waste, nez, DON', 'Waste, nez, PON', 'Waste, nez, Ref',
+    'Waste, nez, Bsi',
+    'Waste, fez, NH', 'Waste, fez, DON', 'Waste, fez, PON', 'Waste, fez, Ref',
+    'Waste, fez, Bsi',
+    'Waste, pez, NH', 'Waste, pez, DON', 'Waste, pez, PON', 'Waste, pez, Ref',
+    'Waste, pez, Bsi',
+    'Waste, zez, NH', 'Waste, zez, DON', 'Waste, zez, PON', 'Waste, zez, Ref',
+    'Waste, zez, Bsi',
+    'Waste, fen, NH', 'Waste, fen, DON', 'Waste, fen, PON', 'Waste, fen, Ref',
+    'Waste, fen, Bsi',
     ]
 
 

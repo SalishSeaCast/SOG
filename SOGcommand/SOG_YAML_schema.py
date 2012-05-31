@@ -649,6 +649,66 @@ class _SloppyEating(colander.MappingSchema):
         infile_key='Waste, zem, Ref', var_name='frac_waste_ZEM%Ref')
     mesozoo_microzoo_grazing_bSi = _Float(
         infile_key='Waste, zem, Bsi', var_name='frac_waste_ZEM%Bsi')
+    microzoo_microphyto_grazing_NH = _Float(
+        infile_key='Waste, dez, NH', var_name='frac_waste_DEZ%NH')
+    microzoo_microphyto_grazing_DON = _Float(
+        infile_key='Waste, dez, DON', var_name='frac_waste_DEZ%DON')
+    microzoo_microphyto_grazing_PON = _Float(
+        infile_key='Waste, dez, PON', var_name='frac_waste_DEZ%PON')
+    microzoo_microphyto_grazing_ref = _Float(
+        infile_key='Waste, dez, Ref', var_name='frac_waste_DEZ%Ref')
+    microzoo_microphyto_grazing_bSi = _Float(
+        infile_key='Waste, dez, Bsi', var_name='frac_waste_DEZ%Bsi')
+    microzoo_nanophyto_grazing_NH = _Float(
+        infile_key='Waste, nez, NH', var_name='frac_waste_NEZ%NH')
+    microzoo_nanophyto_grazing_DON = _Float(
+        infile_key='Waste, nez, DON', var_name='frac_waste_NEZ%DON')
+    microzoo_nanophyto_grazing_PON = _Float(
+        infile_key='Waste, nez, PON', var_name='frac_waste_NEZ%PON')
+    microzoo_nanophyto_grazing_ref = _Float(
+        infile_key='Waste, nez, Ref', var_name='frac_waste_NEZ%Ref')
+    microzoo_nanophyto_grazing_bSi = _Float(
+        infile_key='Waste, nez, Bsi', var_name='frac_waste_NEZ%Bsi')
+    microzoo_picophyto_grazing_NH = _Float(
+        infile_key='Waste, fez, NH', var_name='frac_waste_FEZ%NH')
+    microzoo_picophyto_grazing_DON = _Float(
+        infile_key='Waste, fez, DON', var_name='frac_waste_FEZ%DON')
+    microzoo_picophyto_grazing_PON = _Float(
+        infile_key='Waste, fez, PON', var_name='frac_waste_FEZ%PON')
+    microzoo_picophyto_grazing_ref = _Float(
+        infile_key='Waste, fez, Ref', var_name='frac_waste_FEZ%Ref')
+    microzoo_picophyto_grazing_bSi = _Float(
+        infile_key='Waste, fez, Bsi', var_name='frac_waste_FEZ%Bsi')
+    microzoo_PON_grazing_NH = _Float(
+        infile_key='Waste, pez, NH', var_name='frac_waste_PEZ%NH')
+    microzoo_PON_grazing_DON = _Float(
+        infile_key='Waste, pez, DON', var_name='frac_waste_PEZ%DON')
+    microzoo_PON_grazing_PON = _Float(
+        infile_key='Waste, pez, PON', var_name='frac_waste_PEZ%PON')
+    microzoo_PON_grazing_ref = _Float(
+        infile_key='Waste, pez, Ref', var_name='frac_waste_PEZ%Ref')
+    microzoo_PON_grazing_bSi = _Float(
+        infile_key='Waste, pez, Bsi', var_name='frac_waste_PEZ%Bsi')
+    microzoo_microzoo_grazing_NH = _Float(
+        infile_key='Waste, zez, NH', var_name='frac_waste_ZEZ%NH')
+    microzoo_microzoo_grazing_DON = _Float(
+        infile_key='Waste, zez, DON', var_name='frac_waste_ZEZ%DON')
+    microzoo_microzoo_grazing_PON = _Float(
+        infile_key='Waste, zez, PON', var_name='frac_waste_ZEZ%PON')
+    microzoo_microzoo_grazing_ref = _Float(
+        infile_key='Waste, zez, Ref', var_name='frac_waste_ZEZ%Ref')
+    microzoo_microzoo_grazing_bSi = _Float(
+        infile_key='Waste, zez, Bsi', var_name='frac_waste_ZEZ%Bsi')
+    mesorub_picophyto_grazing_NH = _Float(
+        infile_key='Waste, fen, NH', var_name='frac_waste_FEN%NH')
+    mesorub_picophyto_grazing_DON = _Float(
+        infile_key='Waste, fen, DON', var_name='frac_waste_FEN%DON')
+    mesorub_picophyto_grazing_PON = _Float(
+        infile_key='Waste, fen, PON', var_name='frac_waste_FEN%PON')
+    mesorub_picophyto_grazing_ref = _Float(
+        infile_key='Waste, fen, Ref', var_name='frac_waste_FEN%Ref')
+    mesorub_picophyto_grazing_bSi = _Float(
+        infile_key='Waste, fen, Bsi', var_name='frac_waste_FEN%Bsi')
 
 
 class _BiologyParams(colander.MappingSchema):
