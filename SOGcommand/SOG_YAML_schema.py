@@ -608,7 +608,7 @@ class _MicrozooplanktonWaste(colander.MappingSchema):
         infile_key='Waste, zex, Bsi', var_name='frac_waste_ZEX%Bsi')
 
 
-class _MesozooplanktonGrazingWaste(colander.MappingSchema):
+class _SloppyEating(colander.MappingSchema):
     mesozoo_microphyto_grazing_NH = _Float(
         infile_key='Waste, dem, NH', var_name='frac_waste_DEM%NH')
     mesozoo_microphyto_grazing_DON = _Float(
@@ -667,7 +667,7 @@ class _BiologyParams(colander.MappingSchema):
     remineralization_rates = _RemineralizationRates()
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
     microzooplankton_waste = _MicrozooplanktonWaste()
-    mesozooplankton_grazing_waste = _MesozooplanktonGrazingWaste()
+    sloppy_eating = _SloppyEating()
 
 
 class _Location(colander.MappingSchema):
