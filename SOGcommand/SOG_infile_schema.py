@@ -487,6 +487,11 @@ class SOG_Infile(colander.MappingSchema):
     mesorub_picophyto_grazing_PON = _SOG_RealDP(name='Waste, fen, PON')
     mesorub_picophyto_grazing_ref = _SOG_RealDP(name='Waste, fen, Ref')
     mesorub_picophyto_grazing_bSi = _SOG_RealDP(name='Waste, fen, Bsi')
+    microphyto_min_sink_rate = _SOG_RealDP(name='Micro min sink rate')
+    microphyto_max_sink_rate = _SOG_RealDP(name='Micro max sink rate')
+    PON_sink_rate = _SOG_RealDP(name='PON sink rate')
+    refr_sink_rate = _SOG_RealDP(name='refr sink rate')
+    bSi_sink_rate = _SOG_RealDP(name='bSi sink rate')
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
@@ -584,6 +589,8 @@ SOG_KEYS = [
     'Waste, zez, Bsi',
     'Waste, fen, NH', 'Waste, fen, DON', 'Waste, fen, PON', 'Waste, fen, Ref',
     'Waste, fen, Bsi',
+    'Micro min sink rate', 'Micro max sink rate', 'PON sink rate',
+    'refr sink rate',  'bSi sink rate',
     ]
 
 

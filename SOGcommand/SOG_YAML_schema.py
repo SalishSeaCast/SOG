@@ -711,6 +711,19 @@ class _SloppyEating(colander.MappingSchema):
         infile_key='Waste, fen, Bsi', var_name='frac_waste_FEN%Bsi')
 
 
+class _SinkingRates(colander.MappingSchema):
+    microphyto_min_sink_rate = _Float(
+        infile_key='Micro min sink rate', var_name='w_sink%Pmicro_min')
+    microphyto_max_sink_rate = _Float(
+        infile_key='Micro max sink rate', var_name='w_sink%Pmicro_max')
+    PON_sink_rate = _Float(
+        infile_key='PON sink rate', var_name='w_sink%D_PON')
+    refr_sink_rate = _Float(
+        infile_key='refr sink rate', var_name='w_sink%D_refr')
+    bSi_sink_rate = _Float(
+        infile_key='bSi sink rate', var_name='w_sink%D_bSi')
+
+
 class _BiologyParams(colander.MappingSchema):
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates')
@@ -728,6 +741,7 @@ class _BiologyParams(colander.MappingSchema):
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste()
     microzooplankton_waste = _MicrozooplanktonWaste()
     sloppy_eating = _SloppyEating()
+    sinking_rates = _SinkingRates()
 
 
 class _Location(colander.MappingSchema):
