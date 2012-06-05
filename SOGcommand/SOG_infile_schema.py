@@ -399,15 +399,15 @@ class SOG_Infile(colander.MappingSchema):
     micro_N_inhibition_exponent = _SOG_RealDP(name='Micro, N_x')
     nano_N_inhibition_exponent = _SOG_RealDP(name='Nano, N_x')
     pico_N_inhibition_exponent = _SOG_RealDP(name='Pico, N_x')
-    micro_Si_N_ratio = _SOG_RealDP(name='Micro, Si_ratio')
-    nano_Si_N_ratio = _SOG_RealDP(name='Nano, Si_ratio')
-    pico_Si_N_ratio = _SOG_RealDP(name='Pico, Si_ratio')
-    micro_Si_half_saturation = _SOG_RealDP(name='Micro, K_Si')
-    nano_Si_half_saturation = _SOG_RealDP(name='Nano, K_Si')
-    pico_Si_half_saturation = _SOG_RealDP(name='Pico, K_Si')
-    micro_natural_mortality = _SOG_RealDP(name='Micro, Rm')
-    nano_natural_mortality = _SOG_RealDP(name='Nano, Rm')
-    pico_natural_mortality = _SOG_RealDP(name='Pico, Rm')
+    micro_Si_N_ratio = _SOG_RealDP(name='Micro, Si ratio')
+    nano_Si_N_ratio = _SOG_RealDP(name='Nano, Si ratio')
+    pico_Si_N_ratio = _SOG_RealDP(name='Pico, Si ratio')
+    micro_Si_half_saturation = _SOG_RealDP(name='Micro, K Si')
+    nano_Si_half_saturation = _SOG_RealDP(name='Nano, K Si')
+    pico_Si_half_saturation = _SOG_RealDP(name='Pico, K Si')
+    micro_natural_mortality = _SOG_RealDP(name='Micro, nat mort')
+    nano_natural_mortality = _SOG_RealDP(name='Nano, nat mort')
+    pico_natural_mortality = _SOG_RealDP(name='Pico, nat mort')
     NH_remin_rate = _SOG_RealDP(name='NH remin rate')
     DON_remin_rate = _SOG_RealDP(name='DON remin rate')
     PON_remin_rate = _SOG_RealDP(name='PON remin rate')
@@ -565,9 +565,9 @@ SOG_KEYS = [
     'Micro, NH inhib', 'Nano, NH inhib', 'Pico, NH inhib',
     'Micro, N_o', 'Nano, N_o', 'Pico, N_o',
     'Micro, N_x', 'Nano, N_x', 'Pico, N_x',
-    'Micro, Si_ratio', 'Nano, Si_ratio', 'Pico, Si_ratio',
-    'Micro, K_Si', 'Nano, K_Si', 'Pico, K_Si',
-    'Micro, Rm', 'Nano, Rm', 'Pico, Rm',
+    'Micro, Si ratio', 'Nano, Si ratio', 'Pico, Si ratio',
+    'Micro, K Si', 'Nano, K Si', 'Pico, K Si',
+    'Micro, nat mort', 'Nano, nat mort', 'Pico, nat mort',
     'NH remin rate', 'DON remin rate', 'PON remin rate', 'bSi remin rate',
     'Waste, dnm, NH', 'Waste, dnm, DON', 'Waste, dnm, PON', 'Waste, dnm, Ref',
     'Waste, dnm, Bsi',
