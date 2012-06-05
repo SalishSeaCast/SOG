@@ -60,6 +60,9 @@ def add_run_subparser(subparsers):
         WITHOUT showing output.
         '''
     parser.add_argument(
+        '--legacy-infile', action='store_true',
+        help='INFILE is a legacy, Fortran-style infile.')
+    parser.add_argument(
         '--nice', default=19,
         help='Priority to use for run. Defaults to %(default)s.')
     parser.add_argument(
@@ -80,9 +83,10 @@ def do_run(args):
     """
     if not args.outfile:
         args.outfile = args.infile + '.out'
+    infile = args.infile if args.legacy_infile else args.infile
     cmd = (
-        'nice -n {0.nice} {0.SOG_exec} < {0.infile} > {0.outfile}'
-        .format(args))
+        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
+        .format(args, infile=infile))
     if args.dry_run:
         run_dry_run(cmd, args)
     else:

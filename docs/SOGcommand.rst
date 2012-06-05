@@ -41,8 +41,8 @@ For example:
 .. code-block:: none
 
    $ SOG run --help
-   usage: SOG run [-h] [--version] [--dry-run] [-o OUTFILE] [--nice NICE]
-                  [--watch]
+   usage: SOG run [-h] [--dry-run] [--legacy-infile] [--nice NICE] [-o OUTFILE]
+                  [--version] [--watch]
                   EXEC INFILE
 
    Run SOG with INFILE. Stdout from the run is stored in OUTFILE which defaults
@@ -55,12 +55,13 @@ For example:
 
    optional arguments:
      -h, --help            show this help message and exit
-     --version             show program's version number and exit
      --dry-run             Don't do anything, just report what would be done.
+     --legacy-infile       INFILE is a legacy, Fortran-style infile.
+     --nice NICE           Priority to use for run. Defaults to 19.
      -o OUTFILE, --outfile OUTFILE
                            File to receive stdout from run. Defaults to
                            INFILE.out
-     --nice NICE           Priority to use for run. Defaults to 19.
+     --version             show program's version number and exit
      --watch               Show OUTFILE contents on screen while SOG run is in
                            progress.
 
@@ -98,8 +99,8 @@ letting you do anything else in that shell.
 .. code-block:: none
 
    $ SOG run --help
-   usage: SOG run [-h] [--version] [--dry-run] [-o OUTFILE] [--nice NICE]
-                  [--watch]
+   usage: SOG run [-h] [--dry-run] [--legacy-infile] [--nice NICE] [-o OUTFILE]
+                  [--version] [--watch]
                   EXEC INFILE
 
    Run SOG with INFILE. Stdout from the run is stored in OUTFILE which defaults
@@ -112,25 +113,23 @@ letting you do anything else in that shell.
 
    optional arguments:
      -h, --help            show this help message and exit
-     --version             show program's version number and exit
      --dry-run             Don't do anything, just report what would be done.
+     --legacy-infile       INFILE is a legacy, Fortran-style infile.
+     --nice NICE           Priority to use for run. Defaults to 19.
      -o OUTFILE, --outfile OUTFILE
                            File to receive stdout from run. Defaults to
                            INFILE.out
-     --nice NICE           Priority to use for run. Defaults to 19.
+     --version             show program's version number and exit
      --watch               Show OUTFILE contents on screen while SOG run is in
                            progress.
 
-The :option:`-o` or :option:`--outfile` option allows you to specify
-the name of the file to receive the screen output (stdout) from the run.
-
-The :option:`--watch` option causes the contents of the output file
-that is receiving stdout to be displayed while the run is in progress.
-
-The :option:`--dry-run` options tells you what the :program:`SOG`
+The :option:`--dry-run` option tells you what the :program:`SOG`
 command you have given would do, but doesn't actually do anything.
 That is useful for debugging when things don't turn out like you expected,
 or for checking beforehand.
+
+The :option:`--legacy-infile` option skips the YAML processing of the infile,
+allowing the run to be done with a legacy, Fortran-style infile.
 
 The :option:`--nice` option allows you to set the priority that the
 operating system will assign to your SOG run.
@@ -140,8 +139,14 @@ workstation,
 and allows the operating system to share resources efficiently between
 one or more SOG runs and other processes.
 
+The :option:`-o` or :option:`--outfile` option allows you to specify
+the name of the file to receive the screen output (stdout) from the run.
+
 The :option:`--version` option just returns the version of :program:`SOG`
 that is installed.
+
+The :option:`--watch` option causes the contents of the output file
+that is receiving stdout to be displayed while the run is in progress.
 
 
 Source Code and Issue Tracker

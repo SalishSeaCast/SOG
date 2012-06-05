@@ -1,6 +1,13 @@
 Changelog
 ---------
 
+v1.1
+~~~~
+
+* Add :option:`--legacy-infile` option to :command:`SOG run` command to
+  allow legacy, Fortran-style infiles to be used.
+
+
 v1.0
 ~~~~
 
