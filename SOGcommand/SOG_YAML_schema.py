@@ -763,6 +763,32 @@ class _Numerics(colander.MappingSchema):
     max_iter = _Int(infile_key='max_iter', var_name='max_iter')
 
 
+class _ForcingData(colander.MappingSchema):
+    use_average_forcing_data = _SOG_String(
+        infile_key='use average/hist forcing',
+        var_name='use_average_forcing_data')
+    wind_forcing_file = _SOG_String(
+        infile_key='wind', var_name='n/a')
+    air_temperature_forcing_file = _SOG_String(
+        infile_key='air temp', var_name='n/a')
+    cloud_fraction_forcing_file = _SOG_String(
+        infile_key='cloud', var_name='n/a')
+    humidity_forcing_file = _SOG_String(
+        infile_key='humidity', var_name='n/a')
+    humidity_forcing_file = _SOG_String(
+        infile_key='humidity', var_name='n/a')
+    major_river_forcing_file = _SOG_String(
+        infile_key='major river', var_name='n/a')
+    use_river_temperature = _Boolean(
+        infile_key='use river temp', var_name='UseRiverTemp')
+    minor_river_forcing_file = _SOG_String(
+        infile_key='minor river', var_name='n/a')
+    minor_river_integration_days = _Int(
+        infile_key='minor river integ days', var_name='integ_days')
+    alt_minor_river_forcing_file = _SOG_String(
+        infile_key='alt minor river', var_name='n/a')
+
+
 class _ForcingVariation(colander.MappingSchema):
     wind = _Boolean(
         infile_key='vary%wind%enabled', var_name='vary%wind%enabled')
@@ -787,6 +813,7 @@ class YAML_Infile(colander.MappingSchema):
     profiles_results = _ProfilesResults()
     physics = _PhysicsParams()
     biology = _BiologyParams()
+    forcing_data = _ForcingData()
 
 
 def yaml_to_infile(nodes, yaml_schema, yaml_struct):
