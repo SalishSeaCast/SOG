@@ -44,7 +44,13 @@ def add_run_subparser(subparsers):
     """
     parser = subparsers.add_parser(
         'run', help='Run SOG with a specified infile.')
-    add_version_arg(parser)
+    parser.add_argument(
+        'SOG_exec', metavar='EXEC', default='./SOG',
+        help='''
+             SOG executable to run. May include relative or absolute
+             path elements. Defaults to %(default)s.
+             ''')
+    parser.add_argument('infile', metavar='INFILE', help='infile for run')
     parser.add_argument(
         '--dry-run', action='store_true',
         help="Don't do anything, just report what would be done.")
@@ -54,18 +60,12 @@ def add_run_subparser(subparsers):
         WITHOUT showing output.
         '''
     parser.add_argument(
-        'SOG_exec', metavar='EXEC', default='./SOG',
-        help='''
-             SOG executable to run. May include relative or absolute
-             path elements. Defaults to %(default)s.
-             ''')
-    parser.add_argument('infile', metavar='INFILE', help='infile for run')
+        '--nice', default=19,
+        help='Priority to use for run. Defaults to %(default)s.')
     parser.add_argument(
         '-o', '--outfile', metavar='OUTFILE',
         help='File to receive stdout from run. Defaults to INFILE.out')
-    parser.add_argument(
-        '--nice', default=19,
-        help='Priority to use for run. Defaults to %(default)s.')
+    add_version_arg(parser)
     parser.add_argument(
         '--watch', action='store_true',
         help='''
