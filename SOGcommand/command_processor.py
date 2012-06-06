@@ -121,6 +121,8 @@ def watch_outfile(proc, outfile_name):
     in progress, and continues yielding the lines that are flushed
     when the run finishes.
     """
+    # Wait for the SOG process to create the outfile
+    sleep(0.1)
     with open(outfile_name) as outfile:
         while proc.poll() is None:
             # Echo lines flushed to outfile while SOG is running
