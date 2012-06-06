@@ -4,6 +4,11 @@ Changelog
 v1.1
 ~~~~
 
+* Outfile now defaults to ./INFILE.out; i.e. outfile goes to the directory
+  that the run is started in by default, not the directory the infile is in.
+  Use the :option:`--output` option to specify the outfile path/name if
+  something other than the default is required.
+
 * Add :option:`--legacy-infile` option to :command:`SOG run` command to
   allow legacy, Fortran-style infiles to be used.
 

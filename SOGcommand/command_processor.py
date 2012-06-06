@@ -6,8 +6,10 @@ the SOG bio-physical model of deep estuaries.
 :Author: Doug Latornell <djl@douglatornell.ca>
 """
 from argparse import ArgumentParser
+import os
 from subprocess import Popen
 import sys
+from tempfile import NamedTemporaryFile
 from textwrap import TextWrapper
 from time import sleep
 from __version__ import (
@@ -72,7 +74,10 @@ def add_run_subparser(subparsers):
         help='Priority to use for run. Defaults to %(default)s.')
     parser.add_argument(
         '-o', '--outfile', metavar='OUTFILE',
-        help='File to receive stdout from run. Defaults to INFILE.out')
+        help='''
+            File to receive stdout from run. Defaults to ./INFILE.out;
+            i.e. INFILE.out in the directory that the run is started in.
+            ''')
     add_version_arg(parser)
     parser.add_argument(
         '--watch', action='store_true',
@@ -87,9 +92,8 @@ def do_run(args):
     """Execute the `SOG run` command with the specified options.
     """
     if not args.outfile:
-        args.outfile = args.infile + '.out'
-    infile = (args.infile if args.legacy_infile
-              else create_infile(args.infile))
+        args.outfile = os.path.join('.', args.infile + '.out')
+    infile = args.infile if args.legacy_infile else args.infile
     cmd = (
         'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
         .format(args, infile=infile))

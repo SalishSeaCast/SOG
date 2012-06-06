@@ -57,7 +57,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False)
         command_processor.do_run(args)
         mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < infile > infile.out', shell=True)
+            'nice -n 19 ./SOG < infile > ./infile.out', shell=True)
 
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'run_dry_run')
@@ -79,6 +79,28 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False)
         command_processor.do_run(args)
         mock_Popen().wait.assert_called_once()
+
+    @patch.object(command_processor, 'Popen')
+    def test_do_run_outfile_relative_path(self, mock_Popen):
+        """do_run spawns expected command when outfile arg is relative path
+        """
+        args = Mock(
+            SOG_exec='./SOG', infile='infile', outfile='../foo/bar',
+            nice=19, dry_run=False, watch=False)
+        command_processor.do_run(args)
+        mock_Popen.assert_called_once_with(
+            'nice -n 19 ./SOG < infile > ../foo/bar', shell=True)
+
+    @patch.object(command_processor, 'Popen')
+    def test_do_run_outfile_absolute_path(self, mock_Popen):
+        """do_run spawns expected command when outfile arg is absolute path
+        """
+        args = Mock(
+            SOG_exec='./SOG', infile='infile', outfile='/foo/bar',
+            nice=19, dry_run=False, watch=False)
+        command_processor.do_run(args)
+        mock_Popen.assert_called_once_with(
+            'nice -n 19 ./SOG < infile > /foo/bar', shell=True)
 
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'watch_outfile')
@@ -108,7 +130,7 @@ class TestRunCommand(unittest.TestCase):
     def test_run_dry_run_std_msg(self, mock_stdout):
         """run_dry_run prints intro msg and command that would be run
         """
-        cmd = 'nice -n 19 ./SOG < infile > infile.out'
+        cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
         args = Mock(watch=False)
         command_processor.run_dry_run(cmd, args)
         self.assertEqual(
@@ -120,7 +142,7 @@ class TestRunCommand(unittest.TestCase):
     def test_run_dry_run_watch_msg(self, mock_stdout):
         """run_dry_run w/ watch prints suffix msg about outfile
         """
-        cmd = 'nice -n 19 ./SOG < infile > infile.out'
+        cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
         args = Mock(outfile='infile.out', watch=True)
         command_processor.run_dry_run(cmd, args)
         self.assertEqual(
