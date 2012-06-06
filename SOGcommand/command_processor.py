@@ -10,7 +10,11 @@ from subprocess import Popen
 import sys
 from textwrap import TextWrapper
 from time import sleep
-from __version__ import version
+from __version__ import (
+    version,
+    release,
+    )
+from infile_processor import create_infile
 
 
 def run():
@@ -36,7 +40,8 @@ def build_parser():
 
 
 def add_version_arg(parser):
-    parser.add_argument('--version', action='version', version=version)
+    parser.add_argument(
+        '--version', action='version', version=version + release)
 
 
 def add_run_subparser(subparsers):
@@ -83,7 +88,8 @@ def do_run(args):
     """
     if not args.outfile:
         args.outfile = args.infile + '.out'
-    infile = args.infile if args.legacy_infile else args.infile
+    infile = (args.infile if args.legacy_infile
+              else create_infile(args.infile))
     cmd = (
         'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
         .format(args, infile=infile))
