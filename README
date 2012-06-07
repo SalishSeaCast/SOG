@@ -159,7 +159,7 @@ The SOG command processor is a Python package called
    .. code-block:: sh
 
       $ cd SOG
-      $ python setup.py develop
+      $ python setup.py develop --user
 
 #. Test it with :kbd:`~/.local/bin/SOG help` or :kbd:`~/.local/bin/SOG
    --version`.
