@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """SOG command processor.
 
 A command processer wrapper around various operations associated with
@@ -93,7 +94,13 @@ def do_run(args):
     """
     if not args.outfile:
         args.outfile = os.path.join('.', args.infile + '.out')
-    infile = args.infile if args.legacy_infile else args.infile
+    if args.legacy_infile:
+        infile = args.infile
+    else:
+        if args.dry_run:
+            infile = NamedTemporaryFile(suffix='.infile').name
+        else:
+            infile = create_infile(args.infile)
     cmd = (
         'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
         .format(args, infile=infile))
