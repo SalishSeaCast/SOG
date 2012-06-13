@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Unit tests for SOG infile parser and emitter.
 """
 from StringIO import StringIO

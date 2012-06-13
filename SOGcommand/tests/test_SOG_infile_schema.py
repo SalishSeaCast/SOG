@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """Unit tests for SOG Fortran-ish infile schema and data structure
 transformation function.
 """
