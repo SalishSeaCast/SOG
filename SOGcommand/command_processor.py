@@ -106,6 +106,7 @@ def do_run(args):
         .format(args, infile=infile))
     if args.dry_run:
         run_dry_run(cmd, args)
+        returncode = 0
     else:
         proc = Popen(cmd, shell=True)
         if args.watch:
