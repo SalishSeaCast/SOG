@@ -57,7 +57,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_Popen.assert_called_once_with(
             'nice -n 19 ./SOG < /tmp/foo.infile > ./infile.out', shell=True)
 
@@ -68,7 +68,7 @@ class TestRunCommand(unittest.TestCase):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=False, legacy_infile=True)
-        command_processor.do_run(args)
+        self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_Popen.assert_called_once_with(
             'nice -n 19 ./SOG < infile > ./infile.out', shell=True)
 
@@ -80,7 +80,7 @@ class TestRunCommand(unittest.TestCase):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=True, watch=False, legacy_infile=False)
-        command_processor.do_run(args)
+        self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_run_dry_run.assert_called_once()
 
     @patch.object(command_processor, 'Popen', return_value=Mock(name='proc'))
@@ -92,7 +92,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_Popen().wait.assert_called_once()
 
     @patch.object(command_processor, 'Popen')
@@ -104,7 +104,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_Popen.assert_called_once_with(
             'nice -n 19 ./SOG < /tmp/foo.infile > ../foo/bar', shell=True)
 
@@ -117,7 +117,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_Popen.assert_called_once_with(
             'nice -n 19 ./SOG < /tmp/foo.infile > /foo/bar', shell=True)
 
@@ -131,7 +131,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=True, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         mock_watch.assert_called_once()
 
     @patch('sys.stdout', new_callable=StringIO)
@@ -146,7 +146,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=True, legacy_infile=False)
         with patch.object(command_processor, 'create_infile',
                           return_value='/tmp/foo.infile'):
-            command_processor.do_run(args)
+            self.assertRaises(SystemExit, command_processor.do_run, args)
         self.assertEqual(mock_stdout.getvalue(), 'foo')
 
     @patch('sys.stdout', new_callable=StringIO)
