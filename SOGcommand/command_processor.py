@@ -111,8 +111,10 @@ def do_run(args):
         if args.watch:
             for line in watch_outfile(proc, args.outfile):
                 print line,
+            returncode = proc.poll()
         else:
-            proc.wait()
+            returncode = proc.wait()
+    sys.exit(returncode)
 
 
 def run_dry_run(cmd, args):
