@@ -17,7 +17,8 @@ from __version__ import (
     version,
     release,
     )
-from infile_processor import create_infile
+from .infile_processor import create_infile
+from .infile_processor import read_infile
 
 
 def run():
@@ -39,6 +40,7 @@ def build_parser():
     add_version_arg(parser)
     subparsers = parser.add_subparsers(title='sub-commands')
     add_run_subparser(subparsers)
+    add_read_infile_subparser(subparsers)
     return parser
 
 
@@ -149,3 +151,27 @@ def watch_outfile(proc, outfile_name):
             # Echo lines flushed to outfile when SOG run finishes
             for line in outfile:
                 yield line
+
+
+def add_read_infile_subparser(subparsers):
+    """Add a sub-parser for the `SOG read_infile` command.
+    """
+    parser = subparsers.add_parser(
+        'read_infile', help='Print infile value for specified key.')
+    parser.add_argument('infile', help='infile for run')
+    parser.add_argument(
+        'key',
+        help='''
+             Key to print infile value for;
+             e.g. timeseries_results.std_physics.
+             ''')
+    add_version_arg(parser)
+    parser.set_defaults(func=do_read_infile)
+
+
+def do_read_infile(args):
+    """Print the infile value for the specified key.
+    """
+    value = read_infile(args.infile, args.key)
+    print value
+    sys.exit(0)

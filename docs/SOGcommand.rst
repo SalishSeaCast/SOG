@@ -22,15 +22,16 @@ the available :program:`SOG` options and sub-commands:
 .. code-block:: none
 
    $ SOG --help
-   usage: SOG [-h] [--version] {run} ...
+   usage: SOG [-h] [--version] {run,read_infile} ...
 
    optional arguments:
-     -h, --help  show this help message and exit
-     --version   show program's version number and exit
+     -h, --help         show this help message and exit
+     --version          show program's version number and exit
 
    sub-commands:
-     {run}
-       run       Run SOG with a specified infile.
+     {run,read_infile}
+       run              Run SOG with a specified infile.
+       read_infile      Print infile value for specified key.
 
    Use `SOG <sub-command> --help` to get detailed help about a sub-command.
 
@@ -147,6 +148,23 @@ that is installed.
 
 The :option:`--watch` option causes the contents of the output file
 that is receiving stdout to be displayed while the run is in progress.
+
+
+:program:`SOG read_infile` Command
+----------------------------------
+
+The :program:`SOG read_infile` command prints the value associated with a
+key in the specified YAML infile.
+It is primarily for use by the SOG buildbot where it is used to get output
+file paths/names from the infile.
+Example:
+
+.. code-block:: sh
+
+   # cd SOG-code-ocean
+   $ SOG read_infile infile.yaml timeseries_results.std_physics
+   timeseries/std_phys_SOG.out
+
 
 
 Source Code and Issue Tracker
