@@ -70,7 +70,8 @@ class TestReadInfile(unittest.TestCase):
                          return_value={}),
         )
         with context_mgr:
-            self.assertRaises(SystemExit, self._call_fut, 'foo.yaml', 'bar')
+            with self.assertRaises(SystemExit):
+                self._call_fut('foo.yaml', 'bar')
         self.assertEqual(mock_stderr.getvalue(), 'KeyError: bar\n')
 
 
@@ -100,7 +101,8 @@ class TestReadYamlInfile(unittest.TestCase):
         with patch.object(infile_processor, 'open', create=True) as mock_open:
             mock_open.return_value = MagicMock(spec=file)
             mock_open.return_value.__enter__.return_value = mock_data
-            self.assertRaises(SystemExit, self._call_fut, 'foo.yaml')
+            with self.assertRaises(SystemExit):
+                self._call_fut('foo.yaml')
         self.assertEqual(
             mock_stderr.getvalue(),
             'Unable to parse foo.yaml: Are you sure that it is YAML?\n')
@@ -128,8 +130,8 @@ class TestDeserializeYaml(unittest.TestCase):
         """
         from ..SOG_YAML_schema import YAML_Infile
         mock_data = {'foo': 'bar'}
-        self.assertRaises(SystemExit, self._call_fut,
-                          mock_data, YAML_Infile(), 'foo.yaml')
+        with self.assertRaises(SystemExit):
+            self._call_fut(mock_data, YAML_Infile(), 'foo.yaml')
         self.assertTrue(
             mock_stderr.getvalue().startswith(
             'Invalid SOG YAML in foo.yaml. '
