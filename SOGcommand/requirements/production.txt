@@ -1,7 +1,5 @@
 # Python packages that SOGcommand depends on
 
 PyYAML==3.10
-colander==0.9.7
-coverage==3.5.1
-mock==0.8.0
+colander==0.9.8
 translationstring==1.1
