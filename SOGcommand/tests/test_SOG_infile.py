@@ -135,10 +135,11 @@ class TestDump(unittest.TestCase):
     def test_dump_line_wo_units(self):
         """dump produces expected line for data structure w/o units
         """
+        import colander
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': 'None'}}
+                'units': colander.null}}
         key_order = ['gridsize']
         stream = StringIO()
         self._call_dump(data, key_order, stream)
@@ -148,10 +149,11 @@ class TestDump(unittest.TestCase):
     def test_dump_line_order(self):
         """dump produces lines in correct order
         """
+        import colander
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': 'None'},
+                'units': colander.null},
             'maxdepth': {
                 'value': '40.0d0', 'description': 'depth of modelled domain',
                 'units': 'm'}}

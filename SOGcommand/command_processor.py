@@ -53,7 +53,12 @@ def add_run_subparser(subparsers):
     """Add a sub-parser for the `SOG run` command.
     """
     parser = subparsers.add_parser(
-        'run', help='Run SOG with a specified infile.')
+        'run', help='Run SOG with a specified infile.',
+        description='''
+            Run SOG with INFILE. Stdout from the run is stored in
+            OUTFILE which defaults to INFILE.out.
+            The run is executed WITHOUT showing output.
+            ''')
     parser.add_argument(
         'SOG_exec', metavar='EXEC', default='./SOG',
         help='''
@@ -64,11 +69,16 @@ def add_run_subparser(subparsers):
     parser.add_argument(
         '--dry-run', action='store_true',
         help="Don't do anything, just report what would be done.")
-    parser.description = '''
-        Run SOG with INFILE. Stdout from the run is stored in
-        OUTFILE which defaults to INFILE.out. The run is executed
-        WITHOUT showing output.
-        '''
+    parser.add_argument(
+        '-e', '--editfile', metavar='EDITFILE', action='append', default=[],
+        help='''
+            YAML infile snippet to be merged into INFILE to change
+            1 or more values.
+            This option may be repeated,
+            if so,
+            the edits are applied in the order in which they appear
+            on the command line.
+            ''')
     parser.add_argument(
         '--legacy-infile', action='store_true',
         help='INFILE is a legacy, Fortran-style infile.')
@@ -102,7 +112,7 @@ def do_run(args):
         if args.dry_run:
             infile = NamedTemporaryFile(suffix='.infile').name
         else:
-            infile = create_infile(args.infile)
+            infile = create_infile(args.infile, args.editfile)
     cmd = (
         'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
         .format(args, infile=infile))

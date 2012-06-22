@@ -75,6 +75,18 @@ class TestRunCommand(unittest.TestCase):
             'nice -n 19 ./SOG < infile > ./infile.out', shell=True)
 
     @patch.object(command_processor, 'Popen')
+    @patch.object(command_processor, 'create_infile')
+    def test_do_run_editfile(self, mock_create_infile, mock_Popen):
+        """do_run calls create_infile with editfile list
+        """
+        args = Mock(
+            SOG_exec='./SOG', infile='infile.yaml', outfile=None, editfile=[],
+            nice=19, dry_run=False, watch=False, legacy_infile=False)
+        with self.assertRaises(SystemExit):
+            command_processor.do_run(args)
+        mock_create_infile.assert_called_once_with(args.infile, args.editfile)
+
+    @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'run_dry_run')
     def test_do_run_dry_run(self, mock_run_dry_run, mock_Popen):
         """do_run calls run_dry_run when --dry-run option is used

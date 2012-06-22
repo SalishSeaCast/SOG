@@ -14,6 +14,7 @@ To be clear, the SOG infile format this module handles is the one that
 SOG's Fortran input_processor.f90 module reads.
 """
 import re
+import colander
 
 
 def load(stream):
@@ -116,6 +117,6 @@ def dump(data, key_order, stream):
     """
     for key in key_order:
         line = '"{0}"  {1[value]}  "{1[description]}'.format(key, data[key])
-        if data[key]['units'] != 'None':
+        if data[key]['units'] != colander.null:
             line = '{0} [{1[units]}]'.format(line, data[key])
         stream.write('{0}"\n'.format(line))

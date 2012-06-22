@@ -7,6 +7,7 @@ try:
     import unittest2 as unittest
 except ImportError:
     import unittest  # NOQA
+from mock import call
 from mock import MagicMock
 from mock import patch
 
@@ -36,8 +37,29 @@ class TestCreateInfile(unittest.TestCase):
             mock_NTF = mocks[5]
             handle = mock_NTF.return_value = MagicMock(spec=file)
             handle.__enter__.return_value.name = '/tmp/foo.infile'
-            infile_name = self._call_fut('foo.yaml')
+            infile_name = self._call_fut('foo.yaml', [])
         self.assertEqual(infile_name, '/tmp/foo.infile')
+
+    def test_create_infile_reads_edit_files(self):
+        """create_infile reads infile and edit files in expected order
+        """
+        context_mgr = nested(
+            patch.object(infile_processor, '_read_yaml_infile'),
+            patch.object(infile_processor, '_deserialize_yaml'),
+            patch.object(infile_processor, '_merge_yaml_structs'),
+            patch.object(infile_processor, 'yaml_to_infile'),
+            patch.object(infile_processor, 'SOG_Infile'),
+            patch.object(infile_processor, 'SOG_infile'),
+            patch.object(infile_processor, 'NamedTemporaryFile'),
+        )
+        with context_mgr as mocks:
+            mock_read_yaml_infile = mocks[0]
+            mock_NTF = mocks[6]
+            mock_NTF.return_value = MagicMock(spec=file)
+            self._call_fut('foo.yaml', ['bar.yaml', 'bax.yaml'])
+        self.assertEqual(
+            mock_read_yaml_infile.call_args_list,
+            [call('foo.yaml'), call('bar.yaml'), call('bax.yaml')])
 
 
 class TestReadInfile(unittest.TestCase):
@@ -111,10 +133,18 @@ class TestReadYamlInfile(unittest.TestCase):
 class TestDeserializeYaml(unittest.TestCase):
     """Unit tests for _deserialize_yaml function.
     """
-    def _call_fut(self, *args):
+    def _call_fut(self, *args, **kwargs):
         """Call function under test.
         """
-        return infile_processor._deserialize_yaml(*args)
+        return infile_processor._deserialize_yaml(*args, **kwargs)
+
+    @patch.object(infile_processor, 'YAML_Infile')
+    def test_deserialize_yaml_binds_schema(self, mock_schema):
+        """_deserialize_yaml binds schema with edit_mode
+        """
+        mock_data = {'foo': 'bar'}
+        self._call_fut(mock_data, mock_schema, 'foo.yaml', edit_mode=True)
+        mock_schema.bind.assert_valled_once_with(allow_missing=True)
 
     @patch.object(infile_processor, 'YAML_Infile')
     def test_deserialize_yaml_deserializes_data(self, mock_schema):
@@ -138,3 +168,64 @@ class TestDeserializeYaml(unittest.TestCase):
             'The following parameters are missing or misspelled:\n'))
         self.assertTrue(
             mock_stderr.getvalue().endswith(" 'vary': u'Required'}\n"))
+
+
+class TestMergeYamlStructs(unittest.TestCase):
+    """Unit tests for _merge_yaml_structs function.
+    """
+    def _call_fut(self, *args):
+        """Call function under test.
+        """
+        return infile_processor._merge_yaml_structs(*args)
+
+    def test_merge_yaml_structs_ignores_empty_blocks(self):
+        """_merge_yaml_structs ignores empty/missing blocks in edit_struct
+        """
+        import colander
+        from datetime import datetime
+        from ..SOG_YAML_schema import _SOG_Datetime
+        class MockSchema(colander.MappingSchema): # NOQA
+            end_datetime = _SOG_Datetime(
+                infile_key='end datetime', var_name='endDatetime')
+        mock_schema = MockSchema()
+        yaml_struct = mock_schema.deserialize(
+            {
+                'end_datetime': {
+                    'value': datetime(2012, 06, 22, 12, 55),
+                    'variable_name': 'endDatetime',
+                    'description': 'end of run date/time',
+            }})
+        edit_struct = {'end_datetime': None}
+        self._call_fut(edit_struct, yaml_struct, mock_schema)
+        self.assertEqual(
+            yaml_struct['end_datetime']['value'],
+            datetime(2012, 06, 22, 12, 55))
+
+    def test_merge_yaml_structs_updates_yaml_struct(self):
+        """_merge_yaml_structs updates yaml_struct w/ value from edit_struct
+        """
+        import colander
+        from datetime import datetime
+        from ..SOG_YAML_schema import _SOG_Datetime
+        class MockSchema(colander.MappingSchema): # NOQA
+            end_datetime = _SOG_Datetime(
+                infile_key='end datetime', var_name='endDatetime')
+        mock_schema = MockSchema()
+        yaml_struct = mock_schema.deserialize(
+            {
+                'end_datetime': {
+                    'value': datetime(2012, 06, 22, 12, 55),
+                    'variable_name': 'endDatetime',
+                    'description': 'end of run date/time',
+            }})
+        edit_struct = mock_schema.deserialize(
+            {
+                'end_datetime': {
+                    'value': datetime(2012, 06, 22, 12, 58),
+                    'variable_name': 'endDatetime',
+                    'description': 'end of run date/time',
+            }})
+        self._call_fut(edit_struct, yaml_struct, mock_schema)
+        self.assertEqual(
+            yaml_struct['end_datetime']['value'],
+            datetime(2012, 06, 22, 12, 58))

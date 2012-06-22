@@ -3,6 +3,8 @@ Changelog
 
 v1.1
 ~~~~
+* Add :option:`--editfile` to :command:`SOG run` command to allow YAML
+  infile snippets to be merged into the base YAML infile.
 
 * Outfile now defaults to ./INFILE.out; i.e. outfile goes to the directory
   that the run is started in by default, not the directory the infile is in.

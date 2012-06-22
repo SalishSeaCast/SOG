@@ -11,6 +11,28 @@ from mock import Mock
 import colander
 
 
+class TestDeferredAllowMissing(unittest.TestCase):
+    """Unit tests for deferred_allow_missing schema binding function.
+    """
+    def _call_fut(self, *args):
+        """Call function under test.
+        """
+        from ..SOG_YAML_schema import deferred_allow_missing
+        return deferred_allow_missing(*args)
+
+    def test_deferred_allow_missing_allow_missing_true(self):
+        """deferred_allow_missing returns None if allow_missing arg == True
+        """
+        result = self._call_fut(Mock(), {'allow_missing': True})
+        self.assertIsNone(result)
+
+    def test_deferred_allow_missing_allow_missing_false(self):
+        """deferred_allow_missing returns reqd if allow_missing arg == False
+        """
+        result = self._call_fut(Mock(), {'allow_missing': False})
+        self.assertEqual(result, colander.required)
+
+
 class TestDateTime(unittest.TestCase):
     """Unit tests for _DateTime schema type.
     """
