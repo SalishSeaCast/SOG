@@ -30,7 +30,7 @@ with open('SOGcommand/README', 'rt') as file_obj:
     detailed_description = file_obj.read()
 with open('SOGcommand/CHANGELOG', 'rt') as file_obj:
     detailed_description += '\n\n' + file_obj.read()
-with open('SOGcommand/requirements.txt', 'rt') as file_obj:
+with open('SOGcommand/requirements/production.txt', 'rt') as file_obj:
     requirements = file_obj.read()
 install_requires = [line for line in requirements.split('\n')
                     if line and not line.startswith('#')]
