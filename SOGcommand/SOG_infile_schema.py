@@ -266,6 +266,12 @@ class SOG_Infile(colander.MappingSchema):
     add_freshwater_on_surface = _SOG_Boolean(name='Fw_surface')
     distribution_depth = _SOG_RealDP(name='Fw_depth')
     northern_return_flow = _SOG_Boolean(name='northern_return_flow_on')
+    northern_influence_strength = _SOG_RealDP(name='strength_northern')
+    northern_influence_integration_time_scale = _SOG_RealDP(
+        name='tau_northern')
+    northern_water_depth_peak = _SOG_RealDP(name='depth_northern')
+    northern_water_upper_extension = _SOG_RealDP(name='upper_northern')
+    northern_water_lower_extension = _SOG_RealDP(name='lower_northern')
     include_fresh_water_nutrients = _SOG_Boolean(name='use_Fw_nutrients')
     bottom_salinity = _SOG_RealDP(name='cbottom')
     alpha = _SOG_RealDP(name='calpha')
@@ -522,8 +528,9 @@ SOG_KEYS = [
     'Lx', 'Ly', 'openEnd',
     'nu_w_m', 'nu_w_s', 'shear smooth',
     'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
-    'Fw_depth', 'use_Fw_nutrients', 'northern_return_flow_on',
+    'Fw_depth', 'use_Fw_nutrients',
     'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
+    'northern_return_flow_on',
     'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
     'd',
     'flagellates_on', 'remineralization', 'use microzooplankton',
@@ -606,6 +613,14 @@ SOG_KEYS = [
     'major river', 'use river temp',
     'minor river', 'minor river integ days', 'alt minor river',
     ]
+# List of extra keys, in order, to include in SOG infile for optional
+# parameters
+SOG_EXTRA_KEYS = {
+    'northern_return_flow_on': [
+        'strength_northern', 'tau_northern',
+        'depth_northern', 'upper_northern', 'lower_northern',
+    ],
+}
 
 
 def infile_to_yaml(nodes, infile_schema, infile_struct):

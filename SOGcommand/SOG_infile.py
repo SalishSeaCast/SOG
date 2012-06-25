@@ -87,7 +87,7 @@ def load(stream):
             return result
 
 
-def dump(data, key_order, stream):
+def dump(data, key_order, extra_keys, stream):
     """Dump the Python data structure to the stream using the
     key_order to control the order of the lines in the stream.
 
@@ -98,9 +98,16 @@ def dump(data, key_order, stream):
                     order in which the SOG infile lines are written.
     :type key_order: iterable
 
+    :arg extra_keys: Extra infile keys that may be included in the
+                     SOG infile when optional parameters are enabled.
+                     Keys are option parameters, values are iterables
+                     of extra keys to include in SOG infile immediately
+                     following option parameters.
+    :type extra_keys: dict of iterables
+
     :arg stream: File-like object to which the SOG infile lines are
                  written.
-    :type stream: file-like obejct
+    :type stream: file-like object
 
     Given a dict item that looks like::
 
@@ -115,8 +122,16 @@ def dump(data, key_order, stream):
     will be excluded from the description phrase in the SOG infile
     line.
     """
-    for key in key_order:
+    def build_line(key):
         line = '"{0}"  {1[value]}  "{1[description]}'.format(key, data[key])
         if data[key]['units'] != colander.null:
             line = '{0} [{1[units]}]'.format(line, data[key])
+        return line
+
+    for key in key_order:
+        line = build_line(key)
         stream.write('{0}"\n'.format(line))
+        if key in extra_keys and data[key]['value'] == '.true.':
+            for extra_key in extra_keys[key]:
+                line = build_line(extra_key)
+                stream.write('{0}"\n'.format(line))

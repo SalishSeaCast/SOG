@@ -303,12 +303,29 @@ class _FreshWaterFlux(colander.MappingSchema):
     distribution_depth = _Float(
         infile_key='Fw_depth', var_name='Fw_depth',
         missing=deferred_allow_missing)
-    northern_return_flow = _Boolean(
-        infile_key='northern_return_flow_on', var_name='Northern_return',
-        missing=deferred_allow_missing)
     include_fresh_water_nutrients = _Boolean(
         infile_key='use_Fw_nutrients', var_name='use_Fw_nutrients',
         missing=deferred_allow_missing)
+    northern_return_flow = _Boolean(
+        infile_key='northern_return_flow_on', var_name='Northern_return',
+        missing=deferred_allow_missing)
+    # The next 5 "northern" parameters are only used when
+    # northern_return_flow == True
+    northern_influence_strength = _Float(
+        infile_key='strength_northern', var_name='strength',
+        missing=None)
+    northern_influence_integration_time_scale = _Float(
+        infile_key='tau_northern', var_name='tauN',
+        missing=None)
+    northern_water_depth_peak = _Float(
+        infile_key='depth_northern', var_name='central_depth',
+        missing=None)
+    northern_water_upper_extension = _Float(
+        infile_key='upper_northern', var_name='upper_width',
+        missing=None)
+    northern_water_lower_extension = _Float(
+        infile_key='lower_northern', var_name='lower_width',
+        missing=None)
 
 
 class _SalinityFit(colander.MappingSchema):

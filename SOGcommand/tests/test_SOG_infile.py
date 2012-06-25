@@ -114,9 +114,9 @@ class TestLoad(unittest.TestCase):
 class TestDump(unittest.TestCase):
     """Unit tests for SOG infile emitter.
     """
-    def _call_dump(self, data, key_order, stream):
+    def _call_dump(self, *args):
         from ..SOG_infile import dump
-        return dump(data, key_order, stream)
+        return dump(*args)
 
     def test_dump_line_w_units(self):
         """dump produces expected line for data structure w/ units
@@ -126,8 +126,9 @@ class TestDump(unittest.TestCase):
                 'value': '40.0d0', 'description': 'depth of modelled domain',
                 'units': 'm'}}
         key_order = ['maxdepth']
+        extra_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, stream)
+        self._call_dump(data, key_order, extra_keys, stream)
         self.assertEqual(
             stream.getvalue(),
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n')
@@ -141,8 +142,9 @@ class TestDump(unittest.TestCase):
                 'value': '80', 'description': 'number of grid points',
                 'units': colander.null}}
         key_order = ['gridsize']
+        extra_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, stream)
+        self._call_dump(data, key_order, extra_keys, stream)
         self.assertEqual(
             stream.getvalue(), '"gridsize"  80  "number of grid points"\n')
 
@@ -158,9 +160,36 @@ class TestDump(unittest.TestCase):
                 'value': '40.0d0', 'description': 'depth of modelled domain',
                 'units': 'm'}}
         key_order = 'maxdepth gridsize'.split()
+        extra_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, stream)
+        self._call_dump(data, key_order, extra_keys, stream)
         self.assertEqual(
             stream.getvalue(),
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n'
             '"gridsize"  80  "number of grid points"\n')
+
+    def test_dump_extra_keys(self):
+        """dump handles extra keys for optional parameters
+        """
+        import colander
+        data = {
+            'northern_return_flow': {
+                'value': '.true.',
+                'description': 'include fresh water return flow from north?',
+                'units': colander.null},
+            'northern_influence_strength': {
+                'value': '0.8863d0',
+                'description': 'strength of northen influence',
+                'units': 'm'}}
+        key_order = ['northern_return_flow']
+        extra_keys = {
+            'northern_return_flow': [
+                'northern_influence_strength']}
+        stream = StringIO()
+        self._call_dump(data, key_order, extra_keys, stream)
+        self.assertEqual(
+            stream.getvalue(),
+            '"northern_return_flow"  .true.  '
+                '"include fresh water return flow from north?"\n'
+            '"northern_influence_strength"  0.8863d0  '
+                '"strength of northen influence [m]"\n')
