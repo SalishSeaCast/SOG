@@ -105,7 +105,7 @@ def do_run(args):
     """Execute the `SOG run` command with the specified options.
     """
     if not args.outfile:
-        args.outfile = os.path.join('.', args.infile + '.out')
+        args.outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
     if args.legacy_infile:
         infile = args.infile
     else:
