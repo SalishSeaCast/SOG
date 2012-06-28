@@ -114,7 +114,7 @@ def do_run(args):
         else:
             infile = create_infile(args.infile, args.editfile)
     cmd = (
-        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile}'
+        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
         .format(args, infile=infile))
     if args.dry_run:
         run_dry_run(cmd, args)
