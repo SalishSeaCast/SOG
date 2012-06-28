@@ -183,6 +183,9 @@ class _TimeSeriesResults(colander.MappingSchema):
     std_chemistry = _SOG_String(
         infile_key='std_chem_ts_out', var_name='std_chem_ts_out',
         missing=deferred_allow_missing)
+    user_chemistry = _SOG_String(
+        infile_key='user_chem_ts_out', var_name='user_chem_ts_out',
+        missing=deferred_allow_missing)
 
 
 class _ProfilesResults(colander.MappingSchema):
@@ -346,12 +349,31 @@ class _SalinityFit(colander.MappingSchema):
         missing=deferred_allow_missing)
 
 
+class _RiverAlkalinityFit(colander.MappingSchema):
+    river_alkalinity_slope = _Float(
+        infile_key='slope_alk', var_name='slope',
+        missing=deferred_allow_missing)
+    river_alkalinity_intercept = _Float(
+        infile_key='intercept_alk', var_name='intercept',
+        missing=deferred_allow_missing)
+
+
+class _RiverDIC_Fit(colander.MappingSchema):
+    river_pCO2 = _Float(
+        infile_key='pCO2_river', var_name='pCO2_riv',
+        missing=deferred_allow_missing)
+
+
 class _FreshWater(colander.MappingSchema):
     upwelling = _FreshWaterUpwelling(
         missing=deferred_allow_missing)
     flux = _FreshWaterFlux(
         missing=deferred_allow_missing)
     salinity_fit = _SalinityFit(
+        missing=deferred_allow_missing)
+    river_alkalinity_fit = _RiverAlkalinityFit(
+        missing=deferred_allow_missing)
+    river_DIC_fit = _RiverDIC_Fit(
         missing=deferred_allow_missing)
 
 

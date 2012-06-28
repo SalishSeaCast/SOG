@@ -227,6 +227,7 @@ class SOG_Infile(colander.MappingSchema):
     std_bio_ts_out = _SOG_String()
     user_bio_ts_out = _SOG_String()
     std_chem_ts_out = _SOG_String()
+    user_chem_ts_out = _SOG_String()
     num_profiles = _SOG_Int(name='noprof')
     profile_days = _SOG_IntList(name='profday')
     profile_times = _SOG_RealDP_List(name='proftime')
@@ -278,6 +279,9 @@ class SOG_Infile(colander.MappingSchema):
     alpha2 = _SOG_RealDP(name='calpha2')
     gamma = _SOG_RealDP(name='cgamma')
     beta = _SOG_RealDP(name='cbeta')
+    river_alkalinity_slope = _SOG_RealDP(name='slope_alk')
+    river_alkalinity_intercept = _SOG_RealDP(name='intercept_alk')
+    river_pCO2 = _SOG_RealDP(name='pCO2_river')
     ialpha = _SOG_RealDP()
     ibeta = _SOG_RealDP()
     igamma = _SOG_RealDP()
@@ -517,8 +521,9 @@ SOG_KEYS = [
     'vary%temperature%enabled',
     'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
     'initial chl split',
-    'std_phys_ts_out', 'user_phys_ts_out', 'std_bio_ts_out',
-    'user_bio_ts_out', 'std_chem_ts_out',
+    'std_phys_ts_out', 'user_phys_ts_out',
+    'std_bio_ts_out', 'user_bio_ts_out',
+    'std_chem_ts_out', 'user_chem_ts_out',
     'noprof', 'profday', 'proftime', 'haloclinefile', 'profile_base',
     'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
     'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
@@ -530,6 +535,7 @@ SOG_KEYS = [
     'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
     'Fw_depth', 'use_Fw_nutrients',
     'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
+    'slope_alk', 'intercept_alk', 'pCO2_river',
     'northern_return_flow_on',
     'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
     'd',
