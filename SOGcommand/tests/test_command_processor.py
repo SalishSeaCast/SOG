@@ -1,5 +1,6 @@
 """Unit tests for SOG command processor
 """
+import os
 from mock import Mock
 from mock import patch
 from StringIO import StringIO
@@ -59,8 +60,10 @@ class TestRunCommand(unittest.TestCase):
                           return_value='/tmp/foo.infile'):
             with self.assertRaises(SystemExit):
                 command_processor.do_run(args)
+        outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
         mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > ./infile.out', shell=True)
+            'nice -n 19 ./SOG < /tmp/foo.infile > {0} 2>&1'.format(outfile),
+            shell=True)
 
     @patch.object(command_processor, 'Popen')
     def test_do_run_legacy_infile(self, mock_Popen):
@@ -71,8 +74,9 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=False, watch=False, legacy_infile=True)
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
+        outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
         mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < infile > ./infile.out', shell=True)
+            'nice -n 19 ./SOG < infile > {0} 2>&1'.format(outfile), shell=True)
 
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'create_infile')
@@ -123,7 +127,7 @@ class TestRunCommand(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 command_processor.do_run(args)
         mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > ../foo/bar', shell=True)
+            'nice -n 19 ./SOG < /tmp/foo.infile > ../foo/bar 2>&1', shell=True)
 
     @patch.object(command_processor, 'Popen')
     def test_do_run_outfile_absolute_path(self, mock_Popen):
@@ -137,7 +141,7 @@ class TestRunCommand(unittest.TestCase):
             with self.assertRaises(SystemExit):
                 command_processor.do_run(args)
         mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > /foo/bar', shell=True)
+            'nice -n 19 ./SOG < /tmp/foo.infile > /foo/bar 2>&1', shell=True)
 
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'watch_outfile')
