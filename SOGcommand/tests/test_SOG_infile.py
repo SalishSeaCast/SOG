@@ -168,6 +168,93 @@ class TestDump(unittest.TestCase):
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n'
             '"gridsize"  80  "number of grid points"\n')
 
+    def test_dump_line_length_limit(self):
+        """dump breaks values list so that line length < 240
+        """
+        import colander
+        data = {
+            'profile_times': {
+                'value': '46200. 43620. 40860. 40800. 41400. 41400. 40680. '
+                         '50880. 44280. 47100. 45780. 44880. 44460. 44040. '
+                         '40800. 40260. 40980. 49500. 37620. 39600. 38520. '
+                         '42420. 41760. 42120. 43020. 42600. 43620. 48480. '
+                         '42360. 48120. 34560. 48300. 64920. 24600. 21240. '
+                         '43800. 40620. 44520. 42900. 40380. 43260. 41760. '
+                         '40860. 48300. 53100. 38580. 37620. 36840.',
+                'description': 'list of day-seconds to output profiles for',
+                'units': colander.null}}
+        key_order = ['profile_times']
+        extra_keys = {}
+        stream = StringIO()
+        self._call_dump(data, key_order, extra_keys, stream)
+        for line in stream.getvalue().split('\n'):
+            self.assertLessEqual(len(line), 240)
+
+    def test_dump_long_line_key_first(self):
+        """dump starts broken long line with key
+        """
+        import colander
+        data = {
+            'profile_times': {
+                'value': '46200. 43620. 40860. 40800. 41400. 41400. 40680. '
+                         '50880. 44280. 47100. 45780. 44880. 44460. 44040. '
+                         '40800. 40260. 40980. 49500. 37620. 39600. 38520. '
+                         '42420. 41760. 42120. 43020. 42600. 43620. 48480. '
+                         '42360. 48120. 34560. 48300. 64920. 24600. 21240. '
+                         '43800. 40620. 44520. 42900. 40380. 43260. 41760. '
+                         '40860. 48300. 53100. 38580. 37620. 36840.',
+                'description': 'list of day-seconds to output profiles for',
+                'units': colander.null}}
+        key_order = ['profile_times']
+        extra_keys = {}
+        stream = StringIO()
+        self._call_dump(data, key_order, extra_keys, stream)
+        self.assertEqual(stream.getvalue().split('\n')[0], '"profile_times"')
+
+    def test_dump_long_line_value_per_line(self):
+        """dump prints long line values 1 per line
+        """
+        import colander
+        data = {
+            'profile_times': {
+                'value': '46200. 43620. 40860. 40800. 41400. 41400. 40680. '
+                         '50880. 44280. 47100. 45780. 44880. 44460. 44040. '
+                         '40800. 40260. 40980. 49500. 37620. 39600. 38520. '
+                         '42420. 41760. 42120. 43020. 42600. 43620. 48480. '
+                         '42360. 48120. 34560. 48300. 64920. 24600. 21240. '
+                         '43800. 40620. 44520. 42900. 40380. 43260. 41760. '
+                         '40860. 48300. 53100. 38580. 37620. 36840.',
+                'description': 'list of day-seconds to output profiles for',
+                'units': colander.null}}
+        key_order = ['profile_times']
+        extra_keys = {}
+        stream = StringIO()
+        self._call_dump(data, key_order, extra_keys, stream)
+        self.assertEqual(stream.getvalue().split('\n')[1], '  46200.')
+
+    def test_dump_long_line_description_last(self):
+        """dump ends broken long line with description
+        """
+        import colander
+        data = {
+            'profile_times': {
+                'value': '46200. 43620. 40860. 40800. 41400. 41400. 40680. '
+                         '50880. 44280. 47100. 45780. 44880. 44460. 44040. '
+                         '40800. 40260. 40980. 49500. 37620. 39600. 38520. '
+                         '42420. 41760. 42120. 43020. 42600. 43620. 48480. '
+                         '42360. 48120. 34560. 48300. 64920. 24600. 21240. '
+                         '43800. 40620. 44520. 42900. 40380. 43260. 41760. '
+                         '40860. 48300. 53100. 38580. 37620. 36840.',
+                'description': 'list of day-seconds to output profiles for',
+                'units': colander.null}}
+        key_order = ['profile_times']
+        extra_keys = {}
+        stream = StringIO()
+        self._call_dump(data, key_order, extra_keys, stream)
+        self.assertEqual(
+            stream.getvalue().split('\n')[-2],
+            '  "list of day-seconds to output profiles for"')
+
     def test_dump_extra_keys(self):
         """dump handles extra keys for optional parameters
         """

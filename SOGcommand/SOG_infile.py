@@ -124,6 +124,13 @@ def dump(data, key_order, extra_keys, stream):
     """
     def build_line(key):
         line = '"{0}"  {1[value]}  "{1[description]}'.format(key, data[key])
+        max_line_len = (240 if data[key]['units'] == colander.null
+                        else 240 - (len(data[key]['units']) + 3))
+        if len(line) > max_line_len:
+            line = '"{0}"\n'.format(key)
+            for v in data[key]['value'].split():
+                line += '  {0}\n'.format(v)
+            line += '  "{0[description]}'.format(data[key])
         if data[key]['units'] != colander.null:
             line = '{0} [{1[units]}]'.format(line, data[key])
         return line
