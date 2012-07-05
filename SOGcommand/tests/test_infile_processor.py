@@ -229,3 +229,30 @@ class TestMergeYamlStructs(unittest.TestCase):
         self.assertEqual(
             yaml_struct['end_datetime']['value'],
             datetime(2012, 06, 22, 12, 58))
+
+    def test_merge_yaml_structs_handles_zero_values(self):
+        """_merge_yaml_structs handle change value to 0 properly
+        """
+        import colander
+        from ..SOG_YAML_schema import _Float
+        class MockSchema(colander.MappingSchema): # NOQA
+            mesozoo_grazing_limit = _Float(
+                infile_key='Mesozoo, pred slope',
+                var_name='rate_mesozoo%PredSlope')
+        mock_schema = MockSchema()
+        yaml_struct = mock_schema.deserialize(
+            {
+                'mesozoo_grazing_limit': {
+                    'value': 0.2,
+                    'variable_name': 'Mesozoo, pred slope',
+                    'description': 'mesozooplankton total grazing limit',
+            }})
+        edit_struct = mock_schema.deserialize(
+            {
+                'mesozoo_grazing_limit': {
+                    'value': 0,
+                    'variable_name': 'Mesozoo, pred slope',
+                    'description': 'mesozooplankton total grazing limit',
+            }})
+        self._call_fut(edit_struct, yaml_struct, mock_schema)
+        self.assertEqual(yaml_struct['mesozoo_grazing_limit']['value'], 0)

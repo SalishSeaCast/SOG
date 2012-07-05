@@ -154,7 +154,7 @@ def _merge_yaml_structs(edit_struct, yaml_struct, schema):
     for key in schema.flatten(yaml_struct).iterkeys():
         try:
             value = schema.get_value(edit_struct, key)
-            if value:
+            if value is not None:
                 schema.set_value(yaml_struct, key, value)
         except TypeError:
             # Ignore empty block mappings
