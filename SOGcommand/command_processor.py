@@ -17,8 +17,10 @@ from __version__ import (
     version,
     release,
     )
-from .infile_processor import create_infile
-from .infile_processor import read_infile
+from .infile_processor import (
+    create_infile,
+    read_infile,
+    )
 
 
 def run():
