@@ -73,7 +73,7 @@ def read_infile(yaml_infile, key):
     """
     data = _read_yaml_infile(yaml_infile)
     YAML = YAML_Infile()
-    yaml_struct = _deserialize_yaml(data, YAML, yaml_infile)
+    yaml_struct = _deserialize_yaml(data, YAML, yaml_infile, edit_mode=True)
     try:
         value = YAML.get_value(yaml_struct, key)['value']
     except KeyError:
