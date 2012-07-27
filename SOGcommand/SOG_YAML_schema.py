@@ -354,7 +354,7 @@ class _RiverAlkalinityFit(colander.MappingSchema):
         infile_key='river_Alk_0', var_name='river_Alk_0',
         missing=deferred_allow_missing)
     river_alkalinity_decay = _Float(
-        infile_key='river_alk_decay', var_name='river_Alk_decay',
+        infile_key='river_Alk_decay', var_name='river_Alk_decay',
         missing=deferred_allow_missing)
     river_pH = _Float(
         infile_key='pH_riv', var_name='pH_riv',
