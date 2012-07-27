@@ -288,6 +288,7 @@ class SOG_Infile(colander.MappingSchema):
     isigma = _SOG_RealDP()
     itheta = _SOG_RealDP()
     idl = _SOG_RealDP()
+    include_phytoplankton = _SOG_Boolean(name='biology')
     include_flagellates = _SOG_Boolean(name='flagellates_on')
     include_remineralization = _SOG_Boolean(name='remineralization')
     include_microzooplankton = _SOG_Boolean(name='use microzooplankton')
@@ -519,7 +520,8 @@ SOG_KEYS = [
     'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
     'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',
     'vary%temperature%enabled',
-    'N2chl', 'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
+    'N2chl', 'biology',
+    'ctd_in', 'nuts_in', 'botl_in', 'chem_in',
     'initial chl split',
     'std_phys_ts_out', 'user_phys_ts_out',
     'std_bio_ts_out', 'user_bio_ts_out',

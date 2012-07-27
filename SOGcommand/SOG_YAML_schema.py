@@ -1032,6 +1032,9 @@ class _SinkingRates(colander.MappingSchema):
 
 
 class _BiologyParams(colander.MappingSchema):
+    include_phytoplankton = _Boolean(
+        infile_key='biology', var_name='biology',
+        missing=deferred_allow_missing)
     include_flagellates = _Boolean(
         infile_key='flagellates_on', var_name='flagellates',
         missing=deferred_allow_missing)
