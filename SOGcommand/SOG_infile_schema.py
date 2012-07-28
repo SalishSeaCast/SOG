@@ -226,6 +226,11 @@ class SOG_Infile(colander.MappingSchema):
     vary_river_flows_fraction = _SOG_RealDP(name='vary%rivers%fraction')
     vary_river_flows_addition = _SOG_RealDP(name='vary%rivers%addition')
     vary_temperature = _SOG_Boolean(name='vary%temperature%enabled')
+    vary_temperature_fixed = _SOG_Boolean(name='vary%temperature%fixed')
+    vary_temperature_value = _SOG_RealDP(name='vary%temperature%value')
+    vary_temperature_shift = _SOG_RealDP(name='vary%temperature%shift')
+    vary_temperature_fraction = _SOG_RealDP(name='vary%temperature%fraction')
+    vary_temperature_addition = _SOG_RealDP(name='vary%temperature%addition')
     nitrate_chl_conversion = _SOG_RealDP(name='N2chl')
     ctd_in = _SOG_String()
     nuts_in = _SOG_String()
@@ -649,7 +654,8 @@ SOG_EXTRA_KEYS = {
         '.true.': ['vary%wind%value'],
         '.false.': ['vary%wind%shift', 'vary%wind%fraction',
                     'vary%wind%addition'],
-    },    'vary%rivers%enabled': {
+    },
+    'vary%rivers%enabled': {
         '.true.': ['vary%rivers%fixed'],
         '.false.': [],
     },
@@ -657,6 +663,15 @@ SOG_EXTRA_KEYS = {
         '.true.': ['vary%rivers%value'],
         '.false.': ['vary%rivers%shift', 'vary%rivers%fraction',
                     'vary%rivers%addition'],
+    },
+    'vary%temperature%enabled': {
+        '.true.': ['vary%temperature%fixed'],
+        '.false.': [],
+    },
+    'vary%temperature%fixed': {
+        '.true.': ['vary%temperature%value'],
+        '.false.': ['vary%temperature%shift', 'vary%temperature%fraction',
+                    'vary%temperature%addition'],
     },
 }
 

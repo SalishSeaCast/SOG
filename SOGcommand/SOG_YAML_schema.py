@@ -1198,6 +1198,29 @@ class _ForcingVariation(colander.MappingSchema):
         infile_key='vary%temperature%enabled',
         var_name='vary%temperature%enabled',
         missing=deferred_allow_missing)
+    # Selector for type of temperature variation; only used when
+    # temperature == True
+    temperature_fixed = _Boolean(
+        infile_key='vary%temperature%fixed', var_name='vary%temperature%fixed',
+        missing=None)
+    # Fixed value for temperature variation is only used when
+    # temperature == True and temperature_fixed == True
+    temperature_value = _Float(
+        infile_key='vary%temperature%value', var_name='vary%temperature%value',
+        missing=None)
+    # Shift, fraction and addition values for temperature variation are only
+    # used when temperature == True and temperature_fixed == False
+    temperature_shift = _Float(
+        infile_key='vary%temperature%shift', var_name='vary%temperature%shift',
+        missing=None)
+    temperature_fraction = _Float(
+        infile_key='vary%temperature%fraction',
+        var_name='vary%temperature%fraction',
+        missing=None)
+    temperature_addition = _Float(
+        infile_key='vary%temperature%addition',
+        var_name='vary%temperature%addition',
+        missing=None)
 
 
 class YAML_Infile(colander.MappingSchema):
