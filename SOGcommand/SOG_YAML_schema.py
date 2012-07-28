@@ -1147,6 +1147,26 @@ class _ForcingVariation(colander.MappingSchema):
     wind = _Boolean(
         infile_key='vary%wind%enabled', var_name='vary%wind%enabled',
         missing=deferred_allow_missing)
+    # Selector for type of wind variation; only used when wind == True
+    wind_fixed = _Boolean(
+        infile_key='vary%wind%fixed', var_name='vary%wind%fixed',
+        missing=None)
+    # Fixed value for wind variation is only used when wind == True
+    # and wind_fixed == True
+    wind_value = _Float(
+        infile_key='vary%wind%value', var_name='vary%wind%value',
+        missing=None)
+    # Shift, fraction and addition values for wind variation are only
+    # used when wind == True and wind_fixed == False
+    wind_shift = _Float(
+        infile_key='vary%wind%shift', var_name='vary%wind%shift',
+        missing=None)
+    wind_fraction = _Float(
+        infile_key='vary%wind%fraction', var_name='vary%wind%fraction',
+        missing=None)
+    wind_addition = _Float(
+        infile_key='vary%wind%addition', var_name='vary%wind%addition',
+        missing=None)
     cloud_fraction = _Boolean(
         infile_key='vary%cf%enabled', var_name='vary%cf%enabled',
         missing=deferred_allow_missing)

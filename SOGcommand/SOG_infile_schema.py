@@ -213,6 +213,11 @@ class SOG_Infile(colander.MappingSchema):
     chem_dt = _SOG_Int()
     max_iter = _SOG_Int()
     vary_wind = _SOG_Boolean(name='vary%wind%enabled')
+    vary_wind_fixed = _SOG_Boolean(name='vary%wind%fixed')
+    vary_wind_value = _SOG_RealDP(name='vary%wind%value')
+    vary_wind_shift = _SOG_RealDP(name='vary%wind%shift')
+    vary_wind_fraction = _SOG_RealDP(name='vary%wind%fraction')
+    vary_wind_addition = _SOG_RealDP(name='vary%wind%addition')
     vary_cloud_fraction = _SOG_Boolean(name='vary%cf%enabled')
     vary_river_flows = _SOG_Boolean(name='vary%rivers%enabled')
     vary_temperature = _SOG_Boolean(name='vary%temperature%enabled')
@@ -624,10 +629,22 @@ SOG_KEYS = [
 # List of extra keys, in order, to include in SOG infile for optional
 # parameters
 SOG_EXTRA_KEYS = {
-    'northern_return_flow_on': [
-        'strength_northern', 'tau_northern',
-        'depth_northern', 'upper_northern', 'lower_northern',
-    ],
+    'northern_return_flow_on': {
+        '.true.': [
+            'strength_northern', 'tau_northern',
+            'depth_northern', 'upper_northern', 'lower_northern',
+        ],
+        '.false.': [],
+    },
+    'vary%wind%enabled': {
+        '.true.': ['vary%wind%fixed'],
+        '.false.': [],
+    },
+    'vary%wind%fixed': {
+        '.true.': ['vary%wind%value'],
+        '.false.': ['vary%wind%shift', 'vary%wind%fraction',
+                    'vary%wind%addition'],
+    }
 }
 
 

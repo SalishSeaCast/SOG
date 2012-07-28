@@ -135,10 +135,14 @@ def dump(data, key_order, extra_keys, stream):
             line = '{0} [{1[units]}]'.format(line, data[key])
         return line
 
+    def handle_extra_keys(key):
+        if key in extra_keys:
+            for extra_key in extra_keys[key][data[key]['value']]:
+                line = build_line(extra_key)
+                stream.write('{0}"\n'.format(line))
+                handle_extra_keys(extra_key)
+
     for key in key_order:
         line = build_line(key)
         stream.write('{0}"\n'.format(line))
-        if key in extra_keys and data[key]['value'] == '.true.':
-            for extra_key in extra_keys[key]:
-                line = build_line(extra_key)
-                stream.write('{0}"\n'.format(line))
+        handle_extra_keys(key)
