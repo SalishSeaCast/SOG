@@ -270,8 +270,10 @@ class TestDump(unittest.TestCase):
                 'units': 'm'}}
         key_order = ['northern_return_flow']
         extra_keys = {
-            'northern_return_flow': [
-                'northern_influence_strength']}
+            'northern_return_flow': {
+                '.true.': ['northern_influence_strength'],
+                '.false.': []}
+            }
         stream = StringIO()
         self._call_dump(data, key_order, extra_keys, stream)
         self.assertEqual(
