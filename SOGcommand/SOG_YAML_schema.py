@@ -1170,6 +1170,27 @@ class _ForcingVariation(colander.MappingSchema):
     cloud_fraction = _Boolean(
         infile_key='vary%cf%enabled', var_name='vary%cf%enabled',
         missing=deferred_allow_missing)
+    # Selector for type of cloud fraction variation; only used when
+    # cloud_fraction == True
+    cloud_fraction_fixed = _Boolean(
+        infile_key='vary%cf%fixed', var_name='vary%cf%fixed',
+        missing=None)
+    # Fixed value for cloud fraction variation is only used when
+    # cloud_fraction == True and cloud_fraction_fixed == True
+    cloud_fraction_value = _Float(
+        infile_key='vary%cf%value', var_name='vary%cf%value',
+        missing=None)
+    # Shift, fraction and addition values for cloud fraction variation are only
+    # used when cloud_fraction == True and cloud_fraction_fixed == False
+    cloud_fraction_shift = _Float(
+        infile_key='vary%cf%shift', var_name='vary%cf%shift',
+        missing=None)
+    cloud_fraction_fraction = _Float(
+        infile_key='vary%cf%fraction', var_name='vary%cf%fraction',
+        missing=None)
+    cloud_fraction_addition = _Float(
+        infile_key='vary%cf%addition', var_name='vary%cf%addition',
+        missing=None)
     river_flows = _Boolean(
         infile_key='vary%rivers%enabled', var_name='vary%rivers%enabled',
         missing=deferred_allow_missing)

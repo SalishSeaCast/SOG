@@ -3,6 +3,15 @@ Changelog
 
 v1.1
 ~~~~
+
+* Implement handling for optional parameters in infile, and add
+  optional parameters for northern return flow influence, and forcing
+  quantities variations to infile schemas.
+
+
+v1.1c1
+~~~~
+
 * Add :option:`--editfile` to :command:`SOG run` command to allow YAML
   infile snippets to be merged into the base YAML infile.
 

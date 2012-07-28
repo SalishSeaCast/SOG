@@ -219,6 +219,11 @@ class SOG_Infile(colander.MappingSchema):
     vary_wind_fraction = _SOG_RealDP(name='vary%wind%fraction')
     vary_wind_addition = _SOG_RealDP(name='vary%wind%addition')
     vary_cloud_fraction = _SOG_Boolean(name='vary%cf%enabled')
+    vary_cloud_fraction_fixed = _SOG_Boolean(name='vary%cf%fixed')
+    vary_cloud_fraction_value = _SOG_RealDP(name='vary%cf%value')
+    vary_cloud_fraction_shift = _SOG_RealDP(name='vary%cf%shift')
+    vary_cloud_fraction_fraction = _SOG_RealDP(name='vary%cf%fraction')
+    vary_cloud_fraction_addition = _SOG_RealDP(name='vary%cf%addition')
     vary_river_flows = _SOG_Boolean(name='vary%rivers%enabled')
     vary_river_flows_fixed = _SOG_Boolean(name='vary%rivers%fixed')
     vary_river_flows_value = _SOG_RealDP(name='vary%rivers%value')
@@ -654,6 +659,15 @@ SOG_EXTRA_KEYS = {
         '.true.': ['vary%wind%value'],
         '.false.': ['vary%wind%shift', 'vary%wind%fraction',
                     'vary%wind%addition'],
+    },
+    'vary%cf%enabled': {
+        '.true.': ['vary%cf%fixed'],
+        '.false.': [],
+    },
+    'vary%cf%fixed': {
+        '.true.': ['vary%cf%value'],
+        '.false.': ['vary%cf%shift', 'vary%cf%fraction',
+                    'vary%cf%addition'],
     },
     'vary%rivers%enabled': {
         '.true.': ['vary%rivers%fixed'],
