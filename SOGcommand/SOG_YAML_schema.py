@@ -1173,6 +1173,27 @@ class _ForcingVariation(colander.MappingSchema):
     river_flows = _Boolean(
         infile_key='vary%rivers%enabled', var_name='vary%rivers%enabled',
         missing=deferred_allow_missing)
+    # Selector for type of river flows variation;
+    # only used when river_flows == True
+    river_flows_fixed = _Boolean(
+        infile_key='vary%rivers%fixed', var_name='vary%rivers%fixed',
+        missing=None)
+    # Fixed value for river flows variation is only used when
+    # river_flows == True and river_flows_fixed == True
+    river_flows_value = _Float(
+        infile_key='vary%rivers%value', var_name='vary%rivers%value',
+        missing=None)
+    # Shift, fraction and addition values for river flows variation are only
+    # used when river_flows == True and river_flows_fixed == False
+    river_flows_shift = _Float(
+        infile_key='vary%rivers%shift', var_name='vary%rivers%shift',
+        missing=None)
+    river_flows_fraction = _Float(
+        infile_key='vary%rivers%fraction', var_name='vary%rivers%fraction',
+        missing=None)
+    river_flows_addition = _Float(
+        infile_key='vary%rivers%addition', var_name='vary%rivers%addition',
+        missing=None)
     temperature = _Boolean(
         infile_key='vary%temperature%enabled',
         var_name='vary%temperature%enabled',
