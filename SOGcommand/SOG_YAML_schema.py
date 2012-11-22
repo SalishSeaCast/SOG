@@ -165,6 +165,9 @@ class _InitialConditions(colander.MappingSchema):
     nitrate_chl_conversion = _Float(
         infile_key='N2chl', var_name='N2chl',
         missing=deferred_allow_missing)
+    pCO2_atm = _Float(
+        infile_key='pCO2_atm', var_name='pCO2_atm',
+        missing=deferred_allow_missing)
 
 
 class _TimeSeriesResults(colander.MappingSchema):

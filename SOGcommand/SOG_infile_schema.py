@@ -237,6 +237,7 @@ class SOG_Infile(colander.MappingSchema):
     vary_temperature_fraction = _SOG_RealDP(name='vary%temperature%fraction')
     vary_temperature_addition = _SOG_RealDP(name='vary%temperature%addition')
     nitrate_chl_conversion = _SOG_RealDP(name='N2chl')
+    pCO2_atm = _SOG_RealDP(name='pCO2_atm')
     ctd_in = _SOG_String()
     nuts_in = _SOG_String()
     botl_in = _SOG_String()
@@ -536,7 +537,8 @@ class SOG_Infile(colander.MappingSchema):
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
-    'latitude', 'maxdepth',  'gridsize', 'lambda',
+    'latitude', 'pCO2_atm',
+    'maxdepth',  'gridsize', 'lambda',
     'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
     'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',
     'vary%temperature%enabled',
