@@ -524,6 +524,7 @@ class SOG_Infile(colander.MappingSchema):
     PON_sink_rate = _SOG_RealDP(name='PON sink rate')
     refr_sink_rate = _SOG_RealDP(name='refr sink rate')
     bSi_sink_rate = _SOG_RealDP(name='bSi sink rate')
+    years_of_forcing_data = _SOG_Int(name='years of forcing data')
     use_average_forcing_data = _SOG_String(name='use average/hist forcing')
     wind_forcing_file = _SOG_String(name='wind')
     air_temperature_forcing_file = _SOG_String(name='air temp')
@@ -638,6 +639,7 @@ SOG_KEYS = [
     'Waste, fen, Bsi',
     'Micro min sink rate', 'Micro max sink rate', 'PON sink rate',
     'refr sink rate',  'bSi sink rate',
+    'years of forcing data',
     'use average/hist forcing',
     'wind', 'air temp', 'cloud', 'humidity',
     'major river', 'use river temp',

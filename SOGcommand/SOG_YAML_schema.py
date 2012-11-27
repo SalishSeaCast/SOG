@@ -1110,6 +1110,10 @@ class _Numerics(colander.MappingSchema):
 
 
 class _ForcingData(colander.MappingSchema):
+    years_of_forcing_data = _Int(
+        infile_key='years of forcing data',
+        var_name='NY',
+        missing=deferred_allow_missing)
     use_average_forcing_data = _SOG_String(
         infile_key='use average/hist forcing',
         var_name='use_average_forcing_data',
