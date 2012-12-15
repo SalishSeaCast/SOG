@@ -262,6 +262,8 @@ class SOG_Infile(colander.MappingSchema):
     hoffmueller_end_day = _SOG_Int(name='Hoffmueller end day')
     hoffmueller_end_sec = _SOG_Int(name='Hoffmueller end sec')
     hoffmueller_interval = _SOG_RealDP(name='Hoffmueller interval')
+    user_profile_file_base = _SOG_String(name='user_profile_base')
+    user_hoffmueller_file = _SOG_String(name='user Hoffmueller file')
     constant_temperature = _SOG_Boolean(name='temp_constant')
     salinity_fit_coefficients = _SOG_RealDP_List(name='salinity')
     temperature_fit_coefficients = _SOG_RealDP_List(name='temperature')
@@ -553,6 +555,7 @@ SOG_KEYS = [
     'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
     'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
     'Hoffmueller end sec', 'Hoffmueller interval',
+    'user_profile_base', 'user Hoffmueller file',
     'temp_constant', 'salinity', 'temperature', 'Phytoplankton', 'Nitrate',
     'Silicon', 'DIC', 'Oxy', 'Alk', 'Ammonium', 'Ratio',
     'Lx', 'Ly', 'openEnd',

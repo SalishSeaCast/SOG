@@ -204,11 +204,17 @@ class _ProfilesResults(colander.MappingSchema):
     profile_file_base = _SOG_String(
         infile_key='profile_base', var_name='profilesBase_fn',
         missing=deferred_allow_missing)
+    user_profile_file_base = _SOG_String(
+        infile_key='user_profile_base', var_name='userprofilesBase_fn',
+        missing=deferred_allow_missing)
     halocline_file = _SOG_String(
         infile_key='haloclinefile', var_name='haloclines_fn',
         missing=deferred_allow_missing)
     hoffmueller_file = _SOG_String(
         infile_key='Hoffmueller file', var_name='Hoffmueller_fn',
+        missing=deferred_allow_missing)
+    user_hoffmueller_file = _SOG_String(
+        infile_key='user Hoffmueller file', var_name='userHoffmueller_fn',
         missing=deferred_allow_missing)
     hoffmueller_start_year = _Int(
         infile_key='Hoffmueller start yr', var_name='Hoff_startyr',
