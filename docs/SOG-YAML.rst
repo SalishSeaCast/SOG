@@ -208,6 +208,260 @@ it is metadata provided in the infile to document the SOG variable name
 in which the value is stored.
 
 
+.. _AddingNewInfileLine-section:
+
+Adding a New infile Line
+------------------------
+
+This section describes,
+by example,
+the code changes required to add an new line to the SOG infile;
+i.e. a new quantity to be read into SOG on startup.
+The example used is the addition of file names for the user profiles output
+base filename,
+and the user Hoffmueller data output filename.
+
+The files that need to be changed are:
+
+* Fortran source file:
+
+  * :file:`SOG-code/user_output.f90`
+
+* Legacy infiles:
+
+  * :file:`SOG-code/infile`
+  * :file:`SOG-code/infile_RI`
+  * :file:`SOG-code/infile_SoG_spring_diatoms`
+
+* YAML infile:
+
+  * :file:`SOG-code/infile.yaml`
+
+* SOG command processor Python modules:
+
+  * :file:`SOGcommand/SOG_YAML_schema.py`
+  * :file:`SOGcommand/SOG_infile_schema.py`
+
+#. Edit the appropriate Fortran source file(s) to add :func:`getpar*` calls
+   to read values form the infile,
+   and add code to do whatever it is that you want to do with those values.
+
+   In the example at hand,
+   we'll add 2 :func:`getpars` calls to the :meth:`init_user_profiles`
+   subroutine in :file:`SOG-code/user_output.f90`:
+
+   .. code-block:: fortran
+
+      ...
+      if (noprof > 0) then
+         ! Read the user profiles results file base-name
+         userprofilesBase_fn = getpars("user_profile_base")
+      endif
+
+      ! Read the user Hoffmueller results file name
+      userHoffmueller_fn = getpars("user Hoffmueller file")
+      ...
+
+#. Edit :file:`SOG-code/infile` to add the lines for the :func:`getpar*` calls
+   to read.
+
+   In our example,
+   we add 2 lines at the end of the "Profiles output" section:
+
+   .. code-block:: text
+
+      ...
+      ! User profiles and Hoffmueller data files
+      "user_profile_base"  "profiles/SOG-user"
+          "user profile file base (datetime will be added)"
+      "user Hoffmueller file"  "profiles/hoff-SOG-user.dat"
+          "file for user Hoffmueller results"
+      ...
+
+#. Test that the code and legacy infile changes have been made correctly
+   by compiling the code and running it with the legacy infile:
+
+   .. code-block:: sh
+
+      $ cd SOG-code-dev
+      $ make
+      $ cd ../SOG-dev-test
+      $ SOG run ../SOG-code-dev/SOG ../SOG-code-dev/infile --legacy-infile --watch
+
+#. Once you are happy with the edits to the Fortran source file(s)
+   and legacy infile,
+   edit :file:`SOG-code/infile_RI`
+   and :file:`SOG-code/infile_SoG_spring_diatoms`
+   to add the lines for the :func:`getpar*` calls to read.
+
+   In our example:
+
+   :file:`SOG-code/infile_RI`:
+
+   .. code-block:: text
+
+      ...
+      ! User profiles and Hoffmueller data files
+      "user_profile_base"  "profiles/RI-test-user"
+          "user profile file base (datetime will be added)"
+      "user Hoffmueller file"  "profiles/hoff-TI-test-user.dat"
+          "file for user Hoffmueller results"
+      ...
+
+   :file:`SOG-code/infile_SoG_spring_diatoms`
+
+   .. code-block:: text
+
+      ...
+      ! User profiles and Hoffmueller data files
+      "user_profile_base"
+          "profiles/2002_spring_diatoms_user"
+          "user profile file base (datetime will be added)"
+      "user Hoffmueller file"
+          "profiles/hoff_2002_spring_diatoms_user.dat"
+          "file for user Hoffmueller results"
+      ...
+
+#. Edit :file:`SOG-code/infile.yaml` to add block mappings for the new input
+   quantities.
+
+   In our example,
+   we add 2 blocks to the :kbd:`profile_results` section:
+
+   .. code-block:: yaml
+
+      ...
+      user_profile_file_base:
+        value: profiles/SOG-user
+        variable_name: userprofilesBase_fn
+        description: path/filename base for user profiles (datetime appended)
+      ...
+      user_hoffmueller_file:
+        value: profiles/hoff-SOG-user.dat
+        variable_name: userHoffmueller_fn
+        description: path/filename for user Hoffmueller results
+      ...
+
+   Recall that,
+   so long as the block mappings in the YAML file are nested correctly,
+   their order relative to their sibling "value nodes" does not matter.
+
+#. Edit :file:`SOGcommand/SOG_YAML_schema.py` to add nodes to the appropriate
+   schema classes.
+
+   In the example at hand,
+   we add 2 nodes to the :class:`_ProfilesResults` class:
+
+   .. code-block:: python
+
+      ...
+      user_profile_file_base = _SOG_String(
+          infile_key='user_profile_base', var_name='userprofilesBase_fn',
+          missing=deferred_allow_missing)
+      ...
+      user_hoffmueller_file = _SOG_String(
+          infile_key='user Hoffmueller file', var_name='userHoffmueller_fn',
+          missing=deferred_allow_missing)
+      ...
+
+   Here again,
+   so long as the node declarations are in the correct schema class,
+   order does not matter,
+   but for code readability and maintainability,
+   the nodes should be in the same order as they appear in
+   :file:`SOG-code/infile.yaml`.
+
+   What is important is that:
+
+   * The variable name to which the node declaration is assigned is the
+     same as the key for the corresponding block mapping that was added
+     to :file:`SOG-code/infile.yaml`
+
+   * The value assigned to the :obj:`infile_key` argument in the node
+     declaration is the same as the first element
+     (i.e. the :func:`getpar*` argument) of the corresponding
+     line that was added to :file:`SOG-code/infile`
+
+   So,
+   for the :file:`SOG-code/infile` item:
+
+   .. code-block:: text
+
+      "user Hoffmueller file"  "profiles/hoff-SOG-user.dat"
+          "file for user Hoffmueller results"
+
+   and the :file:`SOG-code/infile.yaml` block:
+
+   .. code-block:: yaml
+
+      user_hoffmueller_file:
+        value: profiles/hoff-SOG-user.dat
+        variable_name: userHoffmueller_fn
+        description: path/filename for user Hoffmueller results
+
+   we have the node declaration:
+
+   .. code-block:: python
+
+      user_hoffmueller_file = _SOG_String(
+          infile_key='user Hoffmueller file', var_name='userHoffmueller_fn',
+          missing=deferred_allow_missing)
+
+#. Edit :file:`SOGcommand/SOG_infile_schema.py` to:
+
+   * Add nodes to the :class:`SOG_Infile` class:
+
+     .. code-block:: python
+
+        ...
+        user_profile_file_base = _SOG_String(name='user_profile_base')
+        user_hoffmueller_file = _SOG_String(name='user Hoffmueller file')
+        ...
+
+     The variable names to which the node declarations are assigned are the
+     same as the keys for the corresponding block mappings that were added
+     to :file:`SOG-code/infile.yaml`.
+
+     The values assigned to the :obj:`name` argument in the node
+     declarations are the same as the first element
+     (i.e. the :func:`getpar*` argument) of the corresponding
+     items that were added to :file:`SOG-code/infile`.
+
+     While the order of the node declarations in the :class:`SOG_Infile` class,
+     strictly speaking,
+     doesn't matter,
+     code readability and maintability is greatly improved if the nodes are
+     in the same order as their corresponding lines appear in
+     :file:`SOG-code/infile`.
+
+   * Add keys to the :data:`SOG_KEYS` list:
+
+     .. code-block:: python
+
+        ...
+        'user_profile_base', 'user Hoffmueller file',
+        ...
+
+     The keys are the same as the first element
+     (i.e. the :func:`getpar*` argument)
+     of the corresponding items that were added to :file:`SOG-code/infile`.
+
+     The keys must appear in the order in which the items are arranged in
+     :file:`SOG-code/infile`.
+     The :data:`SOG_KEYS` list order defines the order of items in the
+     generated infile,
+     and the values in the list are the first element
+     (i.e. the :func:`getpar*` argument) of the infile items.
+
+#. Test that the YAML infile changes have been made correctly
+   by running to code with it:
+
+   .. code-block:: sh
+
+      $ cd ../SOG-dev-test
+      $ SOG run ../SOG-code-dev/SOG ../SOG-code-dev/infile.yaml --watch
+
+
 .. _ExampleSOG-YAMLinfile-section:
 
 Example SOG YAML infile
