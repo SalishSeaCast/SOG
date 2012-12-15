@@ -7,7 +7,6 @@ changesets are pushed via ssh.
 Usage: python patch_hgrc.py <path-to-hgrc>
 
 """
-from __future__ import print_function
 from ConfigParser import NoSectionError
 from ConfigParser import SafeConfigParser
 import os
@@ -26,18 +25,25 @@ def main(argv=[__name__]):
         hgrc = argv[1]
         remotecmd = '/ocean/dlatorne/.virtualenvs/SOG-hg-buildbot/bin/hg'
         config = SafeConfigParser()
-        with open(hgrc, 'rb') as fp:
+        try:
+            fp = open(hgrc, 'rb')
             config.readfp(fp)
             try:
                 config.set('ui', 'remotecmd', remotecmd)
             except NoSectionError:
                 config.add_section('ui')
                 config.set('ui', 'remotecmd', remotecmd)
-        with open(hgrc, 'wb') as fp:
+        finally:
+            fp.close()
+        try:
+            fp = open(hgrc, 'wb')
             config.write(fp)
+        finally:
+            fp.close()
     except Usage as err:
-        print(err.msg, end='\n\n', file=sys.stderr)
-        print(__doc__, file=sys.stderr)
+        print >> sys.stderr, err.msg
+        print >> sys.stderr, '\n\n'
+        print >> sys.stderr, __doc__
         return os.EX_USAGE
 
 

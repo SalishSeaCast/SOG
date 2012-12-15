@@ -2,7 +2,6 @@
 
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
-PYTHON = /usr/local/python26/bin/python2.6
 
 .PHONY:	help env patch_hgrc project
 
@@ -31,10 +30,10 @@ env:
 	make project
 
 patch-hgrc:
-	$(PYTHON) patch_hgrc.py .hg/hgrc
-	$(PYTHON) patch_hgrc.py SOG-code-ocean/.hg/hgrc
-	$(PYTHON) patch_hgrc.py SOG-initial/.hg/hgrc
-	$(PYTHON) patch_hgrc.py SOG-forcing/.hg/hgrc
+	python patch_hgrc.py .hg/hgrc
+	python patch_hgrc.py SOG-code-ocean/.hg/hgrc
+	python patch_hgrc.py SOG-initial/.hg/hgrc
+	python patch_hgrc.py SOG-forcing/.hg/hgrc
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
