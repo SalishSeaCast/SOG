@@ -3,6 +3,19 @@
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
 
+# CentOS machines default to Python 2.4, so tell them explicitly to use
+# Python 2.6
+ifeq ($(HOSTNAME), herring)
+	PYTHON = /usr/local/python26/bin/python2.6
+else
+	PYTHON = python
+endif
+ifeq ($(HOSTNAME), gar)
+	PYTHON = /usr/local/python26/bin/python2.6
+else
+	PYTHON = python
+endif
+
 .PHONY:	help env patch_hgrc project
 
 help:
@@ -30,10 +43,10 @@ env:
 	make project
 
 patch-hgrc:
-	python patch_hgrc.py .hg/hgrc
-	python patch_hgrc.py SOG-code-ocean/.hg/hgrc
-	python patch_hgrc.py SOG-initial/.hg/hgrc
-	python patch_hgrc.py SOG-forcing/.hg/hgrc
+	$(PYTHON) patch_hgrc.py .hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-code-ocean/.hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-initial/.hg/hgrc
+	$(PYTHON) patch_hgrc.py SOG-forcing/.hg/hgrc
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
