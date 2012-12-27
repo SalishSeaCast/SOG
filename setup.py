@@ -3,12 +3,12 @@ import sys
 from setuptools import (
     setup,
     find_packages
-    )
+)
 from SOGcommand.__version__ import (
     version,
     release,
     dev_status,
-    )
+)
 
 python_classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
@@ -24,16 +24,18 @@ other_classifiers = [
     'Intended Audience :: Education',
     'Intended Audience :: Developers',
     'Intended Audience :: End Users/Desktop',
-    ]
+]
 
 with open('SOGcommand/README', 'rt') as file_obj:
     detailed_description = file_obj.read()
 with open('SOGcommand/CHANGELOG', 'rt') as file_obj:
     detailed_description += '\n\n' + file_obj.read()
-with open('SOGcommand/requirements/production.txt', 'rt') as file_obj:
-    requirements = file_obj.read()
-install_requires = [line for line in requirements.split('\n')
-                    if line and not line.startswith('#')]
+install_requires = [
+    # see requirements/production.txt for versions most recently used
+    # in development
+    'colander',
+    'PyYAML',
+]
 if sys.version_info[0] == 2 and sys.version_info[1] < 7:
     install_requires.extend([
         'argparse',
