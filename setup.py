@@ -4,17 +4,12 @@ from setuptools import (
     setup,
     find_packages
 )
-from SOGcommand.__version__ import (
-    version,
-    release,
-    dev_status,
-)
 
 python_classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
     for py_version in ['2', '2.6', '2.7']]
 other_classifiers = [
-    'Development Status :: ' + dev_status,
+    'Development Status :: 5 - Production/Stable',
     'License :: OSI Approved :: BSD License',
     'Programming Language :: Python :: Implementation :: CPython',
     'Operating System :: Unix',
@@ -44,7 +39,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 
 setup(
     name='SOGcommand',
-    version=version + release,
+    version='1.1',
     description='Command processor for SOG.',
     long_description=detailed_description,
     author='Doug Latornell',
