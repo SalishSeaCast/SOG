@@ -1,6 +1,14 @@
 Changelog
 ---------
 
+Next Release
+------------
+
+* Add an API for the :command:`SOG run` command so that it can be used by
+  other Python packages (e.g. SoG-bloomcast) without the overhead of
+  launching a subprocess.
+
+
 v1.1
 ~~~~
 

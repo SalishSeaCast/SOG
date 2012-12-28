@@ -14,3 +14,4 @@ Contents:
    SOG-YAML
    buildbot
    trac
+   SOGcommand-API

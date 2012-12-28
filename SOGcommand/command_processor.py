@@ -16,11 +16,11 @@ from time import sleep
 from __version__ import (
     version,
     release,
-    )
+)
 from .infile_processor import (
     create_infile,
     read_infile,
-    )
+)
 
 
 def run():
@@ -106,18 +106,7 @@ def add_run_subparser(subparsers):
 def do_run(args):
     """Execute the `SOG run` command with the specified options.
     """
-    if not args.outfile:
-        args.outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
-    if args.legacy_infile:
-        infile = args.infile
-    else:
-        if args.dry_run:
-            infile = NamedTemporaryFile(suffix='.infile').name
-        else:
-            infile = create_infile(args.infile, args.editfile)
-    cmd = (
-        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
-        .format(args, infile=infile))
+    cmd = prepare_run_cmd(args)
     if args.dry_run:
         run_dry_run(cmd, args)
         returncode = 0
@@ -130,6 +119,24 @@ def do_run(args):
         else:
             returncode = proc.wait()
     sys.exit(returncode)
+
+
+def prepare_run_cmd(args):
+    """Return the command line string that will execute the requested SOG run.
+    """
+    if not args.outfile:
+        args.outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
+    if args.legacy_infile:
+        infile = args.infile
+    else:
+        if args.dry_run:
+            infile = NamedTemporaryFile(suffix='.infile').name
+        else:
+            infile = create_infile(args.infile, args.editfile)
+    cmd = (
+        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
+        .format(args, infile=infile))
+    return cmd
 
 
 def run_dry_run(cmd, args):
