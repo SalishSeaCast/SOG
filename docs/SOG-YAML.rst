@@ -45,6 +45,8 @@ there's `yaml-mode.el`_
 .. _yaml-mode.el: http://emacswiki.org/emacs/YamlMode
 
 
+.. _SOG-YAML-Grammar-section:
+
 SOG YAML Grammar
 ----------------
 
@@ -460,6 +462,207 @@ The files that need to be changed are:
 
       $ cd ../SOG-dev-test
       $ SOG run ../SOG-code-dev/SOG ../SOG-code-dev/infile.yaml --watch
+
+
+.. _AddingNewOptionalInfileLine-section:
+
+Adding a New Optional infile Line
+---------------------------------
+
+This section describes,
+by example,
+the code changes required to add an new optional line to the SOG infile;
+i.e. a new quantity to be read into SOG on startup,
+the reading of which is triggered by the value of another parameter in the
+infile.
+Examples of optional infile lines are forcing quantity variations,
+northern boundary fresh water return flow influence parameters,
+and,
+forcing data average/historical files.
+
+The example used to illustrate is the addition of the average/historical wind
+forcing date file name.
+
+The Fortran source :file:`SOG-code/forcing.f90` already includes the code to
+trigger reading of the the :kbd:`average/hist wind` parameter from the infile,
+so that won't be addresses.
+Nor will changing the legacy infiles because the optional parameter lines are
+only included in those files when they are used;
+see :file:`SoG-bloomcast/2012_bloomcast_infile` for an example.
+
+The files that *do* need to be changed are:
+
+* YAML infile:
+
+  * :file:`SOG-code/infile.yaml`
+
+* SOG command processor Python modules:
+
+  * :file:`SOGcommand/SOG_YAML_schema.py`
+  * :file:`SOGcommand/SOG_infile_schema.py`
+
+The "base" YAML infile for a run
+(to which edits may be applied)
+*must* include block mappings for all of the possibly optional parameters.
+
+#. Edit :file:`SOG-code/infile.yaml` to add a block mapping for the new
+   optional input quantities.
+
+   In our example,
+   we add a block to the :kbd:`forcing_data` section:
+
+   .. code-block:: yaml
+
+      ...
+      # The avg_historical_wind_file parameter is only used when
+      # use_average_forcing_data == yes or fill or histfill
+      avg_historical_wind_file:
+        value: ../SOG-forcing/wind/SHavg
+        variable_name: n/a
+        description: average/historical wind forcing data path/filename
+      ...
+
+   Recall that,
+   so long as the block mappings in the YAML file are nested correctly,
+   their order relative to their sibling "value nodes" does not matter.
+
+#. Edit :file:`SOGcommand/SOG_YAML_schema.py` to add nodes to the appropriate
+   schema classes.
+
+   In the example at hand,
+   we add a node to the :class:`_ForcingData` class:
+
+   .. code-block:: python
+
+      ...
+      # Average/historical wind forcing data path/filename is only used when
+      # use_average_forcing_data == yes or fill or histfill
+      avg_historical_wind_file = _SOG_String(
+          infile_key='average/hist wind', var_name='n/a',
+          missing=None)
+      ...
+
+   Here again,
+   so long as the node declarations are in the correct schema class,
+   order does not matter,
+   but for code readability and maintainability,
+   the nodes should be in the same order as they appear in
+   :file:`SOG-code/infile.yaml`.
+
+   What is important is that:
+
+   * The variable name to which the node declaration is assigned is the
+     same as the key for the corresponding block mapping that was added
+     to :file:`SOG-code/infile.yaml`
+
+   * The value assigned to the :obj:`infile_key` argument in the node
+     declaration is the same as the first element
+     (i.e. the :func:`getpar*` argument) of the corresponding
+     line that was added to :file:`SOG-code/infile`
+
+    and,
+    most important for an optional parameter:
+
+    * The value assigned to the :obj:`missing` argument in the node
+      declaration is :kbd:`None`,
+      rather than the :kbd:`deferred_allow_missing` value used for required
+      parameters.
+
+   So,
+   for the :file:`infile` item:
+
+   .. code-block:: text
+
+      "average/hist wind"
+          "../SOG-forcing/wind/SHavg"
+          "average wind forcing data"
+
+   and the :file:`SOG-code/infile.yaml` block:
+
+   .. code-block:: yaml
+
+      avg_historical_wind_file = _SOG_String(
+          infile_key='average/hist wind', var_name='n/a',
+          missing=None)
+
+   we have the node declaration:
+
+   .. code-block:: python
+
+      # Average/historical wind forcing data path/filename is only used when
+      # use_average_forcing_data == yes or fill or histfill
+      avg_historical_wind_file = _SOG_String(
+          infile_key='average/hist wind', var_name='n/a',
+          missing=None)
+
+#. Edit :file:`SOGcommand/SOG_infile_schema.py` to:
+
+   * Add a node to the :class:`SOG_Infile` class:
+
+     .. code-block:: python
+
+        ...
+        avg_historical_wind_file = _SOG_String(name='average/hist wind')
+        ...
+
+     The variable name to which the node declaration is assigned is the
+     same as the key for the corresponding block mapping that was added
+     to :file:`SOG-code/infile.yaml`.
+
+     The value assigned to the :obj:`name` argument in the node
+     declaration is the same as the first element
+     (i.e. the :func:`getpar*` argument) of the corresponding
+     item that would be added to the :file:`infile` with the optional
+     parameter in use.
+
+     While the order of the node declarations in the :class:`SOG_Infile` class,
+     strictly speaking,
+     doesn't matter,
+     code readability and maintability is greatly improved if the nodes are
+     in the same order as their corresponding lines appear in
+     :file:`SOG-code/infile`.
+
+   * Add a value to the appropriate specially handled keys data structure,
+   :data:`SOG_EXTRA_KEYS`,
+   or :data:`SOG_AVG_HIST_FORCING_KEYS`.
+   :data:`SOG_EXTRA_KEYS` is for infile items that are to be added following
+   a Boolean items like :kbd:`northern_return_flow_on`.
+   :data:`SOG_AVG_HIST_FORCING_KEYS` is for the average/historical forcing data
+   file items that precede normal forcing data file items when
+   :kbd:`use average/hist forcing` is set to :kbd:`yes`,
+   :kbd:`fill`,
+   or :kbd:`histfill`.
+
+   In our example,
+   we add to the latter data structure:
+
+     .. code-block:: python
+
+        ...
+        'wind': {
+            'trigger': 'use average/hist forcing',
+            'yes': ['average/hist wind'],
+            'no': [],
+            'fill': ['average/hist wind'],
+            'histfill': ['average/hist wind'],
+        },
+        ...
+
+   The :data:`SOG_EXTRA_KEYS` and :data:`SOG_AVG_HIST_FORCING_KEYS` data
+   structures,
+   and their use is complicated.
+   Reading the code in :file:`SOGcommand/SOG_infile_schema.py`
+   and the :func:`dump` function in :file:`SGOcommand/SOG_infile.py`
+   is the best way to understand what's going on and what needs to be done.
+
+#. Test that the YAML infile changes have been made correctly
+   by running to code with it:
+
+   .. code-block:: sh
+
+      $ cd ../SOG-dev-test
+      $ SOG run ../SOG-code-dev/SOG ../SOG-code-dev/infile.yaml --watch
+
 
 
 .. _ExampleSOG-YAMLinfile-section:

@@ -20,11 +20,12 @@ from SOG_infile_schema import (
     SOG_Infile,
     SOG_KEYS,
     SOG_EXTRA_KEYS,
-    )
+    SOG_AVG_HIST_FORCING_KEYS,
+)
 from SOG_YAML_schema import (
     YAML_Infile,
     yaml_to_infile,
-    )
+)
 
 
 def create_infile(yaml_infile, edit_files):
@@ -54,7 +55,8 @@ def create_infile(yaml_infile, edit_files):
     SOG = SOG_Infile()
     data = SOG.serialize(infile_struct)
     with NamedTemporaryFile(mode='wt', suffix='.infile', delete=False) as f:
-        SOG_infile.dump(data, SOG_KEYS, SOG_EXTRA_KEYS, f)
+        SOG_infile.dump(
+            data, SOG_KEYS, SOG_EXTRA_KEYS, SOG_AVG_HIST_FORCING_KEYS, f)
         infile_name = f.name
     return infile_name
 

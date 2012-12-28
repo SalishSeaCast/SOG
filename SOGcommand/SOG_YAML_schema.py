@@ -1127,32 +1127,59 @@ class _ForcingData(colander.MappingSchema):
     wind_forcing_file = _SOG_String(
         infile_key='wind', var_name='n/a',
         missing=deferred_allow_missing)
+    # Average/historical wind forcing data path/filename is only used when
+    # use_average_forcing_data == yes or fill or histfill
+    avg_historical_wind_file = _SOG_String(
+        infile_key='average/hist wind', var_name='n/a',
+        missing=None)
     air_temperature_forcing_file = _SOG_String(
         infile_key='air temp', var_name='n/a',
         missing=deferred_allow_missing)
+    # Average/historical air temperature forcing data path/filename
+    # is only used when use_average_forcing_data == yes or fill or histfill
+    avg_historical_air_temperature_file = _SOG_String(
+        infile_key='average/hist air temp', var_name='n/a',
+        missing=None)
     cloud_fraction_forcing_file = _SOG_String(
         infile_key='cloud', var_name='n/a',
         missing=deferred_allow_missing)
+    # Average/historical cloud fraction forcing data path/filename
+    # is only used when use_average_forcing_data == yes or fill or histfill
+    avg_historical_cloud_file = _SOG_String(
+        infile_key='average/hist cloud', var_name='n/a',
+        missing=None)
     humidity_forcing_file = _SOG_String(
         infile_key='humidity', var_name='n/a',
         missing=deferred_allow_missing)
-    humidity_forcing_file = _SOG_String(
-        infile_key='humidity', var_name='n/a',
-        missing=deferred_allow_missing)
+    # Average/historical humidity forcing data path/filename
+    # is only used when use_average_forcing_data == yes or fill or histfill
+    avg_historical_humidity_file = _SOG_String(
+        infile_key='average/hist humidity', var_name='n/a',
+        missing=None)
     major_river_forcing_file = _SOG_String(
         infile_key='major river', var_name='n/a',
         missing=deferred_allow_missing)
+    # Average/historical major river forcing data path/filename
+    # is only used when use_average_forcing_data == yes or fill or histfill
+    avg_historical_major_river_file = _SOG_String(
+        infile_key='average/hist major river', var_name='n/a',
+        missing=None)
     use_river_temperature = _Boolean(
         infile_key='use river temp', var_name='UseRiverTemp',
         missing=deferred_allow_missing)
     minor_river_forcing_file = _SOG_String(
         infile_key='minor river', var_name='n/a',
         missing=deferred_allow_missing)
-    minor_river_integration_days = _Int(
-        infile_key='minor river integ days', var_name='integ_days',
-        missing=deferred_allow_missing)
+    # Average/historical minor river forcing data path/filename
+    # is only used when use_average_forcing_data == yes or fill or histfill
+    avg_historical_minor_river_file = _SOG_String(
+        infile_key='average/hist minor river', var_name='n/a',
+        missing=None)
     alt_minor_river_forcing_file = _SOG_String(
         infile_key='alt minor river', var_name='n/a',
+        missing=deferred_allow_missing)
+    minor_river_integration_days = _Int(
+        infile_key='minor river integ days', var_name='integ_days',
         missing=deferred_allow_missing)
 
 
@@ -1308,7 +1335,7 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
                 'value': get_element('value', path),
                 'description': get_element('description', path),
                 'units': get_element('units', path),
-        }}
+            }}
 
     def walk_subnodes(node, path):
         result = {}

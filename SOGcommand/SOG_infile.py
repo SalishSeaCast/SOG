@@ -87,7 +87,7 @@ def load(stream):
             return result
 
 
-def dump(data, key_order, extra_keys, stream):
+def dump(data, key_order, extra_keys, avg_hist_forcing_keys, stream):
     """Dump the Python data structure to the stream using the
     key_order to control the order of the lines in the stream.
 
@@ -103,7 +103,15 @@ def dump(data, key_order, extra_keys, stream):
                      Keys are option parameters, values are iterables
                      of extra keys to include in SOG infile immediately
                      following option parameters.
-    :type extra_keys: dict of iterables
+
+    :arg avg_hist_forcing_keys: Extra infile keys that may be included in the
+                                SOG infile when average/historical forcing is
+                                enabled.
+                                Keys are the forcing quantity parameter keys,
+                                values are iterables of extra keys to include
+                                in the SOG infile immediately *preceding* the
+                                forcing parameter quantities for specified
+                                values of the trigger parameter.
 
     :arg stream: File-like object to which the SOG infile lines are
                  written.
@@ -142,7 +150,18 @@ def dump(data, key_order, extra_keys, stream):
                 stream.write('{0}"\n'.format(line))
                 handle_extra_keys(extra_key)
 
+    def handle_avg_hist_forcing(key):
+        try:
+            trigger = avg_hist_forcing_keys[key]['trigger']
+        except KeyError:
+            return
+        trigger_value = data[trigger]['value'].strip('"')
+        for special_key in avg_hist_forcing_keys[key][trigger_value]:
+            line = build_line(special_key)
+            stream.write('{0}"\n'.format(line))
+
     for key in key_order:
         line = build_line(key)
+        handle_avg_hist_forcing(key)
         stream.write('{0}"\n'.format(line))
         handle_extra_keys(key)

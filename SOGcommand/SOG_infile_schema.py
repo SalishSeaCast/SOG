@@ -365,7 +365,7 @@ class SOG_Infile(colander.MappingSchema):
     microzoo_natural_mortality = _SOG_RealDP(
         name='Microzoo, nat mort')
     microzoo_excretion = _SOG_RealDP(
-       name='Microzoo, excretion')
+        name='Microzoo, excretion')
     microzoo_grazing_limit = _SOG_RealDP(
         name='Microzoo, pred slope')
     microzoo_grazing_half_saturation = _SOG_RealDP(
@@ -528,12 +528,21 @@ class SOG_Infile(colander.MappingSchema):
     bSi_sink_rate = _SOG_RealDP(name='bSi sink rate')
     years_of_forcing_data = _SOG_Int(name='years of forcing data')
     use_average_forcing_data = _SOG_String(name='use average/hist forcing')
+    avg_historical_wind_file = _SOG_String(name='average/hist wind')
     wind_forcing_file = _SOG_String(name='wind')
+    avg_historical_air_temperature_file = _SOG_String(
+        name='average/hist air temp')
     air_temperature_forcing_file = _SOG_String(name='air temp')
+    avg_historical_cloud_file = _SOG_String(name='average/hist cloud')
     cloud_fraction_forcing_file = _SOG_String(name='cloud')
+    avg_historical_humidity_file = _SOG_String(name='average/hist humidity')
     humidity_forcing_file = _SOG_String(name='humidity')
+    avg_historical_major_river_file = _SOG_String(
+        name='average/hist major river')
     major_river_forcing_file = _SOG_String(name='major river')
     use_river_temperature = _SOG_Boolean(name='use river temp')
+    avg_historical_minor_river_file = _SOG_String(
+        name='average/hist minor river')
     minor_river_forcing_file = _SOG_String(name='minor river')
     minor_river_integration_days = _SOG_Int(name='minor river integ days')
     alt_minor_river_forcing_file = _SOG_String(name='alt minor river')
@@ -646,10 +655,10 @@ SOG_KEYS = [
     'use average/hist forcing',
     'wind', 'air temp', 'cloud', 'humidity',
     'major river', 'use river temp',
-    'minor river', 'minor river integ days', 'alt minor river',
-    ]
-# List of extra keys, in order, to include in SOG infile for optional
-# parameters
+    'minor river', 'minor river integ days',
+]
+# Lists of extra keys, in order, to include in SOG infile for optional
+# parameters, keyed by optional parameter trigger
 SOG_EXTRA_KEYS = {
     'northern_return_flow_on': {
         '.true.': [
@@ -693,6 +702,60 @@ SOG_EXTRA_KEYS = {
         '.true.': ['vary%temperature%value'],
         '.false.': ['vary%temperature%shift', 'vary%temperature%fraction',
                     'vary%temperature%addition'],
+    },
+}
+# Lists of average/historical forcing data keys, in order, to include in
+# SOG infile when average/historical forcing is enabled.
+# Keys are infile keys which avg/hist parameters precede.
+SOG_AVG_HIST_FORCING_KEYS = {
+    'wind': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist wind'],
+        'no': [],
+        'fill': ['average/hist wind'],
+        'histfill': ['average/hist wind'],
+    },
+    'air temp': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist air temp'],
+        'no': [],
+        'fill': ['average/hist air temp'],
+        'histfill': ['average/hist air temp'],
+    },
+    'cloud': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist cloud'],
+        'no': [],
+        'fill': ['average/hist cloud'],
+        'histfill': ['average/hist cloud'],
+    },
+    'humidity': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist humidity'],
+        'no': [],
+        'fill': ['average/hist humidity'],
+        'histfill': ['average/hist humidity'],
+    },
+    'major river': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist major river'],
+        'no': [],
+        'fill': ['average/hist major river'],
+        'histfill': ['average/hist major river'],
+    },
+    'minor river': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['average/hist minor river'],
+        'no': [],
+        'fill': ['average/hist minor river'],
+        'histfill': ['average/hist minor river'],
+    },
+    'minor river integ days': {
+        'trigger': 'use average/hist forcing',
+        'yes': ['alt minor river'],
+        'no': [],
+        'fill': ['alt minor river'],
+        'histfill': ['alt minor river'],
     },
 }
 
