@@ -126,16 +126,22 @@ def prepare_run_cmd(args):
     """
     if not args.outfile:
         args.outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
-    if args.legacy_infile:
-        infile = args.infile
+    if not os.path.exists(args.infile):
+        raise IOError('infile not found: {0.infile}'.format(args))
     else:
-        if args.dry_run:
-            infile = NamedTemporaryFile(suffix='.infile').name
+        if args.legacy_infile:
+            infile = args.infile
         else:
-            infile = create_infile(args.infile, args.editfile)
-    cmd = (
-        'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
-        .format(args, infile=infile))
+            if args.dry_run:
+                infile = NamedTemporaryFile(suffix='.infile').name
+            else:
+                infile = create_infile(args.infile, args.editfile)
+    if not os.path.exists(args.SOG_exec):
+        raise IOError('SOG executable not found: {0.SOG_exec}'.format(args))
+    else:
+        cmd = (
+            'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
+            .format(args, infile=infile))
     return cmd
 
 
