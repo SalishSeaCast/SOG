@@ -16,17 +16,23 @@ from .command_processor import prepare_run_cmd
 class Args(object):
     """Container for SOG command arguments.
     """
-    def __init__(self, SOG_exec, infile, outfile, legacy_infile, dry_run,
-                 nice):
+    def __init__(self, SOG_exec, infile, editfiles, outfile, legacy_infile,
+                 dry_run, nice):
         self.SOG_exec = SOG_exec
         self.infile = infile
+        self.editfile = editfiles
         self.outfile = outfile
         self.legacy_infile = legacy_infile
         self.dry_run = dry_run
         self.nice = nice
 
 
-def run(SOG_exec, infile, outfile='', legacy_infile=False, dry_run=False,
+def run(SOG_exec,
+        infile,
+        editfiles=[],
+        outfile='',
+        legacy_infile=False,
+        dry_run=False,
         nice=19):
     """Launch SOG with the specified args,
     and return the run's subprocess instance.
@@ -36,6 +42,10 @@ def run(SOG_exec, infile, outfile='', legacy_infile=False, dry_run=False,
 
     :arg infile: Path/filename of the infile to use.
     :type infile: str
+
+    :arg editfiles: Path/filename of YAML infile(s) to apply to the infile
+                    as edits.
+    :type editfiles: list
 
     :arg outfile: Path/filename of the file to receive stdout from the run.
                   Defaults to the path/filename of the infile with :kbd:`.out`
@@ -57,7 +67,8 @@ def run(SOG_exec, infile, outfile='', legacy_infile=False, dry_run=False,
     :returns: Process object for the launched :program:`SOG` run.
     :rtype: :class:`subprocess.Popen` instance
     """
-    args = Args(SOG_exec, infile, outfile, legacy_infile, dry_run, nice)
+    args = Args(SOG_exec, infile, editfiles, outfile, legacy_infile, dry_run,
+                nice)
     cmd = prepare_run_cmd(args)
     proc = Popen(cmd, shell=True)
     return proc
