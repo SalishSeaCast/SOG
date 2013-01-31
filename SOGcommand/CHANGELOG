@@ -1,8 +1,12 @@
 Changelog
 ---------
 
-Next Release
-------------
+v1.2
+----
+
+* Change the signature of the :func:`SOG_YAML_schema.yaml_to_infile`
+  and the :func:`SOG_infile_schema.infile_to_yaml` functions to reflect
+  a change in the Colander 1.0 library API.
 
 * Implement handling for average/historical forcing data,
   and document the process.

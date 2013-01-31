@@ -51,7 +51,7 @@ def create_infile(yaml_infile, edit_files):
         edit_struct = _deserialize_yaml(
             edit_data, YAML, edit_file, edit_mode=True)
         _merge_yaml_structs(edit_struct, yaml_struct, YAML)
-    infile_struct = yaml_to_infile(YAML_Infile.nodes, YAML, yaml_struct)
+    infile_struct = yaml_to_infile(YAML, yaml_struct)
     SOG = SOG_Infile()
     data = SOG.serialize(infile_struct)
     with NamedTemporaryFile(mode='wt', suffix='.infile', delete=False) as f:

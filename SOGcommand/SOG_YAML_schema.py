@@ -1310,12 +1310,9 @@ class YAML_Infile(colander.MappingSchema):
         missing=deferred_allow_missing)
 
 
-def yaml_to_infile(nodes, yaml_schema, yaml_struct):
+def yaml_to_infile(yaml_schema, yaml_struct):
     """Transform elements in a SOG YAML infile data structure
     into those of a SOG Fortran-sh infile data structure.
-
-    :arg nodes: Iterable of :class:`colander.SchemaNode` instances.
-    :type nodes: iterable
 
     :arg yaml_schema: SOG YAML infile schema instance
     :type yaml_schema: :class:`YAML_Infile` instance
@@ -1348,6 +1345,6 @@ def yaml_to_infile(nodes, yaml_schema, yaml_struct):
             return result
 
     result = {}
-    for node in nodes:
+    for node in yaml_schema:
         result.update(walk_subnodes(node, node.name))
     return result
