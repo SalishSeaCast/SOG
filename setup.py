@@ -39,7 +39,7 @@ if sys.version_info[0] == 2 and sys.version_info[1] < 7:
 
 setup(
     name='SOGcommand',
-    version='1.1',
+    version='1.2',
     description='Command processor for SOG.',
     long_description=detailed_description,
     author='Doug Latornell',
