@@ -105,7 +105,7 @@ class TestReadYamlInfile(unittest.TestCase):
         """
         return infile_processor._read_yaml_infile(*args)
 
-    @patch.object(infile_processor.yaml, 'load')
+    @patch.object(infile_processor.yaml, 'safe_load')
     def test_read_yaml_infile_loads_yaml_file(self, mock_load):
         """
         """

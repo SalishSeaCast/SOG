@@ -1,6 +1,13 @@
 Changelog
 ---------
 
+Next Release
+------------
+
+* Change to use :func:`yaml.safe_load` to improve security by preventing
+  arbitrary Python objects from being loaded from YAML infiles.
+
+
 v1.2
 ----
 
