@@ -95,7 +95,7 @@ def _read_yaml_infile(yaml_infile):
     """
     with open(yaml_infile, 'rt') as f:
         try:
-            data = yaml.load(f)
+            data = yaml.safe_load(f)
         except yaml.scanner.ScannerError:
             print('Unable to parse {0}: Are you sure that it is YAML?'
                   .format(yaml_infile), file=sys.stderr)
