@@ -354,10 +354,6 @@ class TestString(unittest.TestCase):
 class TestInfileToYAML(unittest.TestCase):
     """Unit tests for infile_to_yaml data structure transformation function.
     """
-    def _make_schema(self):
-        from ..SOG_infile_schema import SOG_Infile
-        return SOG_Infile()
-
     def _call_infile_to_yaml(self, *args):
         from ..SOG_infile_schema import infile_to_yaml
         return infile_to_yaml(*args)
@@ -365,18 +361,22 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_with_units(self):
         """infile_to_yaml returns expected result for element with units
         """
-        mock_child = Mock()
-        mock_child.configure_mock(
-            name='model_depth', infile_key='maxdepth', var_name='grid%D',
-            children=[Mock(children=[])])
-        mock_node = Mock()
-        mock_node.configure_mock(name='grid', children=[mock_child])
-        nodes = [mock_node]
-        schema = self._make_schema()
+        from ..SOG_infile_schema import SOG_Infile
+        from .. SOG_YAML_schema import YAML_Infile
+        infile_schema = SOG_Infile().clone()
+        infile_schema.children = [child for child in infile_schema.children
+                                  if child.name == 'maxdepth']
+        yaml_schema = YAML_Infile().clone()
+        yaml_schema.children = [child for child in yaml_schema.children
+                                if child.name == 'grid']
+        grid_schema = yaml_schema.children[0]
+        grid_schema.children = [child for child in grid_schema
+                                if child.name == 'model_depth']
         infile_struct = {'maxdepth': {
             'value': 40, 'units': 'm',
             'description': 'depth of modelled domain'}}
-        result = self._call_infile_to_yaml(nodes, schema, infile_struct)
+        result = self._call_infile_to_yaml(
+            yaml_schema, infile_schema, infile_struct)
         self.assertEqual(
             result,
             {'grid': {
@@ -387,18 +387,22 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_without_units(self):
         """infile_to_yaml returns expected result for element without units
         """
-        mock_child = Mock()
-        mock_child.configure_mock(
-            name='grid_size', infile_key='gridsize', var_name='grid%M',
-            children=[Mock(children=[])])
-        mock_node = Mock()
-        mock_node.configure_mock(name='grid', children=[mock_child])
-        nodes = [mock_node]
-        schema = self._make_schema()
+        from ..SOG_infile_schema import SOG_Infile
+        from .. SOG_YAML_schema import YAML_Infile
+        infile_schema = SOG_Infile().clone()
+        infile_schema.children = [child for child in infile_schema.children
+                                  if child.name == 'gridsize']
+        yaml_schema = YAML_Infile().clone()
+        yaml_schema.children = [child for child in yaml_schema.children
+                           if child.name == 'grid']
+        grid_schema = yaml_schema.children[0]
+        grid_schema.children = [child for child in grid_schema
+                                if child.name == 'grid_size']
         infile_struct = {'gridsize': {
             'value': 80, 'units': None,
             'description': 'number of grid points'}}
-        result = self._call_infile_to_yaml(nodes, schema, infile_struct)
+        result = self._call_infile_to_yaml(
+            yaml_schema, infile_schema, infile_struct)
         self.assertEqual(
             result,
             {'grid': {
@@ -409,16 +413,19 @@ class TestInfileToYAML(unittest.TestCase):
     def test_infile_to_yaml_unnested_element(self):
         """infile_to_yaml returns expected result for unnested element
         """
-        mock_node = Mock()
-        mock_node.configure_mock(
-            name='end_datetime', infile_key='end datetime',
-            var_name='endDatetime', children=[Mock(children=[])])
-        nodes = [mock_node]
-        schema = self._make_schema()
+        from ..SOG_infile_schema import SOG_Infile
+        from .. SOG_YAML_schema import YAML_Infile
+        infile_schema = SOG_Infile().clone()
+        infile_schema.children = [child for child in infile_schema.children
+                                  if child.name == 'end datetime']
+        yaml_schema = YAML_Infile().clone()
+        yaml_schema.children = [child for child in yaml_schema.children
+                                if child.name == 'end_datetime']
         infile_struct = {'end datetime': {
             'value': datetime(2012, 4, 2, 19, 1), 'units': None,
             'description': 'end of run date/time'}}
-        result = self._call_infile_to_yaml(nodes, schema, infile_struct)
+        result = self._call_infile_to_yaml(
+            yaml_schema, infile_schema, infile_struct)
         self.assertEqual(
             result,
             {'end_datetime': {

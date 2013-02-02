@@ -760,9 +760,12 @@ SOG_AVG_HIST_FORCING_KEYS = {
 }
 
 
-def infile_to_yaml(infile_schema, infile_struct):
+def infile_to_yaml(yaml_schema, infile_schema, infile_struct):
     """Transform elements in a SOG Fortran-ish infile data structure
     into those of a SOG YAML infile data structure.
+
+    :arg yaml_schema: SOG YAML infile schema instance
+    :type yaml_schema: :class:`YAML_Infile` instance
 
     :arg infile_schema: SOG Fortran-ish infile schema instance
     :type infile_schema: :class:`SOG_Infile` instance
@@ -798,6 +801,6 @@ def infile_to_yaml(infile_schema, infile_struct):
             return result
 
     result = {}
-    for node in infile_schema:
+    for node in yaml_schema:
         result.update({node.name: walk_subnodes(node)})
     return result
