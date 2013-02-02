@@ -127,8 +127,10 @@ class TestDump(unittest.TestCase):
                 'units': 'm'}}
         key_order = ['maxdepth']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
             stream.getvalue(),
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n')
@@ -143,8 +145,10 @@ class TestDump(unittest.TestCase):
                 'units': colander.null}}
         key_order = ['gridsize']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
             stream.getvalue(), '"gridsize"  80  "number of grid points"\n')
 
@@ -161,8 +165,10 @@ class TestDump(unittest.TestCase):
                 'units': 'm'}}
         key_order = 'maxdepth gridsize'.split()
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
             stream.getvalue(),
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n'
@@ -185,8 +191,10 @@ class TestDump(unittest.TestCase):
                 'units': colander.null}}
         key_order = ['profile_times']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         for line in stream.getvalue().split('\n'):
             self.assertLessEqual(len(line), 240)
 
@@ -207,8 +215,10 @@ class TestDump(unittest.TestCase):
                 'units': colander.null}}
         key_order = ['profile_times']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(stream.getvalue().split('\n')[0], '"profile_times"')
 
     def test_dump_long_line_value_per_line(self):
@@ -228,8 +238,10 @@ class TestDump(unittest.TestCase):
                 'units': colander.null}}
         key_order = ['profile_times']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(stream.getvalue().split('\n')[1], '  46200.')
 
     def test_dump_long_line_description_last(self):
@@ -249,8 +261,10 @@ class TestDump(unittest.TestCase):
                 'units': colander.null}}
         key_order = ['profile_times']
         extra_keys = {}
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
             stream.getvalue().split('\n')[-2],
             '  "list of day-seconds to output profiles for"')
@@ -274,11 +288,54 @@ class TestDump(unittest.TestCase):
                 '.true.': ['northern_influence_strength'],
                 '.false.': []}
             }
+        avg_hist_forcing_keys = {}
         stream = StringIO()
-        self._call_dump(data, key_order, extra_keys, stream)
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
             stream.getvalue(),
             '"northern_return_flow"  .true.  '
                 '"include fresh water return flow from north?"\n'
             '"northern_influence_strength"  0.8863d0  '
                 '"strength of northen influence [m]"\n')
+
+    def test_avg_hist_forcing_keys(self):
+        """dump handles average/historical forcing keys for optional parameters
+        """
+        import colander
+        data = {
+            'use average/hist forcing': {
+                'value': '"yes"',
+                'description': 'yes=avg only; no=fail if data runs out; '
+                    'fill=historic then avg',
+                'units': colander.null},
+            'average/hist wind': {
+                'value': '"../SOG-forcing/wind/SHavg"',
+                'description': 'average wind forcing data',
+                'units': colander.null},
+            'wind': {
+                'value': '"Sandheads_wind"',
+                'description': 'wind forcing data',
+                'units': colander.null},
+        }
+        key_order = ['use average/hist forcing', 'wind']
+        extra_keys = {}
+        avg_hist_forcing_keys = {
+            'wind': {
+                'trigger': 'use average/hist forcing',
+                'yes': ['average/hist wind'],
+                'no': [],
+                'fill': ['average/hist wind'],
+                'histfill': ['average/hist wind'],
+            }}
+        stream = StringIO()
+        self._call_dump(
+            data, key_order, extra_keys, avg_hist_forcing_keys, stream)
+        self.assertEqual(
+            stream.getvalue(),
+            '"use average/hist forcing"  "yes"  '
+                '"yes=avg only; no=fail if data runs out; fill=historic then '
+                'avg"\n'
+            '"average/hist wind"  "../SOG-forcing/wind/SHavg"  '
+                '"average wind forcing data"\n'
+            '"wind"  "Sandheads_wind"  "wind forcing data"\n')
