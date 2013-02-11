@@ -4,6 +4,13 @@ Changelog
 Next Release
 ------------
 
+* Add an API for the :command:`SOG read_infile` command so that it can be
+  used by other Python packages (e.g. SoG-bloomcast) without the overhead
+  of launching a subprocess.
+
+* Add :option:`--editfile` to :command:`SOG read_infile` command to allow
+  YAML infile snippets to be merged into the base YAML infile.
+
 * Change to use :func:`yaml.safe_load` to improve security by preventing
   arbitrary Python objects from being loaded from YAML infiles.
 

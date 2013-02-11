@@ -185,6 +185,16 @@ def add_read_infile_subparser(subparsers):
         'read_infile', help='Print infile value for specified key.')
     parser.add_argument('infile', help='infile for run')
     parser.add_argument(
+        '-e', '--editfile', metavar='EDITFILE', action='append', default=[],
+        help='''
+            YAML infile snippet to be merged into INFILE to change
+            1 or more values.
+            This option may be repeated,
+            if so,
+            the edits are applied in the order in which they appear
+            on the command line.
+            ''')
+    parser.add_argument(
         'key',
         help='''
              Key to print infile value for;
@@ -197,6 +207,6 @@ def add_read_infile_subparser(subparsers):
 def do_read_infile(args):
     """Print the infile value for the specified key.
     """
-    value = read_infile(args.infile, args.key)
+    value = read_infile(args.infile, args.editfile, args.key)
     print value
     sys.exit(0)

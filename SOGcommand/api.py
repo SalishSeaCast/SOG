@@ -11,6 +11,7 @@ rather than by way of a subprocess.
 """
 from subprocess import Popen
 from .command_processor import prepare_run_cmd
+from .infile_processor import read_infile
 
 
 class Args(object):

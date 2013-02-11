@@ -73,19 +73,21 @@ class TestReadInfile(unittest.TestCase):
     def test_read_infile_returns_value(self):
         """read_infile returns value associated with key
         """
+        edit_files = []
         context_mgr = nested(
             patch.object(infile_processor, '_read_yaml_infile'),
             patch.object(infile_processor, '_deserialize_yaml',
         return_value={'bar': {'value': 42}}),
         )
         with context_mgr:
-            value = self._call_fut('foo.yaml', 'bar')
+            value = self._call_fut('foo.yaml', edit_files, 'bar')
         self.assertEqual(value, 42)
 
     @patch('sys.stderr', new_callable=StringIO)
     def test_read_infile_handles_bad_key(self, mock_stderr):
         """read_infile raises SystemExit w/ msg for bad infile key
         """
+        edit_files = []
         context_mgr = nested(
             patch.object(infile_processor, '_read_yaml_infile'),
             patch.object(infile_processor, '_deserialize_yaml',
@@ -93,7 +95,7 @@ class TestReadInfile(unittest.TestCase):
         )
         with context_mgr:
             with self.assertRaises(SystemExit):
-                self._call_fut('foo.yaml', 'bar')
+                self._call_fut('foo.yaml', edit_files, 'bar')
         self.assertEqual(mock_stderr.getvalue(), 'KeyError: bar\n')
 
 

@@ -11,3 +11,5 @@ so that :program:`SOG` commands can be used dirctly,
 rather than by way of a subprocess.
 
 .. autofunction:: SOGcommand.api.run
+
+.. autofunction:: SOGcommand.api.read_infile

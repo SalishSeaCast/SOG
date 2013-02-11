@@ -61,13 +61,20 @@ def create_infile(yaml_infile, edit_files):
     return infile_name
 
 
-def read_infile(yaml_infile, key):
+def read_infile(yaml_infile, edit_files, key):
     """Return value for specified infile key.
 
     :arg yaml_infile: Path/name of a SOG YAML infile.
     :type yaml_infile: str
 
+    :arg edit_files: Paths/names of YAML infile snippets to be merged
+                     into `yaml_infile`.
+    :type edit_files: list
+
     :arg key: Infile key to return value for.
+              Key must be "fully qualified";
+              i.e. a dotted name path through the nested YAML mappings,
+              like :kbd:`initial_conditions.init_datetime`.
     :type key: str
 
     :returns value: Infile value associated with key
@@ -76,6 +83,11 @@ def read_infile(yaml_infile, key):
     data = _read_yaml_infile(yaml_infile)
     YAML = YAML_Infile()
     yaml_struct = _deserialize_yaml(data, YAML, yaml_infile, edit_mode=True)
+    for edit_file in edit_files:
+        edit_data = _read_yaml_infile(edit_file)
+        edit_struct = _deserialize_yaml(
+            edit_data, YAML, edit_file, edit_mode=True)
+        _merge_yaml_structs(edit_struct, yaml_struct, YAML)
     try:
         value = YAML.get_value(yaml_struct, key)['value']
     except KeyError:
