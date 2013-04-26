@@ -470,6 +470,18 @@ class _Mesozooplankton(colander.MappingSchema):
         infile_key='Mesozoo, nano half-sat',
         var_name='rate_mesozoo%NanoHalfSat',
         missing=deferred_allow_missing)
+    mesozoo_pico_preference = _Float(
+        infile_key='Mesozoo, pref for pico',
+        var_name='rate_mesozoo%PicoPref',
+        missing=deferred_allow_missing)
+    mesozoo_pico_grazing_limit = _Float(
+        infile_key='Mesozoo, pico pred slope',
+        var_name='rate_mesozoo%PicoPredSlope',
+        missing=deferred_allow_missing)
+    mesozoo_pico_grazing_half_saturation = _Float(
+        infile_key='Mesozoo, pico half-sat',
+        var_name='rate_mesozoo%PicoHalfSat',
+        missing=deferred_allow_missing)
     mesozoo_PON_preference = _Float(
         infile_key='Mesozoo, pref for PON',
         var_name='rate_mesozoo%PON_Pref',
@@ -899,6 +911,21 @@ class _SloppyEating(colander.MappingSchema):
         missing=deferred_allow_missing)
     mesozoo_nanophyto_grazing_bSi = _Float(
         infile_key='Waste, nem, Bsi', var_name='frac_waste_NEM%Bsi',
+        missing=deferred_allow_missing)
+    mesozoo_picophyto_grazing_NH = _Float(
+        infile_key='Waste, fem, NH', var_name='frac_waste_FEM%NH',
+        missing=deferred_allow_missing)
+    mesozoo_picophyto_grazing_DON = _Float(
+        infile_key='Waste, fem, DON', var_name='frac_waste_FEM%DON',
+        missing=deferred_allow_missing)
+    mesozoo_picophyto_grazing_PON = _Float(
+        infile_key='Waste, fem, PON', var_name='frac_waste_FEM%PON',
+        missing=deferred_allow_missing)
+    mesozoo_picophyto_grazing_refr = _Float(
+        infile_key='Waste, fem, Ref', var_name='frac_waste_FEM%Ref',
+        missing=deferred_allow_missing)
+    mesozoo_picophyto_grazing_bSi = _Float(
+        infile_key='Waste, fem, Bsi', var_name='frac_waste_FEM%Bsi',
         missing=deferred_allow_missing)
     mesozoo_PON_grazing_NH = _Float(
         infile_key='Waste, pem, NH', var_name='frac_waste_PEM%NH',

@@ -339,6 +339,12 @@ class SOG_Infile(colander.MappingSchema):
         name='Mesozoo, nano pred slope')
     mesozoo_nano_grazing_half_saturation = _SOG_RealDP(
         name='Mesozoo, nano half-sat')
+    mesozoo_pico_preference = _SOG_RealDP(
+        name='Mesozoo, pref for pico')
+    mesozoo_pico_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, pico pred slope')
+    mesozoo_pico_grazing_half_saturation = _SOG_RealDP(
+        name='Mesozoo, pico half-sat')
     mesozoo_PON_preference = _SOG_RealDP(
         name='Mesozoo, pref for PON')
     mesozoo_PON_grazing_limit = _SOG_RealDP(
@@ -481,6 +487,11 @@ class SOG_Infile(colander.MappingSchema):
     mesozoo_nanophyto_grazing_PON = _SOG_RealDP(name='Waste, nem, PON')
     mesozoo_nanophyto_grazing_refr = _SOG_RealDP(name='Waste, nem, Ref')
     mesozoo_nanophyto_grazing_bSi = _SOG_RealDP(name='Waste, nem, Bsi')
+    mesozoo_picophyto_grazing_NH = _SOG_RealDP(name='Waste, fem, NH')
+    mesozoo_picophyto_grazing_DON = _SOG_RealDP(name='Waste, fem, DON')
+    mesozoo_picophyto_grazing_PON = _SOG_RealDP(name='Waste, fem, PON')
+    mesozoo_picophyto_grazing_refr = _SOG_RealDP(name='Waste, fem, Ref')
+    mesozoo_picophyto_grazing_bSi = _SOG_RealDP(name='Waste, fem, Bsi')
     mesozoo_PON_grazing_NH = _SOG_RealDP(name='Waste, pem, NH')
     mesozoo_PON_grazing_DON = _SOG_RealDP(name='Waste, pem, DON')
     mesozoo_PON_grazing_PON = _SOG_RealDP(name='Waste, pem, PON')
@@ -586,6 +597,8 @@ SOG_KEYS = [
     'Mesozoo, micro half-sat',
     'Mesozoo, pref for nano', 'Mesozoo, nano pred slope',
     'Mesozoo, nano half-sat',
+    'Mesozoo, pref for pico', 'Mesozoo, pico pred slope',
+    'Mesozoo, pico half-sat',
     'Mesozoo, pref for PON', 'Mesozoo, PON pred slope',
     'Mesozoo, PON half-sat',
     'Mesozoo, pref for uZoo', 'Mesozoo, uZoo pred slope',
@@ -633,6 +646,8 @@ SOG_KEYS = [
     'Waste, dem, Bsi',
     'Waste, nem, NH', 'Waste, nem, DON', 'Waste, nem, PON', 'Waste, nem, Ref',
     'Waste, nem, Bsi',
+    'Waste, fem, NH', 'Waste, fem, DON', 'Waste, fem, PON', 'Waste, fem, Ref',
+    'Waste, fem, Bsi',
     'Waste, pem, NH', 'Waste, pem, DON', 'Waste, pem, PON', 'Waste, pem, Ref',
     'Waste, pem, Bsi',
     'Waste, zem, NH', 'Waste, zem, DON', 'Waste, zem, PON', 'Waste, zem, Ref',
