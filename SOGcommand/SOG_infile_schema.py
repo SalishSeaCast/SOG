@@ -324,8 +324,14 @@ class SOG_Infile(colander.MappingSchema):
         name='Mesozoo, summer peak pos')
     mesozoo_summer_peak_widths = _SOG_RealDP_List(
         name='Mesozoo, summer peak wid')
-    mesozoo_max_ingestion = _SOG_RealDP(name='Mesozoo, max ingestion')
-    mesozoo_grazing_limit = _SOG_RealDP(name='Mesozoo, pred slope')
+    mesozoo_max_ingestion = _SOG_RealDP(
+        name='Mesozoo, max ingestion')
+    mesozoo_natural_mortality = _SOG_RealDP(
+        name='Mesozoo, nat mort')
+    mesozoo_excretion = _SOG_RealDP(
+        name='Mesozoo, excretion')
+    mesozoo_grazing_limit = _SOG_RealDP(
+        name='Mesozoo, pred slope')
     mesozoo_grazing_half_saturation = _SOG_RealDP(
         name='Mesozoo, half-sat')
     mesozoo_diatom_preference = _SOG_RealDP(
@@ -334,7 +340,8 @@ class SOG_Infile(colander.MappingSchema):
         name='Mesozoo, micro pred slope')
     mesozoo_diatom_grazing_half_saturation = _SOG_RealDP(
         name='Mesozoo, micro half-sat')
-    mesozoo_nano_preference = _SOG_RealDP(name='Mesozoo, pref for nano')
+    mesozoo_nano_preference = _SOG_RealDP(
+        name='Mesozoo, pref for nano')
     mesozoo_nano_grazing_limit = _SOG_RealDP(
         name='Mesozoo, nano pred slope')
     mesozoo_nano_grazing_half_saturation = _SOG_RealDP(
@@ -592,7 +599,9 @@ SOG_KEYS = [
     'Mesozoo, winter conc',
     'Mesozoo, summer conc', 'Mesozoo, summer peak mag',
     'Mesozoo, summer peak pos', 'Mesozoo, summer peak wid',
-    'Mesozoo, max ingestion', 'Mesozoo, pred slope', 'Mesozoo, half-sat',
+    'Mesozoo, max ingestion',
+    'Mesozoo, nat mort', 'Mesozoo, excretion',
+    'Mesozoo, pred slope', 'Mesozoo, half-sat',
     'Mesozoo, pref for diatoms', 'Mesozoo, micro pred slope',
     'Mesozoo, micro half-sat',
     'Mesozoo, pref for nano', 'Mesozoo, nano pred slope',
