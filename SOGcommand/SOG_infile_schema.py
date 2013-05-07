@@ -474,6 +474,16 @@ class SOG_Infile(colander.MappingSchema):
     pico_mort_PON = _SOG_RealDP(name='Waste, fnm, PON')
     pico_mort_refr = _SOG_RealDP(name='Waste, fnm, Ref')
     pico_mort_bSi = _SOG_RealDP(name='Waste, fnm, Bsi')
+    mesozoo_mort_NH = _SOG_RealDP(name='Waste, mnm, NH')
+    mesozoo_mort_DON = _SOG_RealDP(name='Waste, mnm, DON')
+    mesozoo_mort_PON = _SOG_RealDP(name='Waste, mnm, PON')
+    mesozoo_mort_refr = _SOG_RealDP(name='Waste, mnm, Ref')
+    mesozoo_mort_bSi = _SOG_RealDP(name='Waste, mnm, Bsi')
+    mesozoo_excrete_NH = _SOG_RealDP(name='Waste, mex, NH')
+    mesozoo_excrete_DON = _SOG_RealDP(name='Waste, mex, DON')
+    mesozoo_excrete_PON = _SOG_RealDP(name='Waste, mex, PON')
+    mesozoo_excrete_refr = _SOG_RealDP(name='Waste, mex, Ref')
+    mesozoo_excrete_bSi = _SOG_RealDP(name='Waste, mex, Bsi')
     microzoo_mort_NH = _SOG_RealDP(name='Waste, znm, NH')
     microzoo_mort_DON = _SOG_RealDP(name='Waste, znm, DON')
     microzoo_mort_PON = _SOG_RealDP(name='Waste, znm, PON')
@@ -647,6 +657,10 @@ SOG_KEYS = [
     'Waste, nnm, Bsi',
     'Waste, fnm, NH', 'Waste, fnm, DON', 'Waste, fnm, PON', 'Waste, fnm, Ref',
     'Waste, fnm, Bsi',
+    'Waste, mnm, NH', 'Waste, mnm, DON', 'Waste, mnm, PON', 'Waste, mnm, Ref',
+    'Waste, mnm, Bsi',
+    'Waste, mex, NH', 'Waste, mex, DON', 'Waste, mex, PON', 'Waste, mex, Ref',
+    'Waste, mex, Bsi',
     'Waste, znm, NH', 'Waste, znm, DON', 'Waste, znm, PON', 'Waste, znm, Ref',
     'Waste, znm, Bsi',
     'Waste, zex, NH', 'Waste, zex, DON', 'Waste, zex, PON', 'Waste, zex, Ref',

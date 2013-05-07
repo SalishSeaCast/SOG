@@ -856,6 +856,39 @@ class _PhytoplanktonMortalityWaste(colander.MappingSchema):
         missing=deferred_allow_missing)
 
 
+class _MesozooplanktonWaste(colander.MappingSchema):
+    mesozoo_mort_NH = _Float(
+        infile_key='Waste, mnm, NH', var_name='frac_waste_MNM%NH',
+        missing=deferred_allow_missing)
+    mesozoo_mort_DON = _Float(
+        infile_key='Waste, mnm, DON', var_name='frac_waste_MNM%DON',
+        missing=deferred_allow_missing)
+    mesozoo_mort_PON = _Float(
+        infile_key='Waste, mnm, PON', var_name='frac_waste_MNM%PON',
+        missing=deferred_allow_missing)
+    mesozoo_mort_refr = _Float(
+        infile_key='Waste, mnm, Ref', var_name='frac_waste_MNM%Ref',
+        missing=deferred_allow_missing)
+    mesozoo_mort_bSi = _Float(
+        infile_key='Waste, mnm, Bsi', var_name='frac_waste_MNM%Bsi',
+        missing=deferred_allow_missing)
+    mesozoo_excrete_NH = _Float(
+        infile_key='Waste, mex, NH', var_name='frac_waste_MEX%NH',
+        missing=deferred_allow_missing)
+    mesozoo_excrete_DON = _Float(
+        infile_key='Waste, mex, DON', var_name='frac_waste_MEX%DON',
+        missing=deferred_allow_missing)
+    mesozoo_excrete_PON = _Float(
+        infile_key='Waste, mex, PON', var_name='frac_waste_MEX%PON',
+        missing=deferred_allow_missing)
+    mesozoo_excrete_refr = _Float(
+        infile_key='Waste, mex, Ref', var_name='frac_waste_MEX%Ref',
+        missing=deferred_allow_missing)
+    mesozoo_excrete_bSi = _Float(
+        infile_key='Waste, mex, Bsi', var_name='frac_waste_MEX%Bsi',
+        missing=deferred_allow_missing)
+
+
 class _MicrozooplanktonWaste(colander.MappingSchema):
     microzoo_mort_NH = _Float(
         infile_key='Waste, znm, NH', var_name='frac_waste_ZNM%NH',
@@ -1102,6 +1135,8 @@ class _BiologyParams(colander.MappingSchema):
     remineralization_rates = _RemineralizationRates(
         missing=deferred_allow_missing)
     phytoplankton_mortality_waste = _PhytoplanktonMortalityWaste(
+        missing=deferred_allow_missing)
+    mesozooplankton_waste = _MesozooplanktonWaste(
         missing=deferred_allow_missing)
     microzooplankton_waste = _MicrozooplanktonWaste(
         missing=deferred_allow_missing)
