@@ -326,6 +326,8 @@ class SOG_Infile(colander.MappingSchema):
         name='Mesozoo, summer peak wid')
     mesozoo_max_ingestion = _SOG_RealDP(
         name='Mesozoo, max ingestion')
+    mesozoo_assimilation_efficiency = _SOG_RealDP(
+        name='Mesozoo, assimil. eff')
     mesozoo_natural_mortality = _SOG_RealDP(
         name='Mesozoo, nat mort')
     mesozoo_excretion = _SOG_RealDP(
@@ -609,7 +611,7 @@ SOG_KEYS = [
     'Mesozoo, winter conc',
     'Mesozoo, summer conc', 'Mesozoo, summer peak mag',
     'Mesozoo, summer peak pos', 'Mesozoo, summer peak wid',
-    'Mesozoo, max ingestion',
+    'Mesozoo, max ingestion', 'Mesozoo, assimil. eff',
     'Mesozoo, nat mort', 'Mesozoo, excretion',
     'Mesozoo, pred slope', 'Mesozoo, half-sat',
     'Mesozoo, pref for diatoms', 'Mesozoo, micro pred slope',

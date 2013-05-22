@@ -438,6 +438,10 @@ class _Mesozooplankton(colander.MappingSchema):
         infile_key='Mesozoo, max ingestion',
         var_name='rate_mesozoo%R',
         missing=deferred_allow_missing)
+    mesozoo_assimilation_efficiency = _Float(
+        infile_key='Mesozoo, assimil. eff',
+        var_name='rate_mesozoo%eff',
+        missing=deferred_allow_missing)
     mesozoo_natural_mortality = _Float(
         infile_key='Mesozoo, nat mort',
         var_name='rate_mesozoo%Rm',
