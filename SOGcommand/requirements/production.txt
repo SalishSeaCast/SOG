@@ -1,5 +1,5 @@
 # Python packages that SOGcommand depends on
 
 PyYAML==3.10
-colander==0.9.8
+colander==1.0a5
 translationstring==1.1
