@@ -321,7 +321,7 @@ class _FreshWaterFlux(colander.MappingSchema):
     northern_return_flow = _Boolean(
         infile_key='northern_return_flow_on', var_name='Northern_return',
         missing=deferred_allow_missing)
-    # The next 5 "northern" parameters are only used when
+    # The next 7 "northern" parameters are only used when
     # northern_return_flow == True
     northern_influence_strength = _Float(
         infile_key='strength_northern', var_name='strength',
@@ -338,7 +338,12 @@ class _FreshWaterFlux(colander.MappingSchema):
     northern_water_lower_extension = _Float(
         infile_key='lower_northern', var_name='lower_width',
         missing=None)
-
+    northern_water_power_riverflow_influence = _Float(
+        infile_key='power_northern', var_name='power',
+        missing=None)
+    northern_water_normalization_riverflow_influence = _Float(
+        infile_key='normal_northern', var_name='Fo',
+        missing=None)
 
 class _SalinityFit(colander.MappingSchema):
     bottom_salinity = _Float(

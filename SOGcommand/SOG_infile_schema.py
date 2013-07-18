@@ -296,6 +296,8 @@ class SOG_Infile(colander.MappingSchema):
     northern_water_depth_peak = _SOG_RealDP(name='depth_northern')
     northern_water_upper_extension = _SOG_RealDP(name='upper_northern')
     northern_water_lower_extension = _SOG_RealDP(name='lower_northern')
+    northern_water_power_riverflow_influence = _SOG_RealDP(name='power_northern')
+    northern_water_normalization_riverflow_influence = _SOG_RealDP(name='normal_northern')
     include_fresh_water_nutrients = _SOG_Boolean(name='use_Fw_nutrients')
     bottom_salinity = _SOG_RealDP(name='cbottom')
     alpha = _SOG_RealDP(name='calpha')
@@ -704,6 +706,7 @@ SOG_EXTRA_KEYS = {
         '.true.': [
             'strength_northern', 'tau_northern',
             'depth_northern', 'upper_northern', 'lower_northern',
+            'power_northern', 'normal_northern'
         ],
         '.false.': [],
     },
