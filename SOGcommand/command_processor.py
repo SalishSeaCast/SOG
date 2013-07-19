@@ -6,6 +6,12 @@ the SOG bio-physical model of deep estuaries.
 
 :Author: Doug Latornell <djl@douglatornell.ca>
 """
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
 from argparse import ArgumentParser
 import os
 from subprocess import Popen
@@ -13,7 +19,7 @@ import sys
 from tempfile import NamedTemporaryFile
 from textwrap import TextWrapper
 from time import sleep
-from __version__ import (
+from .__version__ import (
     version,
     release,
 )
@@ -114,7 +120,7 @@ def do_run(args):
         proc = Popen(cmd, shell=True)
         if args.watch:
             for line in watch_outfile(proc, args.outfile):
-                print line,
+                print(line, end='')
             returncode = proc.poll()
         else:
             returncode = proc.wait()
@@ -149,12 +155,13 @@ def run_dry_run(cmd, args):
     """Dry-run handler for `SOG run` command.
     """
     wrapper = TextWrapper()
-    print wrapper.fill('Command that would have been used to run SOG:')
-    print '  {0}'.format(cmd)
+    print(wrapper.fill('Command that would have been used to run SOG:'))
+    print('  {0}'.format(cmd))
     if args.watch:
-        print wrapper.fill(
+        print(wrapper.fill(
             'Contents of {0} would have been shown on screen while '
             'SOG run was in progress.'.format(args.outfile))
+        )
 
 
 def watch_outfile(proc, outfile_name):
@@ -208,5 +215,5 @@ def do_read_infile(args):
     """Print the infile value for the specified key.
     """
     value = read_infile(args.infile, args.editfile, args.key)
-    print value
+    print(value)
     sys.exit(0)

@@ -7,7 +7,7 @@ from setuptools import (
 
 python_classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
-    for py_version in ['2', '2.6', '2.7']]
+    for py_version in ['2', '2.6', '2.7', '3', '3.3']]
 other_classifiers = [
     'Development Status :: 5 - Production/Stable',
     'License :: OSI Approved :: BSD License',

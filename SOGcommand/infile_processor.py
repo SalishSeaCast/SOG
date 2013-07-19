@@ -9,20 +9,25 @@ This module provides services to the SOG command processor.
 
 :Author: Doug Latornell <djl@douglatornell.ca>
 """
-from __future__ import print_function
+from __future__ import (
+    absolute_import,
+    division,
+    print_function,
+    unicode_literals,
+)
 import pprint
 import sys
 from tempfile import NamedTemporaryFile
 import colander
 import yaml
-import SOG_infile
-from SOG_infile_schema import (
+from . import SOG_infile
+from .SOG_infile_schema import (
     SOG_Infile,
     SOG_KEYS,
     SOG_EXTRA_KEYS,
     SOG_AVG_HIST_FORCING_KEYS,
 )
-from SOG_YAML_schema import (
+from .SOG_YAML_schema import (
     YAML_Infile,
     yaml_to_infile,
 )
