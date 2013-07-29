@@ -52,7 +52,7 @@ def load(stream):
     units_container = re.compile(r'\[.+\]')
 
     def get_line():
-        line = stream.next().strip()
+        line = next(stream).strip()
         if line == '' or line.startswith('!'):
             line = get_line()
         return line
