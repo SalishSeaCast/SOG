@@ -3,7 +3,10 @@
 import os
 from mock import Mock
 from mock import patch
-from StringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 import unittest
 from .. import command_processor
 
