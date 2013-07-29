@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import sys
 from setuptools import (
     setup,
     find_packages
@@ -7,7 +6,7 @@ from setuptools import (
 
 python_classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
-    for py_version in ['2', '2.6', '2.7', '3', '3.3']]
+    for py_version in ['2', '2.7', '3', '3.3']]
 other_classifiers = [
     'Development Status :: 5 - Production/Stable',
     'License :: OSI Approved :: BSD License',
@@ -31,15 +30,10 @@ install_requires = [
     'colander',
     'PyYAML',
 ]
-if sys.version_info[0] == 2 and sys.version_info[1] < 7:
-    install_requires.extend([
-        'argparse',
-        'unittest2',
-    ])
 
 setup(
     name='SOGcommand',
-    version='1.2',
+    version='1.2.1dev',
     description='Command processor for SOG.',
     long_description=detailed_description,
     author='Doug Latornell',

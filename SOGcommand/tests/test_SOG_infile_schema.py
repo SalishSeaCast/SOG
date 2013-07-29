@@ -3,11 +3,7 @@
 transformation function.
 """
 from datetime import datetime
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest  # NOQA
-from mock import Mock
+import unittest
 import colander
 
 

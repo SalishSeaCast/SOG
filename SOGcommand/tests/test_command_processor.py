@@ -4,10 +4,7 @@ import os
 from mock import Mock
 from mock import patch
 from StringIO import StringIO
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest  # NOQA
+import unittest
 from .. import command_processor
 
 

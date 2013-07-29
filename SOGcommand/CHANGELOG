@@ -1,8 +1,13 @@
 Changelog
 ---------
 
-Next Release
-------------
+v1.2.1
+------
+
+* Port code to work under both Python 2.7 and 3.3. Use :program:`tox` for
+  multi-version testing.
+
+* Drop support for Python 2.6.
 
 * Add an API for the :command:`SOG read_infile` command so that it can be
   used by other Python packages (e.g. SoG-bloomcast) without the overhead

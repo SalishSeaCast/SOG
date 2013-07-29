@@ -3,10 +3,7 @@
 """
 from contextlib import nested
 from cStringIO import StringIO
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest  # NOQA
+import unittest
 from mock import call
 from mock import MagicMock
 from mock import patch

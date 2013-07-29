@@ -2,10 +2,7 @@
 """Unit tests for SOG infile parser and emitter.
 """
 from StringIO import StringIO
-try:
-    import unittest2 as unittest
-except ImportError:
-    import unittest  # NOQA
+import unittest
 
 
 class TestLoad(unittest.TestCase):
