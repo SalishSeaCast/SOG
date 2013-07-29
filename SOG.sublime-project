@@ -6,7 +6,9 @@
             "folder_exclude_patterns": [
                 "bot_test",
                 "short_test",
-                "*.egg-info"
+                "*.egg-info",
+                ".cache",
+                ".tox"
                 ],
             "file_exclude_patterns": [
                 ".coverage",
