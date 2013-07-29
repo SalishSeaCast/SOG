@@ -6,10 +6,12 @@ try:
 except ImportError:
     from io import StringIO
 import unittest
-from mock import call
-from mock import MagicMock
-from mock import patch
-
+from mock import (
+    call,
+    MagicMock,
+    mock_open,
+    patch,
+)
 from .. import infile_processor
 
 
@@ -95,9 +97,9 @@ class TestReadYamlInfile(unittest.TestCase):
     def test_read_yaml_infile_loads_yaml_file(self, mock_load):
         """
         """
-        with patch.object(infile_processor, 'open', create=True) as mock_open:
-            mock_open.return_value = MagicMock(spec=file)
-            mock_file_obj = mock_open.return_value.__enter__.return_value
+        m = mock_open()
+        with patch.object(infile_processor, 'open', m, create=True):
+            mock_file_obj = m.return_value.__enter__.return_value
             self._call_fut('foo.yaml')
         mock_load.assert_called_once_with(mock_file_obj)
 
@@ -105,10 +107,10 @@ class TestReadYamlInfile(unittest.TestCase):
     def test_read_yaml_infile_handles_invalid_yaml_file(self, mock_stderr):
         """_read_yaml_infile raises SystemExit w/ msg for bad yaml_infile
         """
+        m = mock_open()
         mock_data = '! -*- mode: f90 -*-\n! SOG'
-        with patch.object(infile_processor, 'open', create=True) as mock_open:
-            mock_open.return_value = MagicMock(spec=file)
-            mock_open.return_value.__enter__.return_value = mock_data
+        with patch.object(infile_processor, 'open', m, create=True):
+            m.return_value.__enter__.return_value = mock_data
             with self.assertRaises(SystemExit):
                 self._call_fut('foo.yaml')
         self.assertEqual(
