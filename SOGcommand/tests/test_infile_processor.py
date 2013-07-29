@@ -190,7 +190,7 @@ class TestMergeYamlStructs(unittest.TestCase):
         yaml_struct = mock_schema.deserialize(
             {
                 'end_datetime': {
-                    'value': datetime(2012, 06, 22, 12, 55),
+                    'value': datetime(2012, 6, 22, 12, 55),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
             }})
@@ -198,7 +198,7 @@ class TestMergeYamlStructs(unittest.TestCase):
         self._call_fut(edit_struct, yaml_struct, mock_schema)
         self.assertEqual(
             yaml_struct['end_datetime']['value'],
-            datetime(2012, 06, 22, 12, 55))
+            datetime(2012, 6, 22, 12, 55))
 
     def test_merge_yaml_structs_updates_yaml_struct(self):
         """_merge_yaml_structs updates yaml_struct w/ value from edit_struct
@@ -213,21 +213,21 @@ class TestMergeYamlStructs(unittest.TestCase):
         yaml_struct = mock_schema.deserialize(
             {
                 'end_datetime': {
-                    'value': datetime(2012, 06, 22, 12, 55),
+                    'value': datetime(2012, 6, 22, 12, 55),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
             }})
         edit_struct = mock_schema.deserialize(
             {
                 'end_datetime': {
-                    'value': datetime(2012, 06, 22, 12, 58),
+                    'value': datetime(2012, 6, 22, 12, 58),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
             }})
         self._call_fut(edit_struct, yaml_struct, mock_schema)
         self.assertEqual(
             yaml_struct['end_datetime']['value'],
-            datetime(2012, 06, 22, 12, 58))
+            datetime(2012, 6, 22, 12, 58))
 
     def test_merge_yaml_structs_handles_zero_values(self):
         """_merge_yaml_structs handle change value to 0 properly
