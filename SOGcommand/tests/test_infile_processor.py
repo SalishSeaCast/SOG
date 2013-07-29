@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
 """Unit tests for the SOG infile processor.
 """
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 import unittest
 from mock import call
 from mock import MagicMock
