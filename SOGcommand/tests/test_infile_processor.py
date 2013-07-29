@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Unit tests for the SOG infile processor.
 """
-from contextlib import nested
 from cStringIO import StringIO
 import unittest
 from mock import call
@@ -19,43 +18,35 @@ class TestCreateInfile(unittest.TestCase):
         """
         return infile_processor.create_infile(*args)
 
-    def test_create_infile_returns_temp_file_name(self):
+    @patch.object(infile_processor, '_read_yaml_infile')
+    @patch.object(infile_processor, '_deserialize_yaml')
+    @patch.object(infile_processor, 'yaml_to_infile')
+    @patch.object(infile_processor, 'SOG_Infile')
+    @patch.object(infile_processor, 'SOG_infile')
+    @patch.object(infile_processor, 'NamedTemporaryFile')
+    def test_create_infile_returns_temp_file_name(
+            self, mock_NTF, mock_Si, mock_SI, mock_yti, mock_dy, mock_ryi):
         """create_infile returns name of temp file
         """
-        context_mgr = nested(
-            patch.object(infile_processor, '_read_yaml_infile'),
-            patch.object(infile_processor, '_deserialize_yaml'),
-            patch.object(infile_processor, 'yaml_to_infile'),
-            patch.object(infile_processor, 'SOG_Infile'),
-            patch.object(infile_processor, 'SOG_infile'),
-            patch.object(infile_processor, 'NamedTemporaryFile'),
-        )
-        with context_mgr as mocks:
-            mock_NTF = mocks[5]
-            handle = mock_NTF.return_value = MagicMock(spec=file)
-            handle.__enter__.return_value.name = '/tmp/foo.infile'
-            infile_name = self._call_fut('foo.yaml', [])
+        handle = mock_NTF.return_value = MagicMock()
+        handle.__enter__.return_value.name = '/tmp/foo.infile'
+        infile_name = self._call_fut('foo.yaml', [])
         self.assertEqual(infile_name, '/tmp/foo.infile')
 
-    def test_create_infile_reads_edit_files(self):
+    @patch.object(infile_processor, '_read_yaml_infile')
+    @patch.object(infile_processor, '_deserialize_yaml')
+    @patch.object(infile_processor, 'yaml_to_infile')
+    @patch.object(infile_processor, 'SOG_Infile')
+    @patch.object(infile_processor, 'SOG_infile')
+    @patch.object(infile_processor, 'NamedTemporaryFile')
+    def test_create_infile_reads_edit_files(
+            self, mock_NTF, mock_Si, mock_SI, mock_yti, mock_dy, mock_ryi):
         """create_infile reads infile and edit files in expected order
         """
-        context_mgr = nested(
-            patch.object(infile_processor, '_read_yaml_infile'),
-            patch.object(infile_processor, '_deserialize_yaml'),
-            patch.object(infile_processor, '_merge_yaml_structs'),
-            patch.object(infile_processor, 'yaml_to_infile'),
-            patch.object(infile_processor, 'SOG_Infile'),
-            patch.object(infile_processor, 'SOG_infile'),
-            patch.object(infile_processor, 'NamedTemporaryFile'),
-        )
-        with context_mgr as mocks:
-            mock_read_yaml_infile = mocks[0]
-            mock_NTF = mocks[6]
-            mock_NTF.return_value = MagicMock(spec=file)
-            self._call_fut('foo.yaml', ['bar.yaml', 'bax.yaml'])
+        mock_NTF.return_value = MagicMock()
+        self._call_fut('foo.yaml', ['bar.yaml', 'bax.yaml'])
         self.assertEqual(
-            mock_read_yaml_infile.call_args_list,
+            mock_ryi.call_args_list,
             [call('foo.yaml'), call('bar.yaml'), call('bax.yaml')])
 
 
@@ -67,32 +58,25 @@ class TestReadInfile(unittest.TestCase):
         """
         return infile_processor.read_infile(*args)
 
-    def test_read_infile_returns_value(self):
+    @patch.object(infile_processor, '_read_yaml_infile')
+    @patch.object(infile_processor, '_deserialize_yaml',
+                  return_value={'bar': {'value': 42}})
+    def test_read_infile_returns_value(self, mock_dy, mock_ryi):
         """read_infile returns value associated with key
         """
         edit_files = []
-        context_mgr = nested(
-            patch.object(infile_processor, '_read_yaml_infile'),
-            patch.object(infile_processor, '_deserialize_yaml',
-        return_value={'bar': {'value': 42}}),
-        )
-        with context_mgr:
-            value = self._call_fut('foo.yaml', edit_files, 'bar')
+        value = self._call_fut('foo.yaml', edit_files, 'bar')
         self.assertEqual(value, 42)
 
     @patch('sys.stderr', new_callable=StringIO)
-    def test_read_infile_handles_bad_key(self, mock_stderr):
+    @patch.object(infile_processor, '_read_yaml_infile')
+    @patch.object(infile_processor, '_deserialize_yaml', return_value={})
+    def test_read_infile_handles_bad_key(self, mock_dy, mock_ryi, mock_stderr):
         """read_infile raises SystemExit w/ msg for bad infile key
         """
         edit_files = []
-        context_mgr = nested(
-            patch.object(infile_processor, '_read_yaml_infile'),
-            patch.object(infile_processor, '_deserialize_yaml',
-                         return_value={}),
-        )
-        with context_mgr:
-            with self.assertRaises(SystemExit):
-                self._call_fut('foo.yaml', edit_files, 'bar')
+        with self.assertRaises(SystemExit):
+            self._call_fut('foo.yaml', edit_files, 'bar')
         self.assertEqual(mock_stderr.getvalue(), 'KeyError: bar\n')
 
 
