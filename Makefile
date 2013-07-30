@@ -21,13 +21,12 @@
 HG_REPOS     = /ocean/sallen/hg_repos
 PROJECT_NAME = SOG-project
 
-.PHONY:	help env patch_hgrc project
+.PHONY:	help env project
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of:"
 	@echo "  env      to make a full SOG environment"
 	@echo "  project  to make a new project directory for running SOG"
-	@echo "  patch_hgrc  patch hgrc files so pushes to ocean trigger buildbot"
 	@echo ""
 	@echo "Change hg repository source with \`make env HG_REPOS=<path>'"
 	@echo "where <path> defaults to $(HG_REPOS)"
@@ -40,18 +39,11 @@ env:
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
 	hg clone $(HG_REPOS)/SOG-forcing
-	make patch-hgrc
 	make project PROJECT_NAME=SOG-test/SOG-ocean-`date "+%Y-%m-%d"`
 	make project PROJECT_NAME=SOG-test/SOG-dev-`date "+%Y-%m-%d"`
 	(cd SOG-test && ln -s ../SOG-initial SOG-initial)
 	(cd SOG-test && ln -s ../SOG-forcing SOG-forcing)
 	make project
-
-patch-hgrc:
-	python patch_hgrc.py .hg/hgrc
-	python patch_hgrc.py SOG-code-ocean/.hg/hgrc
-	python patch_hgrc.py SOG-initial/.hg/hgrc
-	python patch_hgrc.py SOG-forcing/.hg/hgrc
 
 project:
 	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
