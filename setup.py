@@ -41,7 +41,7 @@ other_classifiers = [
     'Intended Audience :: End Users/Desktop',
 ]
 
-with open('README', 'rt') as file_obj:
+with open('README.rst', 'rt') as file_obj:
     detailed_description = file_obj.read()
 with open('SOGcommand/CHANGELOG', 'rt') as file_obj:
     detailed_description += '\n\n' + file_obj.read()
