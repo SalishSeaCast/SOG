@@ -4,6 +4,9 @@ Changelog
 v1.2.1
 ------
 
+* Change license to Apache License, Version 2.0 and add necessary license
+  files and information for public release on Bitbucket.
+
 * Add error handling for the case of a YAML infile element that is in the
   schema but missing from the infile.
 

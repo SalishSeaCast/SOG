@@ -1,7 +1,6 @@
-recursive-include SOGcommand *.py
-include SOGcommand/nosy.cfg
-include SOGcommand/README
-include SOGcommand/LICENSE
+include README
+include LICENSE
+include NOTICE
 include SOGcommand/CHANGELOG
-include SOGcommand/ROADMAP
-exclude README
+include SOGcommand/nosy.cfg
+recursive-include SOGcommand *.py
