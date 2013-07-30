@@ -150,12 +150,15 @@ class TestDeserializeYaml(unittest.TestCase):
         mock_data = {'foo': 'bar'}
         with self.assertRaises(SystemExit):
             self._call_fut(mock_data, YAML_Infile(), 'foo.yaml')
-        self.assertTrue(
-            mock_stderr.getvalue().startswith(
+        self.assertTrue(mock_stderr.getvalue().startswith(
             'Invalid SOG YAML in foo.yaml. '
             'The following parameters are missing or misspelled:\n'))
-        self.assertTrue(
-            mock_stderr.getvalue().endswith(" 'vary': u'Required'}\n"))
+        try:
+            self.assertTrue(
+                mock_stderr.getvalue().endswith(" 'vary': 'Required'}\n"))
+        except AssertionError:
+            self.assertTrue(
+                mock_stderr.getvalue().endswith(" 'vary': u'Required'}\n"))
 
 
 class TestMergeYamlStructs(unittest.TestCase):
