@@ -4,6 +4,9 @@ Changelog
 v1.2.1
 ------
 
+* Add error handling for the case of a YAML infile element that is in the
+  schema but missing from the infile.
+
 * Port code to work under both Python 2.7 and 3.3. Use :program:`tox` for
   multi-version testing.
 

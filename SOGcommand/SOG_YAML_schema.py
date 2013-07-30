@@ -1404,7 +1404,10 @@ def yaml_to_infile(yaml_schema, yaml_struct):
     :rtype: nested dicts
     """
     def get_element(key, path):
-        return yaml_schema.get_value(yaml_struct, '.'.join((path, key)))
+        try:
+            return yaml_schema.get_value(yaml_struct, '.'.join((path, key)))
+        except TypeError:
+            raise ValueError('{} element missing from YAML infile'.format(path))
 
     def transform(node, path):
         return {
