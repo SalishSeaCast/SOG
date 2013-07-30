@@ -2,5 +2,4 @@ include README
 include LICENSE
 include NOTICE
 include SOGcommand/CHANGELOG
-include SOGcommand/nosy.cfg
 recursive-include SOGcommand *.py
