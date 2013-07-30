@@ -170,7 +170,7 @@ def _merge_yaml_structs(edit_struct, yaml_struct, schema):
     :arg schema: SOG YAML infile schema instance.
     :type schema: :class:`YAML_Infile` instance
     """
-    for key in schema.flatten(yaml_struct).iterkeys():
+    for key in schema.flatten(yaml_struct).keys():
         try:
             value = schema.get_value(edit_struct, key)
             if value is not None:
