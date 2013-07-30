@@ -19,13 +19,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import os
-from mock import Mock
-from mock import patch
 try:
     from cStringIO import StringIO
 except ImportError:
     from io import StringIO
 import unittest
+try:
+    from unittest.mock import (
+        Mock,
+        patch,
+    )
+except ImportError:
+    from mock import Mock
+    from mock import patch
 from .. import command_processor
 
 

@@ -24,12 +24,20 @@ try:
 except ImportError:
     from io import StringIO
 import unittest
-from mock import (
-    call,
-    MagicMock,
-    mock_open,
-    patch,
-)
+try:
+    from unittest.mock import (
+        call,
+        MagicMock,
+        mock_open,
+        patch,
+    )
+except ImportError:
+    from mock import (
+        call,
+        MagicMock,
+        mock_open,
+        patch,
+    )
 from .. import infile_processor
 
 
