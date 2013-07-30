@@ -390,7 +390,7 @@ class TestInfileToYAML(unittest.TestCase):
                                   if child.name == 'gridsize']
         yaml_schema = YAML_Infile().clone()
         yaml_schema.children = [child for child in yaml_schema.children
-                           if child.name == 'grid']
+                                if child.name == 'grid']
         grid_schema = yaml_schema.children[0]
         grid_schema.children = [child for child in grid_schema
                                 if child.name == 'grid_size']

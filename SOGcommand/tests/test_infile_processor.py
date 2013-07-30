@@ -175,7 +175,8 @@ class TestMergeYamlStructs(unittest.TestCase):
         import colander
         from datetime import datetime
         from ..SOG_YAML_schema import _SOG_Datetime
-        class MockSchema(colander.MappingSchema): # NOQA
+
+        class MockSchema(colander.MappingSchema):
             end_datetime = _SOG_Datetime(
                 infile_key='end datetime', var_name='endDatetime')
         mock_schema = MockSchema()
@@ -185,7 +186,8 @@ class TestMergeYamlStructs(unittest.TestCase):
                     'value': datetime(2012, 6, 22, 12, 55),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
-            }})
+                }
+            })
         edit_struct = {'end_datetime': None}
         self._call_fut(edit_struct, yaml_struct, mock_schema)
         self.assertEqual(
@@ -198,7 +200,8 @@ class TestMergeYamlStructs(unittest.TestCase):
         import colander
         from datetime import datetime
         from ..SOG_YAML_schema import _SOG_Datetime
-        class MockSchema(colander.MappingSchema): # NOQA
+
+        class MockSchema(colander.MappingSchema):
             end_datetime = _SOG_Datetime(
                 infile_key='end datetime', var_name='endDatetime')
         mock_schema = MockSchema()
@@ -208,14 +211,16 @@ class TestMergeYamlStructs(unittest.TestCase):
                     'value': datetime(2012, 6, 22, 12, 55),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
-            }})
+                }
+            })
         edit_struct = mock_schema.deserialize(
             {
                 'end_datetime': {
                     'value': datetime(2012, 6, 22, 12, 58),
                     'variable_name': 'endDatetime',
                     'description': 'end of run date/time',
-            }})
+                }
+            })
         self._call_fut(edit_struct, yaml_struct, mock_schema)
         self.assertEqual(
             yaml_struct['end_datetime']['value'],
@@ -226,7 +231,8 @@ class TestMergeYamlStructs(unittest.TestCase):
         """
         import colander
         from ..SOG_YAML_schema import _Float
-        class MockSchema(colander.MappingSchema): # NOQA
+
+        class MockSchema(colander.MappingSchema):
             mesozoo_grazing_limit = _Float(
                 infile_key='Mesozoo, pred slope',
                 var_name='rate_mesozoo%PredSlope')
@@ -237,13 +243,15 @@ class TestMergeYamlStructs(unittest.TestCase):
                     'value': 0.2,
                     'variable_name': 'Mesozoo, pred slope',
                     'description': 'mesozooplankton total grazing limit',
-            }})
+                }
+            })
         edit_struct = mock_schema.deserialize(
             {
                 'mesozoo_grazing_limit': {
                     'value': 0,
                     'variable_name': 'Mesozoo, pred slope',
                     'description': 'mesozooplankton total grazing limit',
-            }})
+                }
+            })
         self._call_fut(edit_struct, yaml_struct, mock_schema)
         self.assertEqual(yaml_struct['mesozoo_grazing_limit']['value'], 0)

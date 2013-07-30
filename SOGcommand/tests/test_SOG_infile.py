@@ -29,9 +29,10 @@ class TestLoad(unittest.TestCase):
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
     def test_load_ignores_comment(self):
         """load ignores line starting with ! as comment
@@ -41,9 +42,10 @@ class TestLoad(unittest.TestCase):
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
     def test_load_ignores_empty_line(self):
         """load ignores empty line
@@ -54,9 +56,10 @@ class TestLoad(unittest.TestCase):
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
     def test_load_2_lines(self):
         """load returns expected dict for 2 SOG infile lines
@@ -66,12 +69,13 @@ class TestLoad(unittest.TestCase):
             '"gridsize"  80  "number of grid points"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'},
-                 'gridsize': {'value': '80',
-                              'description': 'number of grid points',
-                              'units': None}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'},
+             'gridsize': {'value': '80',
+                          'description': 'number of grid points',
+                          'units': None}})
 
     def test_load_newline_after_key(self):
         """load handles SOG infile w/ newline between key and value
@@ -81,9 +85,10 @@ class TestLoad(unittest.TestCase):
             '  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
     def test_load_newline_after_value(self):
         """load handles SOG infile w/ newline between value and description
@@ -93,9 +98,10 @@ class TestLoad(unittest.TestCase):
             '  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
     def test_load_newlines_after_key_and_value(self):
         """load handles SOG infile w/ newlines b/t key, value and description
@@ -106,9 +112,10 @@ class TestLoad(unittest.TestCase):
             '  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
-        result, {'maxdepth': {'value': '40.0d0',
-                              'description': 'depth of modelled domain',
-                              'units': 'm'}})
+            result,
+            {'maxdepth': {'value': '40.0d0',
+                          'description': 'depth of modelled domain',
+                          'units': 'm'}})
 
 
 class TestDump(unittest.TestCase):
@@ -287,7 +294,7 @@ class TestDump(unittest.TestCase):
             'northern_return_flow': {
                 '.true.': ['northern_influence_strength'],
                 '.false.': []}
-            }
+        }
         avg_hist_forcing_keys = {}
         stream = StringIO()
         self._call_dump(
@@ -295,9 +302,9 @@ class TestDump(unittest.TestCase):
         self.assertEqual(
             stream.getvalue(),
             '"northern_return_flow"  .true.  '
-                '"include fresh water return flow from north?"\n'
+            '"include fresh water return flow from north?"\n'
             '"northern_influence_strength"  0.8863d0  '
-                '"strength of northen influence [m]"\n')
+            '"strength of northen influence [m]"\n')
 
     def test_avg_hist_forcing_keys(self):
         """dump handles average/historical forcing keys for optional parameters
@@ -307,7 +314,7 @@ class TestDump(unittest.TestCase):
             'use average/hist forcing': {
                 'value': '"yes"',
                 'description': 'yes=avg only; no=fail if data runs out; '
-                    'fill=historic then avg',
+                'fill=historic then avg',
                 'units': colander.null},
             'average/hist wind': {
                 'value': '"../SOG-forcing/wind/SHavg"',
@@ -334,8 +341,8 @@ class TestDump(unittest.TestCase):
         self.assertEqual(
             stream.getvalue(),
             '"use average/hist forcing"  "yes"  '
-                '"yes=avg only; no=fail if data runs out; fill=historic then '
-                'avg"\n'
+            '"yes=avg only; no=fail if data runs out; fill=historic then '
+            'avg"\n'
             '"average/hist wind"  "../SOG-forcing/wind/SHavg"  '
-                '"average wind forcing data"\n'
+            '"average wind forcing data"\n'
             '"wind"  "Sandheads_wind"  "wind forcing data"\n')

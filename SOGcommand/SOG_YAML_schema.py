@@ -345,6 +345,7 @@ class _FreshWaterFlux(colander.MappingSchema):
         infile_key='normal_northern', var_name='Fo',
         missing=None)
 
+
 class _SalinityFit(colander.MappingSchema):
     bottom_salinity = _Float(
         infile_key='cbottom', var_name='cbottom',
