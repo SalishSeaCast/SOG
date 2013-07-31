@@ -28,6 +28,7 @@ limitations under the License.
 """
 from datetime import datetime
 import colander
+import six
 
 
 class _SOG_InfileBase(colander.MappingSchema):
@@ -55,7 +56,7 @@ class _RealDP(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         return float(cstruct.replace('d', 'e'))
@@ -90,7 +91,7 @@ class _RealDP_List(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         return [float(item.replace('d', 'e')) for item in cstruct.split()]
@@ -128,7 +129,7 @@ class _IntList(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         return [int(item) for item in cstruct.split()]
@@ -155,7 +156,7 @@ class _Datetime(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         return datetime.strptime(cstruct, '%Y-%m-%d %H:%M:%S')
@@ -181,7 +182,7 @@ class _Boolean(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         if cstruct.lower() == '.true.':
@@ -202,7 +203,7 @@ class _String(object):
     def serialize(self, node, appstruct):
         if appstruct is colander.null:
             return colander.null
-        if not isinstance(appstruct, str):
+        if not isinstance(appstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(appstruct))
         return '"{0}"'.format(appstruct)
@@ -210,7 +211,7 @@ class _String(object):
     def deserialize(self, node, cstruct):
         if cstruct is colander.null:
             return colander.null
-        if not isinstance(cstruct, str):
+        if not isinstance(cstruct, six.string_types):
             raise colander.Invalid(
                 node, '{0!r} is not a string'.format(cstruct))
         return str(cstruct)

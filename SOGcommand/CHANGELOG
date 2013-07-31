@@ -1,8 +1,22 @@
 Changelog
 ---------
 
+v1.2.2
+------
+
+* Fix Unicode handling issue in :py:mod:`SOG_infile_schema` string type
+  checking code that brown-bagged v1.2.1 under Pythnon 2.7.
+
+* Add six library to project dependencies to facilitate Python 3.3 and 2.7
+  common codebase.
+
+
 v1.2.1
 ------
+
+* v1.2.1 was a brown-paper-bag release due to a Unicode handling difference
+  issue between Python 2.7 and 3.3 that was not properly accommodated.
+  It was usable under Python 3.3, but not under 2.7.
 
 * Change license to Apache License, Version 2.0 and add necessary license
   files and information for public release on Bitbucket.

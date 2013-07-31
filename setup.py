@@ -50,6 +50,7 @@ install_requires = [
     # in development
     'colander',
     'PyYAML',
+    'six',
 ]
 
 setup(

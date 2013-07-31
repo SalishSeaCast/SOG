@@ -19,6 +19,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
+import six
 try:
     from cStringIO import StringIO
 except ImportError:
@@ -179,10 +180,10 @@ class TestDeserializeYaml(unittest.TestCase):
         self.assertTrue(mock_stderr.getvalue().startswith(
             'Invalid SOG YAML in foo.yaml. '
             'The following parameters are missing or misspelled:\n'))
-        try:
+        if six.PY3:
             self.assertTrue(
                 mock_stderr.getvalue().endswith(" 'vary': 'Required'}\n"))
-        except AssertionError:
+        else:
             self.assertTrue(
                 mock_stderr.getvalue().endswith(" 'vary': u'Required'}\n"))
 
