@@ -26,7 +26,7 @@ from setuptools import (
 
 python_classifiers = [
     'Programming Language :: Python :: {0}'.format(py_version)
-    for py_version in ['2', '2.7', '3', '3.3']]
+    for py_version in ['2', '2.7', '3', '3.2', '3.3']]
 other_classifiers = [
     'Development Status :: 5 - Production/Stable',
     'License :: OSI Approved :: Apache Software License',
