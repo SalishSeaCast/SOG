@@ -1,0 +1,6 @@
+[run]
+branch = True
+source = SOGcommand
+
+[report]
+show_missing = True
