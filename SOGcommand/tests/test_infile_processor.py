@@ -20,10 +20,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import six
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
 import unittest
 try:
     from unittest.mock import (
@@ -100,7 +96,7 @@ class TestReadInfile(unittest.TestCase):
         value = self._call_fut('foo.yaml', edit_files, 'bar')
         self.assertEqual(value, 42)
 
-    @patch('sys.stderr', new_callable=StringIO)
+    @patch('sys.stderr', new_callable=six.StringIO)
     @patch.object(infile_processor, '_read_yaml_infile')
     @patch.object(infile_processor, '_deserialize_yaml', return_value={})
     def test_read_infile_handles_bad_key(self, mock_dy, mock_ryi, mock_stderr):
@@ -130,7 +126,7 @@ class TestReadYamlInfile(unittest.TestCase):
             self._call_fut('foo.yaml')
         mock_load.assert_called_once_with(mock_file_obj)
 
-    @patch('sys.stderr', new_callable=StringIO)
+    @patch('sys.stderr', new_callable=six.StringIO)
     def test_read_yaml_infile_handles_invalid_yaml_file(self, mock_stderr):
         """_read_yaml_infile raises SystemExit w/ msg for bad yaml_infile
         """
@@ -169,7 +165,7 @@ class TestDeserializeYaml(unittest.TestCase):
         self._call_fut(mock_data, mock_schema, 'foo.yaml')
         mock_schema.deserialize.assert_valled_once_with(mock_data)
 
-    @patch('sys.stderr', new_callable=StringIO)
+    @patch('sys.stderr', new_callable=six.StringIO)
     def test_deserialize_yaml_handles_error(self, mock_stderr):
         """_deserialize_yaml raises SystemExit w/ msg if data is incomplete
         """

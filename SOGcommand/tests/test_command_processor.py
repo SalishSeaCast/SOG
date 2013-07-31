@@ -19,10 +19,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import os
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+import six
 import unittest
 try:
     from unittest.mock import (
@@ -30,8 +27,10 @@ try:
         patch,
     )
 except ImportError:
-    from mock import Mock
-    from mock import patch
+    from mock import (
+        Mock,
+        patch,
+    )
 from .. import command_processor
 
 
@@ -215,7 +214,7 @@ class TestRunCommand(unittest.TestCase):
         mock_watch.assert_called_once()
 
     @patch.object(command_processor, 'os')
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('sys.stdout', new_callable=six.StringIO)
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'watch_outfile', return_value=['foo'])
     def test_do_run_watch_prints_outfile(self, mock_watch, mock_Popen,
@@ -234,7 +233,7 @@ class TestRunCommand(unittest.TestCase):
                 command_processor.do_run(args)
         self.assertEqual(mock_stdout.getvalue(), 'foo')
 
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('sys.stdout', new_callable=six.StringIO)
     def test_run_dry_run_std_msg(self, mock_stdout):
         """run_dry_run prints intro msg and command that would be run
         """
@@ -246,7 +245,7 @@ class TestRunCommand(unittest.TestCase):
             'Command that would have been used to run SOG:\n  {0}\n'
             .format(cmd))
 
-    @patch('sys.stdout', new_callable=StringIO)
+    @patch('sys.stdout', new_callable=six.StringIO)
     def test_run_dry_run_watch_msg(self, mock_stdout):
         """run_dry_run w/ watch prints suffix msg about outfile
         """

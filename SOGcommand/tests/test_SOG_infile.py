@@ -19,10 +19,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-try:
-    from cStringIO import StringIO
-except ImportError:
-    from io import StringIO
+import six
 import unittest
 
 
@@ -36,14 +33,14 @@ class TestLoad(unittest.TestCase):
     def test_load_empty_strem_empty_dict(self):
         """load of empty stream returns empty dict
         """
-        stream = StringIO('')
+        stream = six.StringIO('')
         result = self._call_load(stream)
         self.assertEqual(result, {})
 
     def test_load_1_line(self):
         """load returns expected dict for 1 SOG infile line
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
         self.assertEqual(
@@ -55,7 +52,7 @@ class TestLoad(unittest.TestCase):
     def test_load_ignores_comment(self):
         """load ignores line starting with ! as comment
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '! This is a comment\n'
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
@@ -68,7 +65,7 @@ class TestLoad(unittest.TestCase):
     def test_load_ignores_empty_line(self):
         """load ignores empty line
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '! This is a comment\n'
             '\n'
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"')
@@ -82,7 +79,7 @@ class TestLoad(unittest.TestCase):
     def test_load_2_lines(self):
         """load returns expected dict for 2 SOG infile lines
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '"maxdepth"  40.0d0  "depth of modelled domain [m]"\n'
             '"gridsize"  80  "number of grid points"')
         result = self._call_load(stream)
@@ -98,7 +95,7 @@ class TestLoad(unittest.TestCase):
     def test_load_newline_after_key(self):
         """load handles SOG infile w/ newline between key and value
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '"maxdepth"\n'
             '  40.0d0  "depth of modelled domain [m]"')
         result = self._call_load(stream)
@@ -111,7 +108,7 @@ class TestLoad(unittest.TestCase):
     def test_load_newline_after_value(self):
         """load handles SOG infile w/ newline between value and description
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '"maxdepth"  40.0d0\n'
             '  "depth of modelled domain [m]"')
         result = self._call_load(stream)
@@ -124,7 +121,7 @@ class TestLoad(unittest.TestCase):
     def test_load_newlines_after_key_and_value(self):
         """load handles SOG infile w/ newlines b/t key, value and description
         """
-        stream = StringIO(
+        stream = six.StringIO(
             '"maxdepth"\n'
             '  40.0d0\n'
             '  "depth of modelled domain [m]"')
@@ -153,7 +150,7 @@ class TestDump(unittest.TestCase):
         key_order = ['maxdepth']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
@@ -171,7 +168,7 @@ class TestDump(unittest.TestCase):
         key_order = ['gridsize']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
@@ -191,7 +188,7 @@ class TestDump(unittest.TestCase):
         key_order = 'maxdepth gridsize'.split()
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
@@ -217,7 +214,7 @@ class TestDump(unittest.TestCase):
         key_order = ['profile_times']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         for line in stream.getvalue().split('\n'):
@@ -241,7 +238,7 @@ class TestDump(unittest.TestCase):
         key_order = ['profile_times']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(stream.getvalue().split('\n')[0], '"profile_times"')
@@ -264,7 +261,7 @@ class TestDump(unittest.TestCase):
         key_order = ['profile_times']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(stream.getvalue().split('\n')[1], '  46200.')
@@ -287,7 +284,7 @@ class TestDump(unittest.TestCase):
         key_order = ['profile_times']
         extra_keys = {}
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
@@ -314,7 +311,7 @@ class TestDump(unittest.TestCase):
                 '.false.': []}
         }
         avg_hist_forcing_keys = {}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
@@ -353,7 +350,7 @@ class TestDump(unittest.TestCase):
                 'fill': ['average/hist wind'],
                 'histfill': ['average/hist wind'],
             }}
-        stream = StringIO()
+        stream = six.StringIO()
         self._call_dump(
             data, key_order, extra_keys, avg_hist_forcing_keys, stream)
         self.assertEqual(
