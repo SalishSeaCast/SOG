@@ -594,6 +594,7 @@ class SOG_Infile(colander.MappingSchema):
         name='average/hist major river')
     major_river_forcing_file = _SOG_String(name='major river')
     use_river_temperature = _SOG_Boolean(name='use river temp')
+    river_nutrient_file = _SOG_String(name='river nutrients file')
     avg_historical_minor_river_file = _SOG_String(
         name='average/hist minor river')
     minor_river_forcing_file = _SOG_String(name='minor river')
@@ -718,7 +719,7 @@ SOG_KEYS = [
     'use average/hist forcing',
     'wind', 'air temp', 'cloud', 'humidity',
     'major river', 'use river temp',
-    'minor river', 'minor river integ days',
+    'minor river', 'minor river integ days','river nutrients file'
 ]
 # Lists of extra keys, in order, to include in SOG infile for optional
 # parameters, keyed by optional parameter trigger

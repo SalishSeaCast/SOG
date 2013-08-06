@@ -1265,6 +1265,9 @@ class _ForcingData(colander.MappingSchema):
     use_river_temperature = _Boolean(
         infile_key='use river temp', var_name='UseRiverTemp',
         missing=deferred_allow_missing)
+    river_nutrients_file = _SOG_String(
+        infile_key='river nutrients file', var_name='n/a',
+        missing=deferred_allow_missing)
     minor_river_forcing_file = _SOG_String(
         infile_key='minor river', var_name='n/a',
         missing=deferred_allow_missing)
