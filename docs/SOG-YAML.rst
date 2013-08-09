@@ -691,5 +691,5 @@ Example SOG YAML infile
 
 This is a snapshot of :file:`SOG-code/infile.yaml` as of |today|.
 
-.. literalinclude:: ../SOG-code-ocean/infile.yaml
+.. literalinclude:: ../../SOG-code/infile.yaml
    :language: yaml
