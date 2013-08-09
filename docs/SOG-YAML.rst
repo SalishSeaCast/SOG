@@ -642,15 +642,15 @@ The "base" YAML infile for a run
      :file:`SOG-code/infile`.
 
    * Add a value to the appropriate specially handled keys data structure,
-   :data:`SOG_EXTRA_KEYS`,
-   or :data:`SOG_AVG_HIST_FORCING_KEYS`.
-   :data:`SOG_EXTRA_KEYS` is for infile items that are to be added following
-   a Boolean items like :kbd:`northern_return_flow_on`.
-   :data:`SOG_AVG_HIST_FORCING_KEYS` is for the average/historical forcing data
-   file items that precede normal forcing data file items when
-   :kbd:`use average/hist forcing` is set to :kbd:`yes`,
-   :kbd:`fill`,
-   or :kbd:`histfill`.
+     :data:`SOG_EXTRA_KEYS`,
+     or :data:`SOG_AVG_HIST_FORCING_KEYS`.
+     :data:`SOG_EXTRA_KEYS` is for infile items that are to be added following
+     a Boolean items like :kbd:`northern_return_flow_on`.
+     :data:`SOG_AVG_HIST_FORCING_KEYS` is for the average/historical forcing data
+     file items that precede normal forcing data file items when
+     :kbd:`use average/hist forcing` is set to :kbd:`yes`,
+     :kbd:`fill`,
+     or :kbd:`histfill`.
 
    In our example,
    we add to the latter data structure:
