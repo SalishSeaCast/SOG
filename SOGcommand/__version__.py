@@ -15,6 +15,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-version = '1.2.2'
-release = ''
+version = '1.3'
+release = 'dev'
 dev_status = '5 - Production/Stable'
