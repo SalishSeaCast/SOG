@@ -26,7 +26,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from subprocess import Popen
-from .run_processor import prepare_run_cmd
+from . import run_processor
 from .infile_processor import read_infile
 
 
@@ -86,6 +86,6 @@ def run(SOG_exec,
     """
     args = Args(SOG_exec, infile, editfiles, outfile, legacy_infile, dry_run,
                 nice)
-    cmd = prepare_run_cmd(args)
+    cmd = run_processor.prepare(args)
     proc = Popen(cmd, shell=True)
     return proc

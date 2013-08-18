@@ -72,35 +72,35 @@ class TestRunCommand(unittest.TestCase):
     """Unit tests for the SOG command processor run command.
     """
     @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'prepare_run_cmd')
-    def test_do_run_prepare_run_cmd(self, mock_prepare_run_cmd, mock_Popen):
-        """do_run calls prepare_run_cmd
+    @patch.object(command_processor.run_processor, 'prepare')
+    def test_do_run_prepare_run_cmd(self, mock_prepare, mock_Popen):
+        """do_run calls run_processor.prepare
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile.yaml', outfile=None, editfile=[],
             nice=19, dry_run=False, watch=False, legacy_infile=False)
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
-        mock_prepare_run_cmd.assert_called_once()
+        mock_prepare.assert_called_once()
 
     @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'prepare_run_cmd')
-    @patch.object(command_processor, 'run_dry_run')
+    @patch.object(command_processor.run_processor, 'prepare')
+    @patch.object(command_processor.run_processor, 'dry_run')
     def test_do_run_dry_run(
-            self, mock_run_dry_run, mock_prepare_run_cmd, mock_Popen):
-        """do_run calls run_dry_run when --dry-run option is used
+            self, mock_dry_run, mock_prepare, mock_Popen):
+        """do_run calls run_processor.dry_run when --dry-run option is used
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=True, watch=False, legacy_infile=False)
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
-        mock_run_dry_run.assert_called_once()
+        mock_dry_run.assert_called_once()
 
-    @patch.object(command_processor, 'prepare_run_cmd')
+    @patch.object(command_processor.run_processor, 'prepare')
     @patch.object(command_processor, 'Popen', return_value=Mock(name='proc'))
     def test_do_run_default_waits_for_end_of_run(
-            self, mock_Popen, mock_prepare_run_cmd):
+            self, mock_Popen, mock_prepare):
         """do_run waits for end of run by default
         """
         args = Mock(
@@ -110,11 +110,11 @@ class TestRunCommand(unittest.TestCase):
             command_processor.do_run(args)
         mock_Popen().wait.assert_called_once()
 
-    @patch.object(command_processor, 'prepare_run_cmd')
+    @patch.object(command_processor.run_processor, 'prepare')
     @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'watch_outfile')
+    @patch.object(command_processor.run_processor, 'watch_outfile')
     def test_do_run_watch_calls_watch_outfile(
-            self, mock_watch, mock_Popen, mock_prepare_run_cmd):
+            self, mock_watch, mock_Popen, mock_prepare):
         """do_run calls watch_outfile when --watch option is used
         """
         args = Mock(
@@ -125,11 +125,12 @@ class TestRunCommand(unittest.TestCase):
         mock_watch.assert_called_once()
 
     @patch('sys.stdout', new_callable=six.StringIO)
-    @patch.object(command_processor, 'prepare_run_cmd')
+    @patch.object(command_processor.run_processor, 'prepare')
     @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'watch_outfile', return_value=['foo'])
+    @patch.object(
+        command_processor.run_processor, 'watch_outfile', return_value=['foo'])
     def test_do_run_watch_prints_outfile(
-            self, mock_watch, mock_Popen, mock_prepare_run_cmd, mock_stdout):
+            self, mock_watch, mock_Popen, mock_prepare, mock_stdout):
         """do_run prints outfile line when --watch option is used
         """
         args = Mock(

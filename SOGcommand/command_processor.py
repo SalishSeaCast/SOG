@@ -35,11 +35,9 @@ from .__version__ import (
     version,
     release,
 )
-from .infile_processor import read_infile
-from .run_processor import (
-    prepare_run_cmd,
-    run_dry_run,
-    watch_outfile,
+from . import (
+    infile_processor,
+    run_processor,
 )
 
 
@@ -126,14 +124,14 @@ def add_run_subparser(subparsers):
 def do_run(args):
     """Execute the `SOG run` command with the specified options.
     """
-    cmd = prepare_run_cmd(args)
+    cmd = run_processor.prepare(args)
     if args.dry_run:
-        run_dry_run(cmd, args)
+        run_processor.dry_run(cmd, args)
         returncode = 0
     else:
         proc = Popen(cmd, shell=True)
         if args.watch:
-            for line in watch_outfile(proc, args.outfile):
+            for line in run_processor.watch_outfile(proc, args.outfile):
                 print(line, end='')
             returncode = proc.poll()
         else:
@@ -170,6 +168,7 @@ def add_read_infile_subparser(subparsers):
 def do_read_infile(args):
     """Print the infile value for the specified key.
     """
-    value = read_infile(args.infile, args.editfile, args.key)
+    value = infile_processor.read_infile(
+        args.infile, args.editfile, args.key)
     print(value)
     sys.exit(0)

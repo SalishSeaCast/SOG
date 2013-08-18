@@ -34,12 +34,11 @@ except ImportError:
 from .. import run_processor
 
 
-class TestPrepareRunCmd(object):
-    """Unit tests for prepare_run_cmd function.
+class TestPrepare(object):
+    """Unit tests for the run processor prepare function.
     """
-    def _call_prepare_run_cmd(self, args):
-        from ..run_processor import prepare_run_cmd
-        return prepare_run_cmd(args)
+    def _call_prepare(self, args):
+        return run_processor.prepare(args)
 
     @patch.object(run_processor, 'os')
     @patch.object(
@@ -53,7 +52,7 @@ class TestPrepareRunCmd(object):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        cmd = self._call_prepare_run_cmd(args)
+        cmd = self._call_prepare(args)
         outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
         expected = (
             'nice -n 19 ./SOG < /tmp/foo.infile > {} 2>&1'.format(outfile))
@@ -70,7 +69,7 @@ class TestPrepareRunCmd(object):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=False, legacy_infile=True)
-        cmd = self._call_prepare_run_cmd(args)
+        cmd = self._call_prepare(args)
         outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
         expected = (
             'nice -n 19 ./SOG < infile > {} 2>&1'.format(outfile))
@@ -87,7 +86,7 @@ class TestPrepareRunCmd(object):
         args = Mock(
             SOG_exec='./SOG', infile='infile.yaml', outfile=None, editfile=[],
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        self._call_prepare_run_cmd(args)
+        self._call_prepare(args)
         mock_create_infile.assert_called_once_with(args.infile, args.editfile)
 
     @patch.object(run_processor, 'os')
@@ -101,7 +100,7 @@ class TestPrepareRunCmd(object):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile='../foo/bar',
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        cmd = self._call_prepare_run_cmd(args)
+        cmd = self._call_prepare(args)
         expected = 'nice -n 19 ./SOG < /tmp/foo.infile > ../foo/bar 2>&1'
         assert cmd == expected
 
@@ -116,13 +115,13 @@ class TestPrepareRunCmd(object):
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile='/foo/bar',
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        cmd = self._call_prepare_run_cmd(args)
+        cmd = self._call_prepare(args)
         expected = 'nice -n 19 ./SOG < /tmp/foo.infile > /foo/bar 2>&1'
         assert cmd == expected
 
 
-class TestRunCommand(unittest.TestCase):
-    """Unit tests for the SOG run processor dry-run option.
+class TestDryRun(unittest.TestCase):
+    """Unit tests for the run processor dry_run function.
     """
     @patch('sys.stdout', new_callable=six.StringIO)
     def test_run_dry_run_std_msg(self, mock_stdout):
@@ -130,7 +129,7 @@ class TestRunCommand(unittest.TestCase):
         """
         cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
         args = Mock(watch=False)
-        run_processor.run_dry_run(cmd, args)
+        run_processor.dry_run(cmd, args)
         self.assertEqual(
             mock_stdout.getvalue(),
             'Command that would have been used to run SOG:\n  {0}\n'
@@ -142,7 +141,7 @@ class TestRunCommand(unittest.TestCase):
         """
         cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
         args = Mock(outfile='./infile.out', watch=True, legacy_infile=False)
-        run_processor.run_dry_run(cmd, args)
+        run_processor.dry_run(cmd, args)
         self.assertEqual(
             mock_stdout.getvalue(),
             'Command that would have been used to run SOG:\n  {0}\n'

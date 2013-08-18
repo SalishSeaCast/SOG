@@ -37,7 +37,7 @@ from time import sleep
 from .infile_processor import create_infile
 
 
-def prepare_run_cmd(args):
+def prepare(args):
     """Return the command line string that will execute the requested SOG run.
     """
     if not args.outfile:
@@ -61,7 +61,7 @@ def prepare_run_cmd(args):
     return cmd
 
 
-def run_dry_run(cmd, args):
+def dry_run(cmd, args):
     """Dry-run handler for `SOG run` command.
     """
     wrapper = TextWrapper()
