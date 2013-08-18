@@ -29,19 +29,17 @@ from __future__ import (
     unicode_literals,
 )
 from argparse import ArgumentParser
-import os
 from subprocess import Popen
 import sys
-from tempfile import NamedTemporaryFile
-from textwrap import TextWrapper
-from time import sleep
 from .__version__ import (
     version,
     release,
 )
-from .infile_processor import (
-    create_infile,
-    read_infile,
+from .infile_processor import read_infile
+from .run_processor import (
+    prepare_run_cmd,
+    run_dry_run,
+    watch_outfile,
 )
 
 
@@ -141,64 +139,6 @@ def do_run(args):
         else:
             returncode = proc.wait()
     sys.exit(returncode)
-
-
-def prepare_run_cmd(args):
-    """Return the command line string that will execute the requested SOG run.
-    """
-    if not args.outfile:
-        args.outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
-    if not os.path.exists(args.infile):
-        raise IOError('infile not found: {0.infile}'.format(args))
-    else:
-        if args.legacy_infile:
-            infile = args.infile
-        else:
-            if args.dry_run:
-                infile = NamedTemporaryFile(suffix='.infile').name
-            else:
-                infile = create_infile(args.infile, args.editfile)
-    if not os.path.exists(args.SOG_exec):
-        raise IOError('SOG executable not found: {0.SOG_exec}'.format(args))
-    else:
-        cmd = (
-            'nice -n {0.nice} {0.SOG_exec} < {infile} > {0.outfile} 2>&1'
-            .format(args, infile=infile))
-    return cmd
-
-
-def run_dry_run(cmd, args):
-    """Dry-run handler for `SOG run` command.
-    """
-    wrapper = TextWrapper()
-    print(wrapper.fill('Command that would have been used to run SOG:'))
-    print('  {0}'.format(cmd))
-    if args.watch:
-        print(wrapper.fill(
-            'Contents of {0} would have been shown on screen while '
-            'SOG run was in progress.'.format(args.outfile))
-        )
-
-
-def watch_outfile(proc, outfile_name):
-    """Generator that yields lines from SOG run outfile while run is
-    in progress, and continues yielding the lines that are flushed
-    when the run finishes.
-    """
-    # Wait for the SOG process to create the outfile
-    sleep(0.1)
-    with open(outfile_name) as outfile:
-        while proc.poll() is None:
-            # Echo lines flushed to outfile while SOG is running
-            line = outfile.readline()
-            if not line:
-                sleep(0.1)
-                continue
-            yield line
-        else:
-            # Echo lines flushed to outfile when SOG run finishes
-            for line in outfile:
-                yield line
 
 
 def add_read_infile_subparser(subparsers):

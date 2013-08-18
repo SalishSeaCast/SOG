@@ -26,7 +26,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from subprocess import Popen
-from .command_processor import prepare_run_cmd
+from .run_processor import prepare_run_cmd
 from .infile_processor import read_infile
 
 

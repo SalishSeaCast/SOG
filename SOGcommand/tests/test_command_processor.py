@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-import os
 import six
 import unittest
 try:
@@ -72,188 +71,68 @@ class TestParser(unittest.TestCase):
 class TestRunCommand(unittest.TestCase):
     """Unit tests for the SOG command processor run command.
     """
-    @patch.object(command_processor, 'os')
     @patch.object(command_processor, 'Popen')
-    def test_do_run_default_args(self, mock_Popen, mock_os):
-        """do_run spawns expected command for default args
-        """
-        args = Mock(
-            SOG_exec='./SOG', infile='infile', outfile=None,
-            nice=19, dry_run=False, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
-        outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
-        mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > {0} 2>&1'.format(outfile),
-            shell=True)
-
-    @patch.object(command_processor, 'os')
-    @patch.object(command_processor, 'Popen')
-    def test_do_run_legacy_infile(self, mock_Popen, mock_os):
-        """do_run spawns expected command w/ legacy_infile==True
-        """
-        args = Mock(
-            SOG_exec='./SOG', infile='infile', outfile=None,
-            nice=19, dry_run=False, watch=False, legacy_infile=True)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with self.assertRaises(SystemExit):
-            command_processor.do_run(args)
-        outfile = os.path.abspath(os.path.basename(args.infile) + '.out')
-        mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < infile > {0} 2>&1'.format(outfile), shell=True)
-
-    @patch.object(command_processor, 'os')
-    @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'create_infile')
-    def test_do_run_editfile(self, mock_create_infile, mock_Popen, mock_os):
-        """do_run calls create_infile with editfile list
+    @patch.object(command_processor, 'prepare_run_cmd')
+    def test_do_run_prepare_run_cmd(self, mock_prepare_run_cmd, mock_Popen):
+        """do_run calls prepare_run_cmd
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile.yaml', outfile=None, editfile=[],
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
-        mock_create_infile.assert_called_once_with(args.infile, args.editfile)
+        mock_prepare_run_cmd.assert_called_once()
 
-    @patch.object(command_processor, 'os')
     @patch.object(command_processor, 'Popen')
-    @patch.object(command_processor, 'run_dry_run')
-    def test_do_run_dry_run(self, mock_run_dry_run, mock_Popen, mock_os):
+    @patch.object(command_processor, 'prepare_run_cmd')
+    def test_do_run_dry_run(self, mock_prepare_run_cmd, mock_Popen):
         """do_run calls run_dry_run when --dry-run option is used
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=True, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
-        mock_run_dry_run.assert_called_once()
+        mock_prepare_run_cmd.assert_called_once()
 
-    @patch.object(command_processor, 'os')
+    @patch.object(command_processor, 'prepare_run_cmd')
     @patch.object(command_processor, 'Popen', return_value=Mock(name='proc'))
-    def test_do_run_default_waits_for_end_of_run(self, mock_Popen, mock_os):
+    def test_do_run_default_waits_for_end_of_run(
+            self, mock_Popen, mock_prepare_run_cmd):
         """do_run waits for end of run by default
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
+        with self.assertRaises(SystemExit):
+            command_processor.do_run(args)
         mock_Popen().wait.assert_called_once()
 
-    @patch.object(command_processor, 'os')
-    @patch.object(command_processor, 'Popen')
-    def test_do_run_outfile_relative_path(self, mock_Popen, mock_os):
-        """do_run spawns expected command when outfile arg is relative path
-        """
-        args = Mock(
-            SOG_exec='./SOG', infile='infile', outfile='../foo/bar',
-            nice=19, dry_run=False, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
-        mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > ../foo/bar 2>&1', shell=True)
-
-    @patch.object(command_processor, 'os')
-    @patch.object(command_processor, 'Popen')
-    def test_do_run_outfile_absolute_path(self, mock_Popen, mock_os):
-        """do_run spawns expected command when outfile arg is absolute path
-        """
-        args = Mock(
-            SOG_exec='./SOG', infile='infile', outfile='/foo/bar',
-            nice=19, dry_run=False, watch=False, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
-        mock_Popen.assert_called_once_with(
-            'nice -n 19 ./SOG < /tmp/foo.infile > /foo/bar 2>&1', shell=True)
-
-    @patch.object(command_processor, 'os')
+    @patch.object(command_processor, 'prepare_run_cmd')
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'watch_outfile')
-    def test_do_run_watch_calls_watch_outfile(self, mock_watch, mock_Popen,
-                                              mock_os):
+    def test_do_run_watch_calls_watch_outfile(
+            self, mock_watch, mock_Popen, mock_prepare_run_cmd):
         """do_run calls watch_outfile when --watch option is used
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=True, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
+        with self.assertRaises(SystemExit):
+            command_processor.do_run(args)
         mock_watch.assert_called_once()
 
-    @patch.object(command_processor, 'os')
     @patch('sys.stdout', new_callable=six.StringIO)
+    @patch.object(command_processor, 'prepare_run_cmd')
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'watch_outfile', return_value=['foo'])
-    def test_do_run_watch_prints_outfile(self, mock_watch, mock_Popen,
-                                         mock_stdout, mock_os):
+    def test_do_run_watch_prints_outfile(
+            self, mock_watch, mock_Popen, mock_prepare_run_cmd, mock_stdout):
         """do_run prints outfile line when --watch option is used
         """
         args = Mock(
             SOG_exec='./SOG', infile='infile', outfile=None,
             nice=19, dry_run=False, watch=True, legacy_infile=False)
-        mock_os.path.exists.return_value = True
-        mock_os.path.basename = os.path.basename
-        mock_os.path.abspath = os.path.abspath
-        with patch.object(command_processor, 'create_infile',
-                          return_value='/tmp/foo.infile'):
-            with self.assertRaises(SystemExit):
-                command_processor.do_run(args)
+        with self.assertRaises(SystemExit):
+            command_processor.do_run(args)
         self.assertEqual(mock_stdout.getvalue(), 'foo')
-
-    @patch('sys.stdout', new_callable=six.StringIO)
-    def test_run_dry_run_std_msg(self, mock_stdout):
-        """run_dry_run prints intro msg and command that would be run
-        """
-        cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
-        args = Mock(watch=False)
-        command_processor.run_dry_run(cmd, args)
-        self.assertEqual(
-            mock_stdout.getvalue(),
-            'Command that would have been used to run SOG:\n  {0}\n'
-            .format(cmd))
-
-    @patch('sys.stdout', new_callable=six.StringIO)
-    def test_run_dry_run_watch_msg(self, mock_stdout):
-        """run_dry_run w/ watch prints suffix msg about outfile
-        """
-        cmd = 'nice -n 19 ./SOG < infile > ./infile.out'
-        args = Mock(outfile='./infile.out', watch=True, legacy_infile=False)
-        command_processor.run_dry_run(cmd, args)
-        self.assertEqual(
-            mock_stdout.getvalue(),
-            'Command that would have been used to run SOG:\n  {0}\n'
-            'Contents of {1.outfile} would have been shown on screen while '
-            'SOG run\nwas in progress.\n'.format(cmd, args))
