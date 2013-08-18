@@ -85,7 +85,9 @@ class TestRunCommand(unittest.TestCase):
 
     @patch.object(command_processor, 'Popen')
     @patch.object(command_processor, 'prepare_run_cmd')
-    def test_do_run_dry_run(self, mock_prepare_run_cmd, mock_Popen):
+    @patch.object(command_processor, 'run_dry_run')
+    def test_do_run_dry_run(
+            self, mock_run_dry_run, mock_prepare_run_cmd, mock_Popen):
         """do_run calls run_dry_run when --dry-run option is used
         """
         args = Mock(
@@ -93,7 +95,7 @@ class TestRunCommand(unittest.TestCase):
             nice=19, dry_run=True, watch=False, legacy_infile=False)
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
-        mock_prepare_run_cmd.assert_called_once()
+        mock_run_dry_run.assert_called_once()
 
     @patch.object(command_processor, 'prepare_run_cmd')
     @patch.object(command_processor, 'Popen', return_value=Mock(name='proc'))
