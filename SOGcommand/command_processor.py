@@ -36,6 +36,7 @@ from .__version__ import (
     release,
 )
 from . import (
+    batch_processor,
     infile_processor,
     run_processor,
 )
@@ -60,6 +61,7 @@ def build_parser():
     add_version_arg(parser)
     subparsers = parser.add_subparsers(title='sub-commands')
     add_run_subparser(subparsers)
+    add_batch_subparser(subparsers)
     add_read_infile_subparser(subparsers)
     return parser
 
@@ -136,6 +138,31 @@ def do_run(args):
             returncode = proc.poll()
         else:
             returncode = proc.wait()
+    sys.exit(returncode)
+
+
+def add_batch_subparser(subparsers):
+    """Add a sub-parser for the `SOG batch` command.
+    """
+    parser = subparsers.add_parser(
+        'batch', help='Run a collection of SOG jobs in batch mode.')
+    parser.add_argument('batchfile', help='batch job description file')
+    parser.add_argument(
+        '--dry-run', action='store_true',
+        help="Don't do anything, just report what would be done.")
+    parser.set_defaults(func=do_batch)
+
+
+def do_batch(args):
+    """Execute the `SOG batch command with the specified options.
+    """
+    config = batch_processor.read_config(args.batchfile)
+    jobs = batch_processor.build_jobs(config)
+    if args.dry_run:
+        batch_processor.dry_run()
+        returncode = 0
+    else:
+        returncode = 0
     sys.exit(returncode)
 
 

@@ -18,7 +18,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 """
-import six
 import unittest
 try:
     from unittest.mock import (
@@ -30,6 +29,8 @@ except ImportError:
         Mock,
         patch,
     )
+import pytest
+import six
 from .. import command_processor
 
 
@@ -139,3 +140,43 @@ class TestRunCommand(unittest.TestCase):
         with self.assertRaises(SystemExit):
             command_processor.do_run(args)
         self.assertEqual(mock_stdout.getvalue(), 'foo')
+
+
+class TestBatchCommand(object):
+    """Unit tests for the SOG command processor batch command.
+    """
+    @patch.object(command_processor.batch_processor, 'read_config')
+    @patch.object(command_processor.batch_processor, 'build_jobs')
+    @patch.object(command_processor.batch_processor, 'dry_run')
+    def test_do_batch_read_config(
+            self, mock_dry_run, mock_build_jobs, mock_read_config):
+        """do_batch calls batch_processor.read_config
+        """
+        args = Mock(batchfile='foo.yaml')
+        with pytest.raises(SystemExit):
+            command_processor.do_batch(args)
+        mock_read_config.assert_called_once()
+
+    @patch.object(command_processor.batch_processor, 'read_config')
+    @patch.object(command_processor.batch_processor, 'build_jobs')
+    @patch.object(command_processor.batch_processor, 'dry_run')
+    def test_do_batch_build_jobs(
+            self, mock_dry_run, mock_build_jobs, mock_read_config):
+        """do_batch calls batch_processor.build_jobs
+        """
+        args = Mock(batchfile='foo.yaml')
+        with pytest.raises(SystemExit):
+            command_processor.do_batch(args)
+        mock_build_jobs.assert_called_once()
+
+    @patch.object(command_processor.batch_processor, 'read_config')
+    @patch.object(command_processor.batch_processor, 'build_jobs')
+    @patch.object(command_processor.batch_processor, 'dry_run')
+    def test_do_batch_dry_run(
+            self, mock_dry_run, mock_build_jobs, mock_read_config):
+        """do_batch calls batch_processor.dry_run when --dry-run option is used
+        """
+        args = Mock(batchfile='foo.yaml')
+        with pytest.raises(SystemExit):
+            command_processor.do_batch(args)
+        mock_dry_run.assert_called_once()
