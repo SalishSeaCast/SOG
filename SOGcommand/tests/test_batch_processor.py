@@ -76,48 +76,35 @@ class TestReadConfig(object):
 class TestBuildJobs(object):
     """Unit tests for batch_processor.build_jobs function.
     """
-    def _call_build_jobs(self, *args):
-        return batch_processor.build_jobs(*args)
+    def _call_job_or_default(self, *args):
+        return batch_processor._job_or_default(*args)
 
-    def test_default_SOG_executable(self):
-        """job w/o SOG executable gets default one
+    def test_job_or_default_returns_default_value(self):
+        """job without key gets default value
         """
+        job = {'foo': {}}
         config = {
             'SOG_executable': '../SOG-code/SOG',
-            'jobs': [
-                {
-                    'foo': {}
-                }
-            ]
+            'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].SOG_exec == '../SOG-code/SOG'
+        value = self._call_job_or_default('foo', job, config, 'SOG_executable')
+        assert value == '../SOG-code/SOG'
 
-    def test_job_SOG_executable(self):
-        """job w/ SOG executable overrides default
+    def test_jobs_or_default_returns_job_value(self):
+        """value from job with key overrides default
         """
+        job = {'foo': {'SOG_executable': 'SOG'}}
         config = {
             'SOG_executable': '../SOG-code/SOG',
-            'jobs': [
-                {
-                    'foo': {
-                        'SOG_executable': 'SOG',
-                    }
-                }
-            ]
+            'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].SOG_exec == 'SOG'
+        value = self._call_job_or_default('foo', job, config, 'SOG_executable')
+        assert value == 'SOG'
 
-    def test_misssing_SOG_executable(self):
-        """missing SOG executable raises ValueError
+    def test_job_or_default_misssing_key(self):
+        """missing key raises KeyError
         """
-        config = {
-            'jobs': [
-                {
-                    'foo': {}
-                }
-            ]
-        }
+        job = {'foo': {}}
+        config = {'jobs': [job]}
         with pytest.raises(KeyError):
-            self._call_build_jobs(config)
+            self._call_job_or_default('foo', job, config, 'SOG_executable')

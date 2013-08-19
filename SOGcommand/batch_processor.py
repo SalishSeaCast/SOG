@@ -76,16 +76,25 @@ def build_jobs(config):
     jobs = []
     for job in config['jobs']:
         jobname = list(six.iterkeys(job))[0]
-        try:
-            SOG_exec = job[jobname]['SOG_executable']
-        except KeyError:
-            try:
-                SOG_exec = config['SOG_executable']
-            except KeyError:
-                raise KeyError(
-                    'No SOG_executable key found for job: {}'.format(jobname))
-        jobs.append(Args(SOG_exec, 'foo'))
+        SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
+        jobs.append(Args(SOG_exec, 'foo', jobname=jobname))
     return jobs
+
+
+def _job_or_default(jobname, job, config, key):
+    """Return the value for `key` from either the job or the defaults
+    section of the config.
+    The value from the job section take priority.
+    """
+    try:
+        value = job[jobname][key]
+    except KeyError:
+        try:
+            value = config[key]
+        except KeyError:
+            raise KeyError(
+                'No SOG_executable key found for job: {}'.format(jobname))
+    return value
 
 
 def dry_run(config, jobs):
