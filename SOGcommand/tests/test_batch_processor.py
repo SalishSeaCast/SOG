@@ -71,3 +71,53 @@ class TestReadConfig(object):
         with patch.object(batch_processor, 'open', m, create=True):
             config = self._call_read_config('foo')
         assert config['max_concurrent_jobs'] == 16
+
+
+class TestBuildJobs(object):
+    """Unit tests for batch_processor.build_jobs function.
+    """
+    def _call_build_jobs(self, *args):
+        return batch_processor.build_jobs(*args)
+
+    def test_default_SOG_executable(self):
+        """job w/o SOG executable gets default one
+        """
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'jobs': [
+                {
+                    'foo': {}
+                }
+            ]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].SOG_exec == '../SOG-code/SOG'
+
+    def test_job_SOG_executable(self):
+        """job w/ SOG executable overrides default
+        """
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'jobs': [
+                {
+                    'foo': {
+                        'SOG_executable': 'SOG',
+                    }
+                }
+            ]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].SOG_exec == 'SOG'
+
+    def test_misssing_SOG_executable(self):
+        """missing SOG executable raises ValueError
+        """
+        config = {
+            'jobs': [
+                {
+                    'foo': {}
+                }
+            ]
+        }
+        with pytest.raises(KeyError):
+            self._call_build_jobs(config)

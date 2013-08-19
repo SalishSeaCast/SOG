@@ -157,9 +157,10 @@ def do_batch(args):
     """Execute the `SOG batch command with the specified options.
     """
     config = batch_processor.read_config(args.batchfile)
+    import pprint; pprint.pprint(config)
     jobs = batch_processor.build_jobs(config)
     if args.dry_run:
-        batch_processor.dry_run()
+        batch_processor.dry_run(config, jobs)
         returncode = 0
     else:
         returncode = 0

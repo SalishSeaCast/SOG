@@ -27,24 +27,12 @@ limitations under the License.
 """
 from subprocess import Popen
 from . import run_processor
+from .batch_processor import Args
 from .infile_processor import read_infile
 
 
-class Args(object):
-    """Container for SOG command arguments.
-    """
-    def __init__(self, SOG_exec, infile, editfiles, outfile, legacy_infile,
-                 dry_run, nice):
-        self.SOG_exec = SOG_exec
-        self.infile = infile
-        self.editfile = editfiles
-        self.outfile = outfile
-        self.legacy_infile = legacy_infile
-        self.dry_run = dry_run
-        self.nice = nice
-
-
-def run(SOG_exec,
+def run(
+        SOG_exec,
         infile,
         editfiles=[],
         outfile='',

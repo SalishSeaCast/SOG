@@ -32,7 +32,31 @@ from __future__ import (
 )
 import os
 from textwrap import TextWrapper
+import six
 import yaml
+
+
+class Args(object):
+    """Container for SOG command arguments.
+    """
+    def __init__(
+            self,
+            SOG_exec,
+            infile,
+            editfiles=[],
+            outfile='',
+            jobname=None,
+            legacy_infile=False,
+            dry_run=False,
+            nice=19):
+        self.SOG_exec = SOG_exec
+        self.infile = infile
+        self.editfile = editfiles
+        self.outfile = outfile
+        self.jobname = jobname
+        self.legacy_infile = legacy_infile
+        self.dry_run = dry_run
+        self.nice = nice
 
 
 def read_config(batchfile):
@@ -51,7 +75,16 @@ def build_jobs(config):
     """
     jobs = []
     for job in config['jobs']:
-        pass
+        jobname = list(six.iterkeys(job))[0]
+        try:
+            SOG_exec = job[jobname]['SOG_executable']
+        except KeyError:
+            try:
+                SOG_exec = config['SOG_executable']
+            except KeyError:
+                raise KeyError(
+                    'No SOG_executable key found for job: {}'.format(jobname))
+        jobs.append(Args(SOG_exec, 'foo'))
     return jobs
 
 
