@@ -40,7 +40,10 @@ def read_config(batchfile):
         raise IOError('batchfile not found: {}'.format(batchfile))
     else:
         with open(batchfile, 'rt') as f:
-            return yaml.safe_load(f.read())
+            config = yaml.safe_load(f.read())
+            if 'max_concurrent_jobs' not in config:
+                config['max_concurrent_jobs'] = 1
+        return config
 
 
 def build_jobs(config):

@@ -32,15 +32,18 @@ import pytest
 from .. import batch_processor
 
 
-class TestReadConfig():
+class TestReadConfig(object):
     """Unit tests for batch_processor.read_config function.
     """
+    def _call_read_config(self, *args):
+        return batch_processor.read_config(*args)
+
     @patch.object(batch_processor.os.path, 'exists', return_value=False)
     def test_batchfile_not_found(self, mock_os):
         """IOError raised if batchfile doesn't exist
         """
         with pytest.raises(IOError):
-            batch_processor.read_config('foo')
+            self._call_read_config('foo')
 
     @patch.object(batch_processor.os.path, 'exists', return_value=True)
     def test_returns_config_dict(self, mock_os):
@@ -48,5 +51,23 @@ class TestReadConfig():
         """
         m = mock_open(read_data='foo: bar')
         with patch.object(batch_processor, 'open', m, create=True):
-            config = batch_processor.read_config('foo')
-        assert config == {'foo': 'bar'}
+            config = self._call_read_config('foo')
+        assert isinstance(config, dict)
+
+    @patch.object(batch_processor.os.path, 'exists', return_value=True)
+    def test_max_concurrent_jobs_default(self, mock_os):
+        """max_concurrent_jobs defaults to 1
+        """
+        m = mock_open(read_data='foo: bar')
+        with patch.object(batch_processor, 'open', m, create=True):
+            config = self._call_read_config('foo')
+        assert config['max_concurrent_jobs'] == 1
+
+    @patch.object(batch_processor.os.path, 'exists', return_value=True)
+    def test_max_concurrent_jobs_value(self, mock_os):
+        """max_concurrent_jobs value is read from file
+        """
+        m = mock_open(read_data='max_concurrent_jobs: 16')
+        with patch.object(batch_processor, 'open', m, create=True):
+            config = self._call_read_config('foo')
+        assert config['max_concurrent_jobs'] == 16
