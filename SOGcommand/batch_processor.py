@@ -31,6 +31,7 @@ from __future__ import (
     unicode_literals,
 )
 import os
+from textwrap import TextWrapper
 import yaml
 
 
@@ -45,10 +46,19 @@ def read_config(batchfile):
 def build_jobs(config):
     """Build list of jobs to run as a batch from config dict.
     """
-    pass
+    jobs = []
+    for job in config['jobs']:
+        pass
+    return jobs
 
 
-def dry_run():
+def dry_run(config, jobs):
     """Dry-run handler for `SOG batch` command.
     """
-    pass
+    wrapper = TextWrapper()
+    print(wrapper.fill('The following SOG jobs would have been run:'))
+    for job in jobs:
+        print('  {}'.format(job))
+    print(wrapper.fill(
+        '{[max_concurrent_jobs]} job(s) would have been run concurrently.'
+        .format(config)))
