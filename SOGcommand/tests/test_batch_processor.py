@@ -74,10 +74,26 @@ class TestReadConfig(object):
 
 
 class TestBuildJobs(object):
-    """Unit tests for batch_processor.build_jobs function.
+    """Unit tests for batch_processor.build_jobs and its _job_or_default
+    helper functions.
     """
-    def _call_job_or_default(self, *args):
-        return batch_processor._job_or_default(*args)
+    def _call_build_jobs(self, *args):
+        return batch_processor.build_jobs(*args)
+
+    def _call_job_or_default(self, *args, **kwargs):
+        return batch_processor._job_or_default(*args, **kwargs)
+
+    def test_build_jobs_sets_jobname(self):
+        """job name is set to job's key in config jobs list
+        """
+        job = {'foo': {}}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].jobname == 'foo'
 
     def test_job_or_default_returns_default_value(self):
         """job without key gets default value
@@ -85,6 +101,7 @@ class TestBuildJobs(object):
         job = {'foo': {}}
         config = {
             'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
         value = self._call_job_or_default('foo', job, config, 'SOG_executable')
@@ -96,13 +113,23 @@ class TestBuildJobs(object):
         job = {'foo': {'SOG_executable': 'SOG'}}
         config = {
             'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
         value = self._call_job_or_default('foo', job, config, 'SOG_executable')
         assert value == 'SOG'
 
-    def test_job_or_default_misssing_key(self):
-        """missing key raises KeyError
+    def test_job_or_default_misssing_key_w_default(self):
+        """missing key with default returns default value
+        """
+        job = {'foo': {}}
+        config = {'jobs': [job]}
+        value = self._call_job_or_default(
+            'foo', job, config, 'nice', default=19)
+        assert value == 19
+
+    def test_job_or_default_misssing_key_wo_default(self):
+        """missing key without default raises KeyError
         """
         job = {'foo': {}}
         config = {'jobs': [job]}

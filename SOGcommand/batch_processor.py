@@ -78,12 +78,12 @@ def build_jobs(config):
         jobname = list(six.iterkeys(job))[0]
         SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
         infile = _job_or_default(jobname, job, config, 'base_infile')
-        nice = _job_or_default(jobname, job, config, 'nice')
+        nice = _job_or_default(jobname, job, config, 'nice', default=19)
         jobs.append(Args(SOG_exec, infile, jobname=jobname, nice=nice))
     return jobs
 
 
-def _job_or_default(jobname, job, config, key):
+def _job_or_default(jobname, job, config, key, default=None):
     """Return the value for `key` from either the job or the defaults
     section of the config.
     The value from the job section take priority.
@@ -94,8 +94,11 @@ def _job_or_default(jobname, job, config, key):
         try:
             value = config[key]
         except KeyError:
-            raise KeyError(
-                'No SOG_executable key found for job: {}'.format(jobname))
+            if default is not None:
+                value = default
+            else:
+                raise KeyError(
+                    'No {0} key found for job: {1}'.format(key, jobname))
     return value
 
 
