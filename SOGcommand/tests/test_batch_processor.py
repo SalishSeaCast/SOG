@@ -20,15 +20,18 @@ limitations under the License.
 """
 try:
     from unittest.mock import (
+        Mock,
         mock_open,
         patch,
     )
 except ImportError:
     from mock import (
+        Mock,
         mock_open,
         patch,
     )
 import pytest
+import six
 from .. import batch_processor
 
 
@@ -83,7 +86,7 @@ class TestBuildJobs(object):
     def _call_job_or_default(self, *args, **kwargs):
         return batch_processor._job_or_default(*args, **kwargs)
 
-    def test_build_jobs_sets_jobname(self):
+    def test_jobname_set(self):
         """job name is set to job's key in config jobs list
         """
         job = {'foo': {}}
@@ -94,6 +97,47 @@ class TestBuildJobs(object):
         }
         jobs = self._call_build_jobs(config)
         assert jobs[0].jobname == 'foo'
+
+    def test_edit_files_list_initialized_empty(self):
+        """edit files list initialized w/ empty list if not in defaults
+        """
+        job = {'foo': {}}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].editfile == []
+
+    def test_edit_files_list_initialized_w_default(self):
+        """edit files list initialized w/ list from defaults
+        """
+        job = {'foo': {}}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'edit_files': ['R3base.yaml'],
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].editfile == ['R3base.yaml']
+
+    def test_job_edit_files_appended_to_list(self):
+        """edit files list from job are appended to list from defaults
+        """
+        job = {
+            'foo': {
+                'edit_files': ['R3no_remin.yaml'],
+            }}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'edit_files': ['R3base.yaml'],
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].editfile == ['R3base.yaml', 'R3no_remin.yaml']
 
     def test_job_or_default_returns_default_value(self):
         """job without key gets default value
@@ -135,3 +179,32 @@ class TestBuildJobs(object):
         config = {'jobs': [job]}
         with pytest.raises(KeyError):
             self._call_job_or_default('foo', job, config, 'SOG_executable')
+
+
+class TestDryRun(object):
+    """Unit tests for batch_processor.dry_run function.
+    """
+    @patch('sys.stdout', new_callable=six.StringIO)
+    def test_dry_run_no_edit_files(self, mock_stdout):
+        """dry run command for job without edit files has no -e options
+        """
+        jobs = [
+            Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
+                 editfile=[], nice=19)
+        ]
+        batch_processor.dry_run(jobs, 1)
+        expected = '  foo: SOG run SOG infile.yaml --nice 19'
+        assert expected in mock_stdout.getvalue()
+
+    @patch('sys.stdout', new_callable=six.StringIO)
+    def test_dry_run_edit_files(self, mock_stdout):
+        """dry run command for job with edit files has -e option
+        """
+        jobs = [
+            Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
+                 editfile=['R3base.yaml'], nice=19)
+        ]
+        batch_processor.dry_run(jobs, 1)
+        expected = '  foo: SOG run SOG infile.yaml -e R3base.yaml --nice 19'
+        assert expected in mock_stdout.getvalue()
+

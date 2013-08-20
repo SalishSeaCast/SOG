@@ -74,12 +74,24 @@ def build_jobs(config):
     """Build list of jobs to run as a batch from config dict.
     """
     jobs = []
+    try:
+        default_editfiles = config['edit_files']
+    except KeyError:
+        default_editfiles = []
     for job in config['jobs']:
         jobname = list(six.iterkeys(job))[0]
         SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
         infile = _job_or_default(jobname, job, config, 'base_infile')
+        try:
+            job_editfiles = job[jobname]['edit_files']
+        except KeyError:
+            job_editfiles = []
         nice = _job_or_default(jobname, job, config, 'nice', default=19)
-        jobs.append(Args(SOG_exec, infile, jobname=jobname, nice=nice))
+        jobs.append(Args(
+            SOG_exec, infile,
+            editfiles=default_editfiles + job_editfiles,
+            jobname=jobname,
+            nice=nice))
     return jobs
 
 
@@ -102,16 +114,18 @@ def _job_or_default(jobname, job, config, key, default=None):
     return value
 
 
-def dry_run(config, jobs):
+def dry_run(jobs, max_concurrent_jobs):
     """Dry-run handler for `SOG batch` command.
     """
     wrapper = TextWrapper()
     print(wrapper.fill('The following SOG jobs would have been run:'))
-    print('  job name: command')
+    print('  job name: command\n')
     for job in jobs:
-        print(
-            '  {0.jobname}: SOG run {0.SOG_exec} {0.infile} --nice {0.nice}'
-            .format(job))
+        cmd = '  {0.jobname}: SOG run {0.SOG_exec} {0.infile}'.format(job)
+        for edit_file in job.editfile:
+            cmd = ' '.join((cmd, '-e {}'.format(edit_file)))
+        cmd = ' '.join((cmd, '--nice {0.nice}\n'.format(job)))
+        print(cmd)
     print(wrapper.fill(
-        '{[max_concurrent_jobs]} job(s) would have been run concurrently.'
-        .format(config)))
+        '{} job(s) would have been run concurrently.'
+        .format(max_concurrent_jobs)))
