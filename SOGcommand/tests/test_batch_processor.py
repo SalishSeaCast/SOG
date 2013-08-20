@@ -86,6 +86,12 @@ class TestBuildJobs(object):
     def _call_job_or_default(self, *args, **kwargs):
         return batch_processor._job_or_default(*args, **kwargs)
 
+    def _call_legacy_infile_default_rules(self, *args):
+        return batch_processor._legacy_infile_default_rules(*args)
+
+    def _call_legacy_infile_job_rules(self, *args):
+        return batch_processor._legacy_infile_job_rules(*args)
+
     def test_jobname_set(self):
         """job name is set to job's key in config jobs list
         """
@@ -227,6 +233,83 @@ class TestBuildJobs(object):
         with pytest.raises(KeyError):
             self._call_job_or_default('foo', job, config, 'SOG_executable')
 
+    def test_legacy_infile_default_false(self):
+        """top level legacy_infile defaults to False
+        """
+        job = {
+            'foo': {}
+        }
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '/infile.yaml',
+            'jobs': [job]
+        }
+        legacy_infile = self._call_legacy_infile_default_rules(config)
+        assert legacy_infile is False
+
+    def test_legacy_infile_default_precludes_default_base_infile(self):
+        """default base_infile with legacy_infile==True raises KeyError
+        """
+        job = {
+            'foo': {}
+        }
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '/infile.yaml',
+            'legacy_infile': True,
+            'jobs': [job]
+        }
+        with pytest.raises(KeyError):
+            self._call_legacy_infile_default_rules(config)
+
+    def test_legacy_infile_default_precludes_default_edit_files(self):
+        """default edit_files with legacy_infile==True raises KeyError
+        """
+        job = {
+            'foo': {}
+        }
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'edit_files': ['R3base.yaml'],
+            'legacy_infile': True,
+            'jobs': [job]
+        }
+        with pytest.raises(KeyError):
+            self._call_legacy_infile_default_rules(config)
+
+    def test_legacy_infile_job_default_false(self):
+        """job level legacy_infile defaults to False
+        """
+        job = {
+            'foo': {}
+        }
+        legacy_infile = self._call_legacy_infile_job_rules('foo', job)
+        assert legacy_infile is False
+
+    def test_legacy_infile_job_base_infile_reqd(self):
+        """job level legacy_infile==True means job base_infile is required
+        """
+        job = {
+            'foo': {
+                'legacy_infile': True,
+            }
+        }
+        with pytest.raises(KeyError):
+            self._call_legacy_infile_job_rules('foo', job)
+
+    def test_legacy_infile_job_precludes_edit_files(self):
+        """job level edit_files with legacy_infile==True raises KeyError
+        """
+        job = {
+            'foo': {
+                'legacy_infile': True,
+                'base_infile': 'foo',
+                'edit_files': ['bar']
+            }
+        }
+        with pytest.raises(KeyError):
+            self._call_legacy_infile_job_rules('foo', job)
+
 
 class TestDryRun(object):
     """Unit tests for batch_processor.dry_run function.
@@ -237,7 +320,8 @@ class TestDryRun(object):
         """
         jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
-                 editfile=[], outfile='infile.yaml.out', nice=19)
+                 editfile=[], outfile='infile.yaml.out', legacy_infile=False,
+                 nice=19)
         ]
         batch_processor.dry_run(jobs, 1)
         expected = (
@@ -250,7 +334,8 @@ class TestDryRun(object):
         """
         jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
-                 editfile=['R3base.yaml'], outfile='R3base.yaml.out', nice=19)
+                 editfile=['R3base.yaml'], outfile='R3base.yaml.out',
+                 legacy_infile=False, nice=19)
         ]
         batch_processor.dry_run(jobs, 1)
         expected = (
@@ -258,3 +343,17 @@ class TestDryRun(object):
             '--nice 19')
         assert expected in mock_stdout.getvalue()
 
+    @patch('sys.stdout', new_callable=six.StringIO)
+    def test_dry_run_legacy_infile(self, mock_stdout):
+        """legacy_infile option shown when True
+        """
+        jobs = [
+            Mock(jobname='foo', SOG_exec='SOG', infile='infile',
+                 editfile=[], outfile='infile.out', legacy_infile=True,
+                 nice=19)
+        ]
+        batch_processor.dry_run(jobs, 1)
+        expected = (
+            '  foo: SOG run SOG infile -o infile.out --legacy_infile '
+            '--nice 19')
+        assert expected in mock_stdout.getvalue()

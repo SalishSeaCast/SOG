@@ -78,6 +78,7 @@ def build_jobs(config):
         default_editfiles = config['edit_files']
     except KeyError:
         default_editfiles = []
+    default_legacy_infile = _legacy_infile_default_rules(config)
     for job in config['jobs']:
         jobname = list(six.iterkeys(job))[0]
         SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
@@ -93,12 +94,15 @@ def build_jobs(config):
                 outfile = '.'.join((job_editfiles[-1], 'out'))
             else:
                 outfile = '.'.join((infile, 'out'))
+        legacy_infile = (
+            default_legacy_infile or _legacy_infile_job_rules(jobname, job))
         nice = _job_or_default(jobname, job, config, 'nice', default=19)
         jobs.append(Args(
             SOG_exec, infile,
             editfiles=default_editfiles + job_editfiles,
             outfile=outfile,
             jobname=jobname,
+            legacy_infile=legacy_infile,
             nice=nice))
     return jobs
 
@@ -122,6 +126,42 @@ def _job_or_default(jobname, job, config, key, default=None):
     return value
 
 
+def _legacy_infile_default_rules(config):
+    """Return legacy_infile value and enforce rules for its use at the top
+    level of the batch config file.
+    """
+    try:
+        legacy_infile = config['legacy_infile']
+    except KeyError:
+        legacy_infile = False
+    if legacy_infile and 'base_infile' in config:
+        raise KeyError(
+            'Default base_infile not allowed with legacy_infile = True')
+    if legacy_infile and 'edit_files' in config:
+        raise KeyError(
+            'Default edit_files not allowed with legacy_infile = True')
+    return legacy_infile
+
+
+def _legacy_infile_job_rules(jobname, job):
+    """Return legacy_infile value and enforce rules for its use at the job
+    level of the batch config file.
+    """
+    try:
+        legacy_infile = job[jobname]['legacy_infile']
+    except KeyError:
+        legacy_infile = False
+    if legacy_infile and 'base_infile' not in job[jobname]:
+        raise KeyError(
+            '{} job with legacy_infile = True requires base_infile'
+            .format(jobname))
+    if legacy_infile and 'edit_files' in job[jobname]:
+        raise KeyError(
+            '{} job with legacy_infile = True cannot have edit_files'
+            .format(jobname))
+    return legacy_infile
+
+
 def dry_run(jobs, max_concurrent_jobs):
     """Dry-run handler for `SOG batch` command.
     """
@@ -132,7 +172,10 @@ def dry_run(jobs, max_concurrent_jobs):
         cmd = '  {0.jobname}: SOG run {0.SOG_exec} {0.infile}'.format(job)
         for edit_file in job.editfile:
             cmd = ' '.join((cmd, '-e {}'.format(edit_file)))
-        cmd = ' '.join((cmd, '-o {0.outfile} --nice {0.nice}\n'.format(job)))
+        cmd = ' '.join((cmd, '-o {0.outfile}'.format(job)))
+        if job.legacy_infile:
+            cmd = ' '.join((cmd, '--legacy_infile'))
+        cmd = ' '.join((cmd, '--nice {0.nice}\n'.format(job)))
         print(cmd)
     print(wrapper.fill(
         '{} job(s) would have been run concurrently.'

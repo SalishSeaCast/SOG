@@ -376,11 +376,15 @@ The keys that may be used are:
     When :kbd:`False` they are handled as YAML infiles.
     If :kbd:`legacy_infile` is exluded from the top level of the file its
     value defaults to :kbd:`False`.
-    If the value is :kbd:`True`,
-    the top level :kbd:`base_infile` and :kbd:`edit_infiles` keys have no
+    If the value is :kbd:`True` in the top level,
+    the default :kbd:`base_infile` and :kbd:`edit_infiles` keys have no
     meaning and therefore must be excluded,
     furthermore,
     a :kbd:`base_infile` key must be included for each job.
+    If the value is :kbd:`True` in an individual job description,
+    the :kbd:`edit_files` key for that job is meaningless and must be excluded,
+    furthermore,
+    a :kbd:`base_infile` key must be included for that job.
     This is a seldom used option that is included for backward compatibility.
 
 * :kbd:`nice`:
