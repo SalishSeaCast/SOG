@@ -423,8 +423,11 @@ those described above:
     The path to the outfile may be specified as either a relative or an
     absolute path.
     Exclusion of the :kbd:`outfile` key-value pair results in the :kbd:`stdout`
-    output of the job being stored in a file whose name if the last file in the
+    output of the job being stored in a file whose name is the last file in the
     :kbd:`edit_files` list for the job with :kbd:`.out` appended.
+    If there are no YAML infile edit files,
+    the output will be stored in a files whose name is the :kbd:`base_infile`
+    with :kbd:`.out` appended.
 
 
 :program:`SOG read_infile` Command

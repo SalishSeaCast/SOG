@@ -139,6 +139,53 @@ class TestBuildJobs(object):
         jobs = self._call_build_jobs(config)
         assert jobs[0].editfile == ['R3base.yaml', 'R3no_remin.yaml']
 
+    def test_outfile_from_config(self):
+        """outfile name from job config
+        """
+        job = {
+            'foo': {
+                'edit_files': ['R3no_remin.yaml'],
+                'outfile': '/foo/bar.yaml.out'
+            }}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'edit_files': ['R3base.yaml'],
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].outfile == '/foo/bar.yaml.out'
+
+    def test_outfile_from_last_edit_file(self):
+        """outfile is name of last edit file with .out appended
+        """
+        job = {
+            'foo': {
+                'edit_files': ['/foo/bar.yaml'],
+            }}
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '../SOG-code/infile.yaml',
+            'edit_files': ['R3base.yaml.out'],
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].outfile == '/foo/bar.yaml.out'
+
+    def test_outfile_from_base_infile(self):
+        """outfile is base infile w/ .out appended if no edit files
+        """
+        job = {
+            'foo': {}
+        }
+        config = {
+            'SOG_executable': '../SOG-code/SOG',
+            'base_infile': '/infile.yaml',
+            'jobs': [job]
+        }
+        jobs = self._call_build_jobs(config)
+        assert jobs[0].outfile == '/infile.yaml.out'
+
     def test_job_or_default_returns_default_value(self):
         """job without key gets default value
         """
@@ -190,10 +237,11 @@ class TestDryRun(object):
         """
         jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
-                 editfile=[], nice=19)
+                 editfile=[], outfile='infile.yaml.out', nice=19)
         ]
         batch_processor.dry_run(jobs, 1)
-        expected = '  foo: SOG run SOG infile.yaml --nice 19'
+        expected = (
+            '  foo: SOG run SOG infile.yaml -o infile.yaml.out --nice 19')
         assert expected in mock_stdout.getvalue()
 
     @patch('sys.stdout', new_callable=six.StringIO)
@@ -202,9 +250,11 @@ class TestDryRun(object):
         """
         jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
-                 editfile=['R3base.yaml'], nice=19)
+                 editfile=['R3base.yaml'], outfile='R3base.yaml.out', nice=19)
         ]
         batch_processor.dry_run(jobs, 1)
-        expected = '  foo: SOG run SOG infile.yaml -e R3base.yaml --nice 19'
+        expected = (
+            '  foo: SOG run SOG infile.yaml -e R3base.yaml -o R3base.yaml.out '
+            '--nice 19')
         assert expected in mock_stdout.getvalue()
 

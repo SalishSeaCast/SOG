@@ -86,10 +86,18 @@ def build_jobs(config):
             job_editfiles = job[jobname]['edit_files']
         except KeyError:
             job_editfiles = []
+        try:
+            outfile = job[jobname]['outfile']
+        except KeyError:
+            if job_editfiles:
+                outfile = '.'.join((job_editfiles[-1], 'out'))
+            else:
+                outfile = '.'.join((infile, 'out'))
         nice = _job_or_default(jobname, job, config, 'nice', default=19)
         jobs.append(Args(
             SOG_exec, infile,
             editfiles=default_editfiles + job_editfiles,
+            outfile=outfile,
             jobname=jobname,
             nice=nice))
     return jobs
@@ -124,7 +132,7 @@ def dry_run(jobs, max_concurrent_jobs):
         cmd = '  {0.jobname}: SOG run {0.SOG_exec} {0.infile}'.format(job)
         for edit_file in job.editfile:
             cmd = ' '.join((cmd, '-e {}'.format(edit_file)))
-        cmd = ' '.join((cmd, '--nice {0.nice}\n'.format(job)))
+        cmd = ' '.join((cmd, '-o {0.outfile} --nice {0.nice}\n'.format(job)))
         print(cmd)
     print(wrapper.fill(
         '{} job(s) would have been run concurrently.'
