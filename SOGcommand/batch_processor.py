@@ -102,8 +102,9 @@ def dry_run(config, jobs):
     """
     wrapper = TextWrapper()
     print(wrapper.fill('The following SOG jobs would have been run:'))
+    print('  job name: command')
     for job in jobs:
-        print('  {}'.format(job))
+        print('  {0.jobname}: SOG run {0.SOG_exec}'.format(job))
     print(wrapper.fill(
         '{[max_concurrent_jobs]} job(s) would have been run concurrently.'
         .format(config)))
