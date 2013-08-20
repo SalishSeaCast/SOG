@@ -77,7 +77,9 @@ def build_jobs(config):
     for job in config['jobs']:
         jobname = list(six.iterkeys(job))[0]
         SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
-        jobs.append(Args(SOG_exec, 'foo', jobname=jobname))
+        infile = _job_or_default(jobname, job, config, 'base_infile')
+        nice = _job_or_default(jobname, job, config, 'nice')
+        jobs.append(Args(SOG_exec, infile, jobname=jobname, nice=nice))
     return jobs
 
 
@@ -104,7 +106,9 @@ def dry_run(config, jobs):
     print(wrapper.fill('The following SOG jobs would have been run:'))
     print('  job name: command')
     for job in jobs:
-        print('  {0.jobname}: SOG run {0.SOG_exec}'.format(job))
+        print(
+            '  {0.jobname}: SOG run {0.SOG_exec} {0.infile} --nice {0.nice}'
+            .format(job))
     print(wrapper.fill(
         '{[max_concurrent_jobs]} job(s) would have been run concurrently.'
         .format(config)))
