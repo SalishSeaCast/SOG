@@ -275,6 +275,23 @@ use:
    $ cd SOG-test
    $ SOG batch my_SOG_jobs.yaml
 
+:program:`SOG batch` has some options that let you change how it acts:
+
+.. code-block:: none
+
+   $ SOG batch --help
+
+   usage: SOG batch [-h] [--dry-run] [--debug] batchfile
+
+   positional arguments:
+     batchfile   batch job description file
+
+   optional arguments:
+     -h, --help  show this help message and exit
+     --dry-run   Don't do anything, just report what would be done.
+     --debug     Show extra information about the building of the job commands
+                 and their execution.
+
 
 Batch Job Description File Structure
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -150,6 +150,10 @@ def add_batch_subparser(subparsers):
     parser.add_argument(
         '--dry-run', action='store_true',
         help="Don't do anything, just report what would be done.")
+    parser.add_argument(
+        '--debug', action='store_true',
+        help='Show extra information about the building of the job commands '
+             'and their execution.')
     parser.set_defaults(func=do_batch)
 
 
@@ -157,7 +161,7 @@ def do_batch(args):
     """Execute the `SOG batch command with the specified options.
     """
     config = batch_processor.read_config(args.batchfile)
-    jobs = batch_processor.build_jobs(config)
+    jobs = batch_processor.build_jobs(config, args.debug)
     if args.dry_run:
         batch_processor.dry_run(jobs, config['max_concurrent_jobs'])
         returncode = 0

@@ -30,10 +30,21 @@ from __future__ import (
     print_function,
     unicode_literals,
 )
+import logging
 import os
+import sys
 from textwrap import TextWrapper
 import six
 import yaml
+
+
+log = logging.getLogger('batch')
+log.setLevel(logging.INFO)
+console = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter(
+    '%(asctime)s [%(levelname)-5s] %(message)s', '%Y-%m-%d %H:%M:%S')
+console.setFormatter(formatter)
+log.addHandler(console)
 
 
 class Args(object):
@@ -63,30 +74,43 @@ def read_config(batchfile):
     if not os.path.exists(batchfile):
         raise IOError('batchfile not found: {}'.format(batchfile))
     else:
+        log.info('building jobs described in {}'.format(batchfile))
         with open(batchfile, 'rt') as f:
             config = yaml.safe_load(f.read())
             if 'max_concurrent_jobs' not in config:
                 config['max_concurrent_jobs'] = 1
+            log.info(
+                'max concurrent jobs: {[max_concurrent_jobs]}'
+                .format(config))
         return config
 
 
-def build_jobs(config):
+def build_jobs(config, debug=False):
     """Build list of jobs to run as a batch from config dict.
     """
     jobs = []
+    if debug:
+        log.setLevel(logging.DEBUG)
     try:
         default_editfiles = config['edit_files']
     except KeyError:
         default_editfiles = []
+    log.debug(
+        'YAML edit files that will be used in all jobs (in order): {}'
+        .format(default_editfiles))
     default_legacy_infile = _legacy_infile_default_rules(config)
     for job in config['jobs']:
         jobname = list(six.iterkeys(job))[0]
+        log.info('building command for job: {}'.format(jobname))
         SOG_exec = _job_or_default(jobname, job, config, 'SOG_executable')
         infile = _job_or_default(jobname, job, config, 'base_infile')
         try:
             job_editfiles = job[jobname]['edit_files']
         except KeyError:
             job_editfiles = []
+        log.debug(
+            '{}: YAML edit files (in order): {}'
+            .format(jobname, default_editfiles + job_editfiles))
         try:
             outfile = job[jobname]['outfile']
         except KeyError:
@@ -94,8 +118,10 @@ def build_jobs(config):
                 outfile = '.'.join((job_editfiles[-1], 'out'))
             else:
                 outfile = '.'.join((infile, 'out'))
+        log.debug('{}: stdout stored in: {}'.format(jobname, outfile))
         legacy_infile = (
             default_legacy_infile or _legacy_infile_job_rules(jobname, job))
+        log.debug('{}: legacy infile: {}'.format(jobname, legacy_infile))
         nice = _job_or_default(jobname, job, config, 'nice', default=19)
         jobs.append(Args(
             SOG_exec, infile,
@@ -114,12 +140,20 @@ def _job_or_default(jobname, job, config, key, default=None):
     """
     try:
         value = job[jobname][key]
+        log.debug(
+            '{}: {} from job description: {}'.format(jobname, key, value))
     except KeyError:
         try:
             value = config[key]
+            log.debug(
+                '{}: {} from top level defaults: {}'
+                .format(jobname, key, value))
         except KeyError:
             if default is not None:
                 value = default
+                log.debug(
+                    '{}: {} from hard-coded default: {}'
+                    .format(jobname, key, value))
             else:
                 raise KeyError(
                     'No {0} key found for job: {1}'.format(key, jobname))
