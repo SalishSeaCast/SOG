@@ -155,7 +155,7 @@ class TestBatchCommand(object):
         args = Mock(batchfile='foo.yaml')
         with pytest.raises(SystemExit):
             command_processor.do_batch(args)
-        mock_read_config.assert_called_once()
+        assert mock_read_config.called
 
     @patch.object(command_processor.batch_processor, 'read_config')
     @patch.object(command_processor.batch_processor, 'build_jobs')
@@ -167,7 +167,7 @@ class TestBatchCommand(object):
         args = Mock(batchfile='foo.yaml')
         with pytest.raises(SystemExit):
             command_processor.do_batch(args)
-        mock_build_jobs.assert_called_once()
+        assert mock_build_jobs.called
 
     @patch.object(command_processor.batch_processor, 'read_config')
     @patch.object(command_processor.batch_processor, 'build_jobs')
@@ -176,7 +176,7 @@ class TestBatchCommand(object):
             self, mock_dry_run, mock_build_jobs, mock_read_config):
         """do_batch calls batch_processor.dry_run when --dry-run option is used
         """
-        args = Mock(batchfile='foo.yaml')
+        args = Mock(batchfile='foo.yaml', dry_run=True)
         with pytest.raises(SystemExit):
             command_processor.do_batch(args)
-        mock_dry_run.assert_called_once()
+        assert mock_dry_run.called
