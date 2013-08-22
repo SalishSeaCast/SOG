@@ -35,6 +35,76 @@ import six
 from .. import batch_processor
 
 
+class TestJob(object):
+    """Unit tests for SOG Job object.
+    """
+    def _get_target_class(self):
+        from ..batch_processor import Job
+        return Job
+
+    def _make_one(self, *args, **kwargs):
+        return self._get_target_class()(*args, **kwargs)
+
+    def test_job_defaults(self):
+        """Job instance has expected default attribute values
+        """
+        job = self._make_one(
+            'jobname', 'SOG executable', 'infile', 'edit_files', 'outfile')
+        assert job.nice is 19
+        assert job.legacy_infile is False
+        assert job.dry_run is False
+        assert job.process is None
+        assert job.pid is None
+        assert job.returncode is None
+
+    @patch('SOGcommand.batch_processor.run_processor.prepare')
+    @patch('SOGcommand.batch_processor.subprocess.Popen')
+    def test_job_start_prepares_command(self, mock_popen, mock_prepare):
+        """job.start calls run_processor.prepare with job instance as arg
+        """
+        job = self._make_one(
+            'jobname', 'SOG executable', 'infile', 'edit_files', 'outfile')
+        job.start()
+        mock_prepare.assert_called_once_with(job)
+
+    @patch('SOGcommand.batch_processor.run_processor.prepare')
+    @patch('SOGcommand.batch_processor.subprocess.Popen')
+    def test_job_start_spawns_subprocess(self, mock_popen, mock_prepare):
+        """job.start spawns subprocess to run SOG job & caches process info
+        """
+        mock_prepare.return_value = 'cmd'
+        mock_process = Mock('process', pid=12345)
+        mock_popen.return_value = mock_process
+        job = self._make_one(
+            'jobname', 'SOG executable', 'infile', 'edit_files', 'outfile')
+        job.start()
+        mock_popen.assert_called_once_with('cmd', shell=True)
+        assert job.process == mock_process
+        assert job.pid == mock_process.pid
+
+    def test_job_not_done(self):
+        """job.done polls job, caches returncode & returns False when not done
+        """
+        job = self._make_one(
+            'jobname', 'SOG executable', 'infile', 'edit_files', 'outfile')
+        job.process = Mock('process', poll=Mock(return_value=None))
+        result = job.done
+        assert job.process.poll.called
+        assert result is False
+        assert job.returncode is None
+
+    def test_job_done(self):
+        """job.done polls job, caches returncode & returns True when job done
+        """
+        job = self._make_one(
+            'jobname', 'SOG executable', 'infile', 'edit_files', 'outfile')
+        job.process = Mock('process', poll=Mock(return_value=0))
+        result = job.done
+        assert job.process.poll.called
+        assert result is True
+        assert job.returncode is 0
+
+
 class TestReadConfig(object):
     """Unit tests for batch_processor.read_config function.
     """

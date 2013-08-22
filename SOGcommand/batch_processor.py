@@ -32,10 +32,12 @@ from __future__ import (
 )
 import logging
 import os
+import subprocess
 import sys
 from textwrap import TextWrapper
 import six
 import yaml
+from . import run_processor
 
 
 log = logging.getLogger('batch')
@@ -47,27 +49,74 @@ console.setFormatter(formatter)
 log.addHandler(console)
 
 
-class Args(object):
-    """Container for SOG command arguments.
+class Job(object):
+    """SOG job object.
+
+    :arg jobname: Descriptive job name used for logging.
+    :type: string
+
+    :arg SOG_exec: Path/filename of the SOG executable.
+    :type SOG_exec: str
+
+    :arg infile: Path/filename of the infile to use.
+    :type infile: str
+
+    :arg editfiles: Path/filename of YAML infile(s) to apply to the infile
+                    as edits.
+    :type editfiles: list
+
+    :arg outfile: Path/filename of the file to receive stdout from the run.
+    :type outfile: str
+
+    :arg nice: Priority to use for the run.
+               Defaults to :kbd:`19`.
+    :type nice: int
+
+    :arg legacy_infile: infile is a legacy, Fortran-style infile.
+                        Defaults to :kbd:`False`.
+    :type legacy_infile: boolean
     """
-    def __init__(
-            self,
-            SOG_exec,
-            infile,
-            editfiles=[],
-            outfile='',
-            jobname=None,
-            legacy_infile=False,
-            dry_run=False,
-            nice=19):
+    def __init__(self, jobname, SOG_exec, infile, editfiles, outfile,
+                 nice=19, legacy_infile=False):
+        self.jobname = jobname
         self.SOG_exec = SOG_exec
         self.infile = infile
         self.editfile = editfiles
         self.outfile = outfile
-        self.jobname = jobname
-        self.legacy_infile = legacy_infile
-        self.dry_run = dry_run
         self.nice = nice
+        self.legacy_infile = legacy_infile
+        self.dry_run = False
+        self.process = None
+        self.pid = None
+        self.returncode = None
+
+    def start(self):
+        """Start the job in a subprocess.
+
+        Cache the subprocess object and its process id as job attributes.
+        """
+        cmd = run_processor.prepare(self)
+        self.process = subprocess.Popen(cmd, shell=True)
+        self.pid = self.process.pid
+        log.info('{0.jobname}: started job as process {0.pid}'.format(self))
+
+    @property
+    def done(self):
+        """Return a boolean indicating whether or not the job has finished.
+
+        Cache the subprocess return code as a job attribute.
+
+        :returns: Done
+        :rtype: boolean
+        """
+        finished = False
+        self.returncode = self.process.poll()
+        if self.returncode is not None:
+            finished = True
+            log.info(
+                '{0.jobname}: finished job with return code {0.returncode}'
+                .format(self))
+        return finished
 
 
 def read_config(batchfile):
@@ -123,13 +172,13 @@ def build_jobs(config, debug=False):
             default_legacy_infile or _legacy_infile_job_rules(jobname, job))
         log.debug('{}: legacy infile: {}'.format(jobname, legacy_infile))
         nice = _job_or_default(jobname, job, config, 'nice', default=19)
-        jobs.append(Args(
-            SOG_exec, infile,
+        jobs.append(Job(
+            jobname, SOG_exec, infile,
             editfiles=default_editfiles + job_editfiles,
             outfile=outfile,
-            jobname=jobname,
+            nice=nice,
             legacy_infile=legacy_infile,
-            nice=nice))
+        ))
     return jobs
 
 
