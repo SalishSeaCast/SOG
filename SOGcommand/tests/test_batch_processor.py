@@ -105,271 +105,286 @@ class TestJob(object):
         assert job.returncode is 0
 
 
-class TestReadConfig(object):
-    """Unit tests for batch_processor.read_config function.
+class TestBatchProcessorInit(object):
+    """Unit tests for BatchProcessor instance initialization.
     """
-    def _call_read_config(self, *args):
-        return batch_processor.read_config(*args)
+    def _get_target_class(self):
+        from ..batch_processor import BatchProcessor
+        return BatchProcessor
 
-    @patch.object(batch_processor.os.path, 'exists', return_value=False)
+    def _make_one(self, *args, **kwargs):
+        return self._get_target_class()(*args, **kwargs)
+
+    def test_init_defaults(self):
+        """BatchProcessor instance has expected default attribute values
+        """
+        batch = self._make_one('batchfile')
+        assert batch.batchfile is 'batchfile'
+        assert batch.max_concurrent_jobs is 1
+
+    @patch('SOGcommand.batch_processor.log')
+    def test_init_debug_sets_logging_level(self, mock_log):
+        """debug==True sets logging level to logging.DEBUG
+        """
+        import logging
+        self._make_one('batchfile', debug=True)
+        mock_log.setLevel.assert_called_once_with(logging.DEBUG)
+
+
+class TestBatchProcessorPrepare(object):
+    """Unit tests for BatchProcessor prepare method and its helpers.
+    """
+    def _get_target_class(self):
+        from ..batch_processor import BatchProcessor
+        return BatchProcessor
+
+    def _make_one(self, *args, **kwargs):
+        return self._get_target_class()(*args, **kwargs)
+
+    @patch('SOGcommand.batch_processor.os.path.exists', return_value=False)
     def test_batchfile_not_found(self, mock_os):
         """IOError raised if batchfile doesn't exist
         """
+        batch = self._make_one('batchfile')
         with pytest.raises(IOError):
-            self._call_read_config('foo')
+            batch.prepare()
 
-    @patch.object(batch_processor.os.path, 'exists', return_value=True)
-    def test_returns_config_dict(self, mock_os):
-        """config is returned as a dict
+    @patch('SOGcommand.batch_processor.os.path.exists', return_value=True)
+    def test_read_config_sets_config_attr_dict(self, mock_os):
+        """_read_config sets config attribute w/ data from batchfile
         """
+        batch = self._make_one('batchfile')
         m = mock_open(read_data='foo: bar')
-        with patch.object(batch_processor, 'open', m, create=True):
-            config = self._call_read_config('foo')
-        assert isinstance(config, dict)
+        with patch('SOGcommand.batch_processor.open', m, create=True):
+            batch._read_config()
+        assert batch.config == {'foo': 'bar'}
 
-    @patch.object(batch_processor.os.path, 'exists', return_value=True)
-    def test_max_concurrent_jobs_default(self, mock_os):
-        """max_concurrent_jobs defaults to 1
-        """
-        m = mock_open(read_data='foo: bar')
-        with patch.object(batch_processor, 'open', m, create=True):
-            config = self._call_read_config('foo')
-        assert config['max_concurrent_jobs'] == 1
-
-    @patch.object(batch_processor.os.path, 'exists', return_value=True)
+    @patch('SOGcommand.batch_processor.os.path.exists', return_value=True)
     def test_max_concurrent_jobs_value(self, mock_os):
         """max_concurrent_jobs value is read from file
         """
+        batch = self._make_one('batchfile')
         m = mock_open(read_data='max_concurrent_jobs: 16')
-        with patch.object(batch_processor, 'open', m, create=True):
-            config = self._call_read_config('foo')
-        assert config['max_concurrent_jobs'] == 16
-
-
-class TestBuildJobs(object):
-    """Unit tests for batch_processor.build_jobs and its _job_or_default
-    helper functions.
-    """
-    def _call_build_jobs(self, *args):
-        return batch_processor.build_jobs(*args)
-
-    def _call_job_or_default(self, *args, **kwargs):
-        return batch_processor._job_or_default(*args, **kwargs)
-
-    def _call_legacy_infile_default_rules(self, *args):
-        return batch_processor._legacy_infile_default_rules(*args)
-
-    def _call_legacy_infile_job_rules(self, *args):
-        return batch_processor._legacy_infile_job_rules(*args)
+        with patch('SOGcommand.batch_processor.open', m, create=True):
+            batch._read_config()
+        assert batch.max_concurrent_jobs is 16
 
     def test_jobname_set(self):
         """job name is set to job's key in config jobs list
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].jobname == 'foo'
+        batch._build_jobs()
+        assert batch.jobs[0].jobname == 'foo'
 
     def test_edit_files_list_initialized_empty(self):
         """edit files list initialized w/ empty list if not in defaults
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].editfile == []
+        batch._build_jobs()
+        assert batch.jobs[0].editfile == []
 
     def test_edit_files_list_initialized_w_default(self):
         """edit files list initialized w/ list from defaults
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'edit_files': ['R3base.yaml'],
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].editfile == ['R3base.yaml']
+        batch._build_jobs()
+        assert batch.jobs[0].editfile == ['R3base.yaml']
 
     def test_job_edit_files_appended_to_list(self):
         """edit files list from job are appended to list from defaults
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {
                 'edit_files': ['R3no_remin.yaml'],
             }}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'edit_files': ['R3base.yaml'],
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].editfile == ['R3base.yaml', 'R3no_remin.yaml']
+        batch._build_jobs()
+        assert batch.jobs[0].editfile == ['R3base.yaml', 'R3no_remin.yaml']
 
     def test_outfile_from_config(self):
         """outfile name from job config
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {
                 'edit_files': ['R3no_remin.yaml'],
                 'outfile': '/foo/bar.yaml.out'
             }}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'edit_files': ['R3base.yaml'],
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].outfile == '/foo/bar.yaml.out'
+        batch._build_jobs()
+        assert batch.jobs[0].outfile == '/foo/bar.yaml.out'
 
     def test_outfile_from_last_edit_file(self):
         """outfile is name of last edit file with .out appended
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {
                 'edit_files': ['/foo/bar.yaml'],
             }}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
-            'edit_files': ['R3base.yaml.out'],
+            'edit_files': ['R3base.yaml'],
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].outfile == '/foo/bar.yaml.out'
+        batch._build_jobs()
+        assert batch.jobs[0].outfile == '/foo/bar.yaml.out'
 
     def test_outfile_from_base_infile(self):
         """outfile is base infile w/ .out appended if no edit files
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {}
         }
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '/infile.yaml',
             'jobs': [job]
         }
-        jobs = self._call_build_jobs(config)
-        assert jobs[0].outfile == '/infile.yaml.out'
+        batch._build_jobs()
+        assert batch.jobs[0].outfile == '/infile.yaml.out'
 
-    def test_job_or_default_returns_default_value(self):
-        """job without key gets default value
+    def test_job_or_default_returns_top_level_value(self):
+        """job without key gets top level value
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
-        value = self._call_job_or_default('foo', job, config, 'SOG_executable')
-        assert value == '../SOG-code/SOG'
+        value = batch._job_or_default('foo', job, 'SOG_executable')
+        assert value is '../SOG-code/SOG'
 
     def test_jobs_or_default_returns_job_value(self):
         """value from job with key overrides default
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {'SOG_executable': 'SOG'}}
-        config = {
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
-        value = self._call_job_or_default('foo', job, config, 'SOG_executable')
-        assert value == 'SOG'
+        value = batch._job_or_default('foo', job, 'SOG_executable')
+        assert value is 'SOG'
 
     def test_job_or_default_misssing_key_w_default(self):
         """missing key with default returns default value
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {'jobs': [job]}
-        value = self._call_job_or_default(
-            'foo', job, config, 'nice', default=19)
-        assert value == 19
+        batch.config = {'jobs': [job]}
+        value = batch._job_or_default('foo', job, 'nice', default=19)
+        assert value is 19
 
     def test_job_or_default_misssing_key_wo_default(self):
         """missing key without default raises KeyError
         """
+        batch = self._make_one('batchfile')
         job = {'foo': {}}
-        config = {'jobs': [job]}
+        batch.config = {'jobs': [job]}
         with pytest.raises(KeyError):
-            self._call_job_or_default('foo', job, config, 'SOG_executable')
+            batch._job_or_default('foo', job, 'SOG_executable')
 
     def test_legacy_infile_default_false(self):
         """top level legacy_infile defaults to False
         """
-        job = {
-            'foo': {}
-        }
-        config = {
+        batch = self._make_one('batchfile')
+        job = {'foo': {}}
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
-            'base_infile': '/infile.yaml',
+            'base_infile': '../SOG-code/infile.yaml',
             'jobs': [job]
         }
-        legacy_infile = self._call_legacy_infile_default_rules(config)
+        legacy_infile = batch._legacy_infile_default_rules()
         assert legacy_infile is False
 
     def test_legacy_infile_default_precludes_default_base_infile(self):
         """default base_infile with legacy_infile==True raises KeyError
         """
-        job = {
-            'foo': {}
-        }
-        config = {
+        batch = self._make_one('batchfile')
+        job = {'foo': {}}
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'base_infile': '/infile.yaml',
             'legacy_infile': True,
             'jobs': [job]
         }
         with pytest.raises(KeyError):
-            self._call_legacy_infile_default_rules(config)
+            batch._legacy_infile_default_rules()
 
     def test_legacy_infile_default_precludes_default_edit_files(self):
         """default edit_files with legacy_infile==True raises KeyError
         """
-        job = {
-            'foo': {}
-        }
-        config = {
+        batch = self._make_one('batchfile')
+        job = {'foo': {}}
+        batch.config = {
             'SOG_executable': '../SOG-code/SOG',
             'edit_files': ['R3base.yaml'],
             'legacy_infile': True,
             'jobs': [job]
         }
         with pytest.raises(KeyError):
-            self._call_legacy_infile_default_rules(config)
+            batch._legacy_infile_default_rules()
 
     def test_legacy_infile_job_default_false(self):
         """job level legacy_infile defaults to False
         """
-        job = {
-            'foo': {}
-        }
-        legacy_infile = self._call_legacy_infile_job_rules('foo', job)
+        batch = self._make_one('batchfile')
+        job = {'foo': {}}
+        legacy_infile = batch._legacy_infile_job_rules('foo', job)
         assert legacy_infile is False
 
     def test_legacy_infile_job_base_infile_reqd(self):
         """job level legacy_infile==True means job base_infile is required
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {
                 'legacy_infile': True,
             }
         }
         with pytest.raises(KeyError):
-            self._call_legacy_infile_job_rules('foo', job)
+            batch._legacy_infile_job_rules('foo', job)
 
     def test_legacy_infile_job_precludes_edit_files(self):
         """job level edit_files with legacy_infile==True raises KeyError
         """
+        batch = self._make_one('batchfile')
         job = {
             'foo': {
                 'legacy_infile': True,
@@ -378,22 +393,40 @@ class TestBuildJobs(object):
             }
         }
         with pytest.raises(KeyError):
-            self._call_legacy_infile_job_rules('foo', job)
+            batch._legacy_infile_job_rules('foo', job)
 
 
-class TestDryRun(object):
-    """Unit tests for batch_processor.dry_run function.
+class TestBatchProcessorRun(object):
+    """Unit tests for BatchProcessor run method and its helpers.
     """
+    def _get_target_class(self):
+        from ..batch_processor import BatchProcessor
+        return BatchProcessor
+
+    def _make_one(self, *args, **kwargs):
+        return self._get_target_class()(*args, **kwargs)
+
+    def test_dry_run(self):
+        """dry_run=True calls _dry_run method & returns 0
+        """
+        batch = self._make_one('batchfile')
+        mock_dry_run = Mock()
+        batch._dry_run = mock_dry_run
+        returncode = batch.run(dry_run=True)
+        assert mock_dry_run.called
+        assert returncode is 0
+
     @patch('sys.stdout', new_callable=six.StringIO)
     def test_dry_run_no_edit_files(self, mock_stdout):
         """dry run command for job without edit files has no -e options
         """
-        jobs = [
+        batch = self._make_one('batchfile')
+        batch.jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
                  editfile=[], outfile='infile.yaml.out', legacy_infile=False,
                  nice=19)
         ]
-        batch_processor.dry_run(jobs, 1)
+        batch._dry_run()
         expected = (
             '  foo: SOG run SOG infile.yaml -o infile.yaml.out --nice 19')
         assert expected in mock_stdout.getvalue()
@@ -402,12 +435,13 @@ class TestDryRun(object):
     def test_dry_run_edit_files(self, mock_stdout):
         """dry run command for job with edit files has -e option
         """
-        jobs = [
+        batch = self._make_one('batchfile')
+        batch.jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile.yaml',
                  editfile=['R3base.yaml'], outfile='R3base.yaml.out',
                  legacy_infile=False, nice=19)
         ]
-        batch_processor.dry_run(jobs, 1)
+        batch._dry_run()
         expected = (
             '  foo: SOG run SOG infile.yaml -e R3base.yaml -o R3base.yaml.out '
             '--nice 19')
@@ -417,12 +451,13 @@ class TestDryRun(object):
     def test_dry_run_legacy_infile(self, mock_stdout):
         """legacy_infile option shown when True
         """
-        jobs = [
+        batch = self._make_one('batchfile')
+        batch.jobs = [
             Mock(jobname='foo', SOG_exec='SOG', infile='infile',
                  editfile=[], outfile='infile.out', legacy_infile=True,
                  nice=19)
         ]
-        batch_processor.dry_run(jobs, 1)
+        batch._dry_run()
         expected = (
             '  foo: SOG run SOG infile -o infile.out --legacy_infile '
             '--nice 19')
