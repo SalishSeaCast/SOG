@@ -462,3 +462,51 @@ class TestBatchProcessorRun(object):
             '  foo: SOG run SOG infile -o infile.out --legacy_infile '
             '--nice 19')
         assert expected in mock_stdout.getvalue()
+
+    def test_launch_initial_jobs(self):
+        """launch allowed number of jobs & move them from jobs to in_progress
+        """
+        mock_job_1 = Mock(spec=batch_processor.Job, pid=123)
+        mock_job_2 = Mock(spec=batch_processor.Job, pid=456)
+        mock_job_3 = Mock(spec=batch_processor.Job, pid=789)
+        batch = self._make_one('batchfile')
+        batch.max_concurrent_jobs = 2
+        batch.jobs = [mock_job_1, mock_job_2, mock_job_3]
+        batch._launch_initial_jobs()
+        assert batch.in_progress == {123: mock_job_1, 456: mock_job_2}
+        assert mock_job_1.start.called
+        assert mock_job_2.start.called
+        assert batch.jobs == [mock_job_3]
+        assert mock_job_3.start.called is False
+
+    def test_launch_initial_jobs_excess_capacity(self):
+        """launch all jobs when allowed number exceeds number of jobs
+        """
+        mock_job_1 = Mock(spec=batch_processor.Job, pid=123)
+        mock_job_2 = Mock(spec=batch_processor.Job, pid=456)
+        batch = self._make_one('batchfile')
+        batch.max_concurrent_jobs = 4
+        batch.jobs = [mock_job_1, mock_job_2]
+        batch._launch_initial_jobs()
+        assert batch.in_progress == {123: mock_job_1, 456: mock_job_2}
+        assert mock_job_1.start.called
+        assert mock_job_2.start.called
+        assert batch.jobs == []
+
+    def test_poll_and_launch(self):
+        """when a job finishes capture its returncode & launch a new job
+        """
+        mock_job_1 = Mock(spec=batch_processor.Job, pid=123, done=False)
+        mock_job_2 = Mock(
+            spec=batch_processor.Job, pid=456, done=True, returncode=2)
+        mock_job_3 = Mock(spec=batch_processor.Job, pid=789)
+        batch = self._make_one('batchfile')
+        batch.max_concurrent_jobs = 2
+        batch.jobs = [mock_job_3]
+        batch.in_progress = {123: mock_job_1, 456: mock_job_2}
+        # import ipdb; ipdb.set_trace()
+        batch._poll_and_launch()
+        assert batch.returncode is 2
+        assert batch.in_progress == {123: mock_job_1, 789: mock_job_3}
+        assert mock_job_3.start.called
+        assert batch.jobs == []

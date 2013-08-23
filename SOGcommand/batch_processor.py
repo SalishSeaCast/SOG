@@ -35,6 +35,7 @@ import os
 import subprocess
 import sys
 from textwrap import TextWrapper
+import time
 import six
 import yaml
 from . import run_processor
@@ -135,6 +136,9 @@ class BatchProcessor(object):
         if debug:
             log.setLevel(logging.DEBUG)
         self.max_concurrent_jobs = 1
+        self.jobs = []
+        self.in_progress = {}
+        self.returncode = 0
 
     def prepare(self):
         """Read the batch description file and build the list of jobs to run.
@@ -154,7 +158,6 @@ class BatchProcessor(object):
             'max concurrent jobs: {.max_concurrent_jobs}'.format(self))
 
     def _build_jobs(self):
-        self.jobs = []
         try:
             default_editfiles = self.config['edit_files']
         except KeyError:
@@ -262,8 +265,14 @@ class BatchProcessor(object):
         """
         if dry_run:
             self._dry_run()
-            returncode = 0
-            return returncode
+            self.returncode = 0
+            return self.returncode
+        self._launch_initial_jobs()
+        while self.jobs or self.in_progress:
+            time.sleep(15)
+            self._poll_and_launch()
+        log.info('all jobs completed')
+        return self.returncode
 
     def _dry_run(self):
         """Dry-run handler for `SOG batch` command.
@@ -283,3 +292,30 @@ class BatchProcessor(object):
         print(wrapper.fill(
             '{} job(s) would have been run concurrently.'
             .format(self.max_concurrent_jobs)))
+
+    def _launch_initial_jobs(self):
+        """Start running the batch by launching jobs up to the number of
+        concurrent jobs allowed.
+        """
+        log.info('starting {.max_concurrent_jobs} jobs'.format(self))
+        for process in range(self.max_concurrent_jobs):
+            try:
+                job = self.jobs.pop(0)
+                job.start()
+                self.in_progress[job.pid] = job
+            except IndexError:
+                break
+
+    def _poll_and_launch(self):
+        """Poll the in-progress jobs and launch new jobs as existing ones
+        finish.
+        """
+        for running_job in six.itervalues(self.in_progress.copy()):
+            if running_job.done:
+                self.in_progress.pop(running_job.pid)
+                self.returncode = max(
+                    self.returncode, abs(running_job.returncode))
+                if self.jobs:
+                    job = self.jobs.pop(0)
+                    job.start()
+                    self.in_progress[job.pid] = job
