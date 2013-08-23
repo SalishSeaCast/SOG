@@ -378,11 +378,11 @@ The files that need to be changed are:
       ...
       user_profile_file_base = _SOG_String(
           infile_key='user_profile_base', var_name='userprofilesBase_fn',
-          missing=deferred_allow_missing)
+          missing=_deferred_allow_missing)
       ...
       user_hoffmueller_file = _SOG_String(
           infile_key='user Hoffmueller file', var_name='userHoffmueller_fn',
-          missing=deferred_allow_missing)
+          missing=_deferred_allow_missing)
       ...
 
    Here again,
@@ -426,7 +426,7 @@ The files that need to be changed are:
 
       user_hoffmueller_file = _SOG_String(
           infile_key='user Hoffmueller file', var_name='userHoffmueller_fn',
-          missing=deferred_allow_missing)
+          missing=_deferred_allow_missing)
 
 #. Edit :file:`SOGcommand/SOG_infile_schema.py` to:
 
@@ -584,7 +584,7 @@ The "base" YAML infile for a run
 
     * The value assigned to the :obj:`missing` argument in the node
       declaration is :kbd:`None`,
-      rather than the :kbd:`deferred_allow_missing` value used for required
+      rather than the :kbd:`_deferred_allow_missing` value used for required
       parameters.
 
    So,

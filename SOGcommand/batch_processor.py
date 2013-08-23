@@ -41,6 +41,9 @@ import yaml
 from . import run_processor
 
 
+__all__ = ['BatchProcessor', 'Job']
+
+
 log = logging.getLogger('batch')
 log.setLevel(logging.INFO)
 console = logging.StreamHandler(sys.stdout)

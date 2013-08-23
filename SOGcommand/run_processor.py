@@ -37,6 +37,9 @@ from time import sleep
 from .infile_processor import create_infile
 
 
+__all__ = ['dry_run', 'prepare', 'watch_outfile']
+
+
 def prepare(args):
     """Return the command line string that will execute the requested SOG run.
     """

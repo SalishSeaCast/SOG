@@ -31,6 +31,11 @@ import colander
 import six
 
 
+__all__ = [
+    'SOG_Infile', 'SOG_KEYS', 'SOG_EXTRA_KEYS', 'SOG_AVG_HIST_FORCING_KEYS'
+]
+
+
 class _SOG_InfileBase(colander.MappingSchema):
     """Base class for SOG Fortran-ish infile quantities.
     """

@@ -49,6 +49,9 @@ from .SOG_YAML_schema import (
 )
 
 
+__all__ = ['create_infile', 'read_infile']
+
+
 def create_infile(yaml_infile, edit_files):
     """Create a SOG Fortran-style infile for SOG to read from
     `yaml_infile`.

@@ -42,10 +42,13 @@ from . import (
 )
 
 
+__all__ = ['run']
+
+
 def run():
     """Entry point to start the command processor.
     """
-    cmd_processor = build_parser()
+    cmd_processor = _build_parser()
     if len(sys.argv) == 1:
         cmd_processor.print_help()
     else:
@@ -53,25 +56,25 @@ def run():
         args.func(args)
 
 
-def build_parser():
+def _build_parser():
     parser = ArgumentParser(
         epilog='''
             Use `%(prog)s <sub-command> --help` to get detailed
             help about a sub-command.''')
-    add_version_arg(parser)
+    _add_version_arg(parser)
     subparsers = parser.add_subparsers(title='sub-commands')
-    add_run_subparser(subparsers)
-    add_batch_subparser(subparsers)
-    add_read_infile_subparser(subparsers)
+    _add_run_subparser(subparsers)
+    _add_batch_subparser(subparsers)
+    _add_read_infile_subparser(subparsers)
     return parser
 
 
-def add_version_arg(parser):
+def _add_version_arg(parser):
     parser.add_argument(
         '--version', action='version', version=version + release)
 
 
-def add_run_subparser(subparsers):
+def _add_run_subparser(subparsers):
     """Add a sub-parser for the `SOG run` command.
     """
     parser = subparsers.add_parser(
@@ -113,17 +116,17 @@ def add_run_subparser(subparsers):
             File to receive stdout from run. Defaults to ./INFILE.out;
             i.e. INFILE.out in the directory that the run is started in.
             ''')
-    add_version_arg(parser)
+    _add_version_arg(parser)
     parser.add_argument(
         '--watch', action='store_true',
         help='''
              Show OUTFILE contents on screen while SOG run is in
              progress.
              ''')
-    parser.set_defaults(func=do_run)
+    parser.set_defaults(func=_do_run)
 
 
-def do_run(args):
+def _do_run(args):
     """Execute the `SOG run` command with the specified options.
     """
     cmd = run_processor.prepare(args)
@@ -141,7 +144,7 @@ def do_run(args):
     sys.exit(returncode)
 
 
-def add_batch_subparser(subparsers):
+def _add_batch_subparser(subparsers):
     """Add a sub-parser for the `SOG batch` command.
     """
     parser = subparsers.add_parser(
@@ -154,10 +157,10 @@ def add_batch_subparser(subparsers):
         '--debug', action='store_true',
         help='Show extra information about the building of the job commands '
              'and their execution.')
-    parser.set_defaults(func=do_batch)
+    parser.set_defaults(func=_do_batch)
 
 
-def do_batch(args):
+def _do_batch(args):
     """Execute the `SOG batch command with the specified options.
     """
     batch = batch_processor.BatchProcessor(args.batchfile, args.debug)
@@ -166,7 +169,7 @@ def do_batch(args):
     sys.exit(returncode)
 
 
-def add_read_infile_subparser(subparsers):
+def _add_read_infile_subparser(subparsers):
     """Add a sub-parser for the `SOG read_infile` command.
     """
     parser = subparsers.add_parser(
@@ -188,11 +191,11 @@ def add_read_infile_subparser(subparsers):
              Key to print infile value for;
              e.g. timeseries_results.std_physics.
              ''')
-    add_version_arg(parser)
-    parser.set_defaults(func=do_read_infile)
+    _add_version_arg(parser)
+    parser.set_defaults(func=_do_read_infile)
 
 
-def do_read_infile(args):
+def _do_read_infile(args):
     """Print the infile value for the specified key.
     """
     value = infile_processor.read_infile(

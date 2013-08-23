@@ -35,6 +35,9 @@ import re
 import colander
 
 
+__all__ = ['dump', 'load']
+
+
 def load(stream):
     """Load the parameter keys, values and descriptions from a SOG
     infile into a Python data structure.

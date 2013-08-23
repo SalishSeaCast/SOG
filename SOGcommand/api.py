@@ -30,6 +30,9 @@ from . import run_processor
 from .infile_processor import read_infile
 
 
+__all__ = ['Args', 'read_infile', 'run']
+
+
 class Args(object):
     """Container for SOG command arguments.
     """

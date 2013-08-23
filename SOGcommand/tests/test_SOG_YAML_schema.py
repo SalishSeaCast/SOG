@@ -30,13 +30,13 @@ import colander
 
 
 class TestDeferredAllowMissing(unittest.TestCase):
-    """Unit tests for deferred_allow_missing schema binding function.
+    """Unit tests for _deferred_allow_missing schema binding function.
     """
     def _call_fut(self, *args):
         """Call function under test.
         """
-        from ..SOG_YAML_schema import deferred_allow_missing
-        return deferred_allow_missing(*args)
+        from ..SOG_YAML_schema import _deferred_allow_missing
+        return _deferred_allow_missing(*args)
 
     def test_deferred_allow_missing_allow_missing_true(self):
         """deferred_allow_missing returns None if allow_missing arg == True
