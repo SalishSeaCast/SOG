@@ -31,7 +31,6 @@ except ImportError:
         patch,
     )
 import pytest
-import six
 from .. import batch_processor
 
 
@@ -416,8 +415,7 @@ class TestBatchProcessorRun(object):
         assert mock_dry_run.called
         assert returncode is 0
 
-    @patch('sys.stdout', new_callable=six.StringIO)
-    def test_dry_run_no_edit_files(self, mock_stdout):
+    def test_dry_run_no_edit_files(self, capsys):
         """dry run command for job without edit files has no -e options
         """
         batch = self._make_one('batchfile')
@@ -429,10 +427,9 @@ class TestBatchProcessorRun(object):
         batch._dry_run()
         expected = (
             '  foo: SOG run SOG infile.yaml -o infile.yaml.out --nice 19')
-        assert expected in mock_stdout.getvalue()
+        assert expected in capsys.readouterr()[0]
 
-    @patch('sys.stdout', new_callable=six.StringIO)
-    def test_dry_run_edit_files(self, mock_stdout):
+    def test_dry_run_edit_files(self, capsys):
         """dry run command for job with edit files has -e option
         """
         batch = self._make_one('batchfile')
@@ -445,10 +442,9 @@ class TestBatchProcessorRun(object):
         expected = (
             '  foo: SOG run SOG infile.yaml -e R3base.yaml -o R3base.yaml.out '
             '--nice 19')
-        assert expected in mock_stdout.getvalue()
+        assert expected in capsys.readouterr()[0]
 
-    @patch('sys.stdout', new_callable=six.StringIO)
-    def test_dry_run_legacy_infile(self, mock_stdout):
+    def test_dry_run_legacy_infile(self, capsys):
         """legacy_infile option shown when True
         """
         batch = self._make_one('batchfile')
@@ -461,7 +457,7 @@ class TestBatchProcessorRun(object):
         expected = (
             '  foo: SOG run SOG infile -o infile.out --legacy_infile '
             '--nice 19')
-        assert expected in mock_stdout.getvalue()
+        assert expected in capsys.readouterr()[0]
 
     def test_launch_initial_jobs(self):
         """launch allowed number of jobs & move them from jobs to in_progress
