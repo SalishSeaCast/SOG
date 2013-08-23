@@ -301,10 +301,11 @@ class BatchProcessor(object):
         for process in range(self.max_concurrent_jobs):
             try:
                 job = self.jobs.pop(0)
-                job.start()
-                self.in_progress[job.pid] = job
             except IndexError:
                 break
+            else:
+                job.start()
+                self.in_progress[job.pid] = job
 
     def _poll_and_launch(self):
         """Poll the in-progress jobs and launch new jobs as existing ones
@@ -315,7 +316,10 @@ class BatchProcessor(object):
                 self.in_progress.pop(running_job.pid)
                 self.returncode = max(
                     self.returncode, abs(running_job.returncode))
-                if self.jobs:
+                try:
                     job = self.jobs.pop(0)
+                except IndexError:
+                    continue
+                else:
                     job.start()
                     self.in_progress[job.pid] = job
