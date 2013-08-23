@@ -504,7 +504,6 @@ class TestBatchProcessorRun(object):
         batch.max_concurrent_jobs = 2
         batch.jobs = [mock_job_3]
         batch.in_progress = {123: mock_job_1, 456: mock_job_2}
-        # import ipdb; ipdb.set_trace()
         batch._poll_and_launch()
         assert batch.returncode is 2
         assert batch.in_progress == {123: mock_job_1, 789: mock_job_3}
