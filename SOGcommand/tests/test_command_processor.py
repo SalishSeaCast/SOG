@@ -29,7 +29,6 @@ except ImportError:
         Mock,
         patch,
     )
-import pytest
 import six
 from .. import command_processor
 
