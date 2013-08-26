@@ -35,7 +35,7 @@ See :ref:`SOG_CommandProcessorInstallation-section`.
 Available Commands
 ------------------
 
-The command :program:`SOG` or :program:`SOG --help` produces a list of
+The command :program:`SOG` or :command:`SOG --help` produces a list of
 the available :program:`SOG` options and sub-commands:
 
 .. code-block:: none
@@ -55,7 +55,7 @@ the available :program:`SOG` options and sub-commands:
    Use `SOG <sub-command> --help` to get detailed help about a sub-command.
 
 For details of the arguments and options for a command use
-:program:`SOG <command> --help`.
+:command:`SOG <command> --help`.
 For example:
 
 .. code-block:: none
@@ -98,10 +98,10 @@ You can check what version of :program:`SOG` you have installed with:
    $ SOG --version
 
 
-:program:`SOG run` Command
+:command:`SOG run` Command
 --------------------------
 
-The :program:`SOG run` command runs the SOG code executable with a
+The :command:`SOG run` command runs the SOG code executable with a
 specified infile.
 If you have compiled and linked SOG in :file:`SOG-code-dev`,
 and you want to run a test case using your test infile
@@ -117,10 +117,10 @@ That will run SOG using :file:`infile.short` as the infile.
 The screen output (stdout) will be stored in :file:`infile.short.out`.
 It *will not* be displayed while the run is in progress.
 The command prompt will not come back until the run is finished;
-i.e. the :program:`SOG run` command will wait until the end of the run before
+i.e. the :command:`SOG run` command will wait until the end of the run before
 letting you do anything else in that shell.
 
-:program:`SOG run` has some options that let you change how it acts:
+:command:`SOG run` has some options that let you change how it acts:
 
 .. code-block:: none
 
@@ -191,7 +191,7 @@ YAML Infile Editing
 -------------------
 
 The :option:`--editfile` option (:option:`-e` for short) of the
-:program:`SOG run` command allows 1 or more YAML infile snippets to be
+:command:`SOG run` command allows 1 or more YAML infile snippets to be
 merged into the YAML infile for the run.
 For example,
 
@@ -260,10 +260,10 @@ parameters that are to be changed. Example:
 
 .. _SOGbatch_command-section:
 
-:program:`SOG batch` Command
+:command:`SOG batch` Command
 ----------------------------
 
-The :program:`SOG batch` command runs a series of SOG code jobs,
+The :command:`SOG batch` command runs a series of SOG code jobs,
 possibly using concurrent processes on multi-core machines.
 The SOG jobs to run are described in a YAML file that is passed on the command
 line.
@@ -275,7 +275,7 @@ use:
    $ cd SOG-test
    $ SOG batch my_SOG_jobs.yaml
 
-:program:`SOG batch` has some options that let you change how it acts:
+:command:`SOG batch` has some options that let you change how it acts:
 
 .. code-block:: none
 
@@ -419,7 +419,7 @@ The other part of the YAML batch job description file is a block mapping with
 the key :kbd:`jobs`.
 It is a required block.
 It contains a list of mapping blocks that describe each of the jobs to be run.
-The key of each block in the jobs list is used in the :program:`SOG batch`
+The key of each block in the jobs list is used in the :command:`SOG batch`
 command logging output,
 so it is good practice to make it descriptive.
 
@@ -451,10 +451,10 @@ those described above:
     with :kbd:`.out` appended.
 
 
-:program:`SOG read_infile` Command
+:command:`SOG read_infile` Command
 ----------------------------------
 
-The :program:`SOG read_infile` command prints the value associated with a
+The :command:`SOG read_infile` command prints the value associated with a
 key in the specified YAML infile.
 It is primarily for use by the SOG buildbot where it is used to get output
 file paths/names from the infile.
