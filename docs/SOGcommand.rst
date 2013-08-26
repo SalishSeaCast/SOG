@@ -103,7 +103,7 @@ You can check what version of :program:`SOG` you have installed with:
 
 The :command:`SOG run` command runs the SOG code executable with a
 specified infile.
-If you have compiled and linked SOG in :file:`SOG-code-dev`,
+If you have compiled and linked SOG in :file:`SOG-code`,
 and you want to run a test case using your test infile
 :file:`SOG-test/infile.short`,
 use:
@@ -111,7 +111,7 @@ use:
 .. code-block:: sh
 
    $ cd SOG-test
-   $ SOG run ../SOG-code-dev/SOG infile.short
+   $ SOG run ../SOG-code/SOG infile.short
 
 That will run SOG using :file:`infile.short` as the infile.
 The screen output (stdout) will be stored in :file:`infile.short.out`.
@@ -349,12 +349,14 @@ The keys that may be used are:
 * :kbd:`max_concurrent_jobs`:
 
     The maximum number of jobs that may be run concurrently.
-    If the :kbd:`max_concurrent_jobs` key is ommitted its value defaults to 1
+    If the :kbd:`max_concurrent_jobs` key is omitted its value defaults to 1
     and the jobs will be processed sequentially.
     As a guide,
     the value of :kbd:`max_concurrent_jobs` should be less than or equal to the
     number of cores on the worker machine
-    (or perhaps the number of virtual cores on machines with hyper-threading).
+    (or the number of virtual cores on machines with hyper-threading).
+    See :ref:`SOG-BatchPerformance-section` for information on some tests of
+    :command:`SOG batch` on various worker machines.
 
 * :kbd:`SOG_executable`:
 
@@ -391,7 +393,7 @@ The keys that may be used are:
 
     When :kbd:`True` the job infiles are handled as legacy Fortran-ish infiles.
     When :kbd:`False` they are handled as YAML infiles.
-    If :kbd:`legacy_infile` is exluded from the top level of the file its
+    If :kbd:`legacy_infile` is excluded from the top level of the file its
     value defaults to :kbd:`False`.
     If the value is :kbd:`True` in the top level,
     the default :kbd:`base_infile` and :kbd:`edit_infiles` keys have no
@@ -407,7 +409,7 @@ The keys that may be used are:
 * :kbd:`nice`:
 
     The :kbd:`nice` level to run the jobs at.
-    If the :kbd:`nice` key is ommitted its value defaults to 19.
+    If the :kbd:`nice` key is omitted its value defaults to 19.
     If it is included in both the top level and in a job description,
     the value in the job description takes precedence.
     This is a seldom used option since jobs should generally be run at
@@ -449,6 +451,139 @@ those described above:
     If there are no YAML infile edit files,
     the output will be stored in a files whose name is the :kbd:`base_infile`
     with :kbd:`.out` appended.
+
+
+.. _SOG-BatchPerformance-section:
+
+Notes on :command:`SOG batch` Performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When the :command:`SOG batch` command was implemented in late August of 2013
+a series of test were conducted on 3 worker machines to explore the effect on
+run time of running various numbers of jobs concurrently.
+
+The machines tested were :kbd:`cod`, :kbd:`salish`, and :kbd:`tyee`.
+The changeset hash of the :file:`SOG-code` repository that was used for the
+tests was :kbd:`a0ea801cf23b`.
+The tests consisted of running various numbers of the same job concurrently
+and measuring their wall-clock and system running times with the :program:`time`
+command.
+There were no other users on the machines when the tests were run, and the tests
+on :kbd:`cod` and :kbd:`tyee` were not run at the same time to avoid contention
+for access to storage on :kbd:`ocean`.
+The test job was to run with :file:`SOG-code/infile.yaml` and an edit file that
+caused the timeseries and profiles output files to be written to different files
+for each job.
+The batch job description files were constructed so that the :kbd:`stdout` output
+from each job also went to a separate file.
+Note, however, that the :file:`S_riv_check`, :file:`salinity_check`, and
+:file:`total_check` files were written contentiously by all running jobs because
+those file names are hard-coded in :file:`SOG-code`.
+
+A Python script (:file:`build_test_files.py`) was used to generate
+the batch job description files, and the YAML infile edit files for
+the tests.
+It and it's output can be found in :file:`/ocean/dlatorne/SOG-projects/batch_test/`
+(or :file:`/data/dlatorne/SOG-projects/batch_test` on :kbd:`salish`).
+The results of the tests and the code to produce the graph images below is in
+:file:`results.py` in the same directory.
+
+The results discussed below are just snapshots to provide initial guidance
+on how many jobs to try to run concurrently.
+The tests were conducted under fairly ideal conditions with no other users on
+the machines and load network load (a Friday afternoon and Saturday morning
+in late August :-).
+If you are running planning to run a large number of jobs it may be worthwhile
+to conduct some experiments to determine the optimal level of concurrency for
+the machine(s) you plan to use, and the usage conditions they are operating
+under.
+
+
+:kbd:`cod` Test Results
+```````````````````````
+
+:kbd:`cod` is a 2.8 GHz 4-core machine that does not use hyper-threading,
+so it presents as having 4 CPUs. It has 8 Gb of RAM, and its local drive is a
+7200 rpm SATA drive.
+Output storage for the tests was over the network to :kbd:`ocean` via an NFS
+mount.
+When the tests were run :kbd:`cod` was running Ubuntu 12.04.2 LTS as its
+operating system.
+
+The graphs below show the wall-clock and system run times for various numbers of
+concurrent jobs from 1 to 8 run via :command:`SOG batch` on :kbd:`cod`,
+and the runtime normalized relative to the time for a single job:
+
+.. image:: cod.png
+
+As expected, up to 4 jobs running concurrently take the same time as a single
+job because SOG is, for the most part, a compute-bound model, and there is very
+little penalty for doing 1 run per core.
+What's interesting is that "overloading" the processor with 6 or 8 concurrent
+jobs does not result in the normalized run times of 1.5 or 2 that might be
+expected.
+Presumably this is due to the operating system being able to swap among jobs
+quickly enough when there are I/O waits that 8 jobs can complete in less time
+than 2 x 4 jobs.
+
+
+:kbd:`salish` Test Results
+``````````````````````````
+
+:kbd:`salish` is a 3.8 GHz 2 x 8-core machine with hyper-threading, so it presents
+as having 32 CPUs.
+It has 128 Gb of RAM, and it has local 10000 rpm SATA and SSD drives.
+Output storage for the tests was to the local SATA drive.
+When the tests were run :kbd:`salish` was running Ubuntu 13.04 as its
+operating system.
+
+The graphs below show the wall-clock and system run times for various numbers of
+concurrent jobs from 1 to 36 run via :command:`SOG batch` on :kbd:`salish`,
+and the runtime normalized relative to the time for a single job:
+
+.. image:: salish.png
+
+:kbd:`salish` does not exhibit the same flat relationship as :kbd:`cod` and
+:kbd:`tyee` between run time and job count up to the number of physical cores.
+8 and 12 concurrent jobs take about 12% longer per job than a single job,
+and 16 jobs takes almost 25% longer per job.
+The reason for this is unknown, however, the effect tails off somewhat as the
+number of concurrent jobs increases toward the number of virtual cores,
+with 32 jobs taking almost exactly twice as long to run as a single job.
+That means that it is more efficient to run 32 jobs concurrently than to do
+2 runs of 16 concurrent jobs.
+"Overloading" the processor by running 36 concurrent jobs increases the run
+time proportionally to 225%.
+
+Even though the normalized performance of :kbd:`salish` may not look as
+attractive as that of :kbd:`tyee` is must be noted that in absolute terms
+it is, by far, the fastest at running SOG.
+
+
+:kbd:`tyee` Test Results
+````````````````````````
+
+:kbd:`tyee` is a 3.8 GHz 4-core machine with hyper-threading, so it presents
+as having 8 CPUs.
+It has 16 Gb of RAM, and its local drive is an SSD drive.
+Output storage for the tests was over the network to :kbd:`ocean` via and NFS
+mount.
+When the tests were run :kbd:`tyee` was running Ubuntu 12.04.2 LTS as its
+operating system.
+
+The graphs below show the wall-clock and system run times for various numbers of
+concurrent jobs from 1 to 36 run via :command:`SOG batch` on :kbd:`tyee`,
+and the runtime normalized relative to the time for a single job:
+
+.. image:: tyee.png
+
+Like :kbd:`cod`, :kbd:`tyee` takes the same amount of time to run 4 concurrent
+jobs as to run a single job.
+However, hyper-threading allows 6 or 8 concurrent jobs to be run with less
+slow-down than :kbd:`cod` exhibits and 8 jobs is significantly faster than
+2 x 4 jobs.
+"Overloading" of more concurrent jobs than virtual cores was not tested on
+:kbd:`tyee`.
 
 
 :command:`SOG read_infile` Command
