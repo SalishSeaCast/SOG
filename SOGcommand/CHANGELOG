@@ -1,6 +1,14 @@
 Changelog
 ---------
 
+v1.3
+----
+
+* Implement the :command:`SOG batch` command to run a collection of jobs
+  (described in a YAML file). Support for running jobs concurrently is
+  included.
+
+
 v1.2.2
 ------
 
