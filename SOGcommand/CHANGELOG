@@ -1,6 +1,14 @@
 Changelog
 ---------
 
+v1.3.1
+------
+
+* Fix issue re: serialized rendering of `default=None` for units.
+  Colander v1.0b1 changed the rendering from `colander.null` to "None".
+  See http://docs.pylonsproject.org/projects/colander/en/latest/changes.html#b1-2013-09-01 for details.
+
+
 v1.3
 ----
 
