@@ -160,7 +160,7 @@ def dump(data, key_order, extra_keys, avg_hist_forcing_keys, stream):
             for v in data[key]['value'].split():
                 line += '  {0}\n'.format(v)
             line += '  "{0[description]}'.format(data[key])
-        if data[key]['units'] != colander.null:
+        if data[key]['units'] != 'None':
             line = '{0} [{1[units]}]'.format(line, data[key])
         return line
 

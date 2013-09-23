@@ -160,11 +160,10 @@ class TestDump(unittest.TestCase):
     def test_dump_line_wo_units(self):
         """dump produces expected line for data structure w/o units
         """
-        import colander
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': colander.null}}
+                'units': 'None'}}
         key_order = ['gridsize']
         extra_keys = {}
         avg_hist_forcing_keys = {}
@@ -177,11 +176,10 @@ class TestDump(unittest.TestCase):
     def test_dump_line_order(self):
         """dump produces lines in correct order
         """
-        import colander
         data = {
             'gridsize': {
                 'value': '80', 'description': 'number of grid points',
-                'units': colander.null},
+                'units': 'None'},
             'maxdepth': {
                 'value': '40.0d0', 'description': 'depth of modelled domain',
                 'units': 'm'}}
@@ -269,7 +267,6 @@ class TestDump(unittest.TestCase):
     def test_dump_long_line_description_last(self):
         """dump ends broken long line with description
         """
-        import colander
         data = {
             'profile_times': {
                 'value': '46200. 43620. 40860. 40800. 41400. 41400. 40680. '
@@ -280,7 +277,7 @@ class TestDump(unittest.TestCase):
                          '43800. 40620. 44520. 42900. 40380. 43260. 41760. '
                          '40860. 48300. 53100. 38580. 37620. 36840.',
                 'description': 'list of day-seconds to output profiles for',
-                'units': colander.null}}
+                'units': 'None'}}
         key_order = ['profile_times']
         extra_keys = {}
         avg_hist_forcing_keys = {}
@@ -294,12 +291,11 @@ class TestDump(unittest.TestCase):
     def test_dump_extra_keys(self):
         """dump handles extra keys for optional parameters
         """
-        import colander
         data = {
             'northern_return_flow': {
                 'value': '.true.',
                 'description': 'include fresh water return flow from north?',
-                'units': colander.null},
+                'units': 'None'},
             'northern_influence_strength': {
                 'value': '0.8863d0',
                 'description': 'strength of northen influence',
@@ -324,21 +320,20 @@ class TestDump(unittest.TestCase):
     def test_avg_hist_forcing_keys(self):
         """dump handles average/historical forcing keys for optional parameters
         """
-        import colander
         data = {
             'use average/hist forcing': {
                 'value': '"yes"',
                 'description': 'yes=avg only; no=fail if data runs out; '
                 'fill=historic then avg',
-                'units': colander.null},
+                'units': 'None'},
             'average/hist wind': {
                 'value': '"../SOG-forcing/wind/SHavg"',
                 'description': 'average wind forcing data',
-                'units': colander.null},
+                'units': 'None'},
             'wind': {
                 'value': '"Sandheads_wind"',
                 'description': 'wind forcing data',
-                'units': colander.null},
+                'units': 'None'},
         }
         key_order = ['use average/hist forcing', 'wind']
         extra_keys = {}
