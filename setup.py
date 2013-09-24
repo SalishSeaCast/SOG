@@ -48,7 +48,7 @@ with open('SOGcommand/CHANGELOG', 'rt') as file_obj:
 install_requires = [
     # see requirements/production.txt for versions most recently used
     # in development
-    'colander',
+    'colander>=1.0b1',
     'PyYAML',
     'six',
 ]
