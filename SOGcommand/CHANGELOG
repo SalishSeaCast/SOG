@@ -1,6 +1,12 @@
 Changelog
 ---------
 
+v1.3.2
+------
+
+* Pin colander version at >=1.0b1.
+
+
 v1.3.1
 ------
 
