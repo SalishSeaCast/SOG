@@ -47,15 +47,16 @@ The :program:`tracd` server runs on :kbd:`bjossa`.
 
 The following notes document the deployment of trac_ in Dec-2013 when it was migrated to new :kbd:`bjossa` hardware.
 
-Create a virtualenv_ and install trac_ from PyPI_:
+Create a virtualenv_ and install trac_ and mercurial_ from PyPI_:
 
 .. code-block:: bash
 
     $ cd /ocean/dlatorne/.virtualenvs/
     $ virtualenv trac-1.0
     $ source trac-1.0/bin/activate
-    (trac-1.0)$ pip install trac
+    (trac-1.0)$ pip install trac mercurial
 
+.. _mercurial: http://mercurial.selenic.com/
 .. _PyPI: https://pypi.python.org/pypi
 
 Since the new :kbd:`bjossa` hardware was being set up in parallel with the still-running old hardware,
@@ -78,6 +79,7 @@ Install the trac_ `mercurial-plugin`_ by cloning its repo into the new data dire
 
     (trac-1.0)$ cd trac-1.0
     (trac-1.0)$ hg clone http://hg.edgewall.org/trac/mercurial-plugin#1.0
+    (trac-1.0)$ cd mercurial-plugin
     (trac-1.0)$ python setup.py install
 
 .. _mercurial-plugin: http://trac.edgewall.org/wiki/TracMercurial
@@ -86,7 +88,7 @@ Add a :program:`cron` job to start the :program:`tracd` server when the machine 
 
 .. code-block:: bash
 
-    MAIL=djl@douglatornell.ca
+    MAIL=dlatornell@eos.ubc.ca
 
     TRACD=/ocean/dlatorne/.virtualenvs/trac-0.12/bin/tracd
     TRACD_PID=/ocean/dlatorne/trac/tracd.pid
