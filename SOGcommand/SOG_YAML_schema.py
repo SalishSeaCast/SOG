@@ -12,7 +12,7 @@ structure that is defined in :mod:`SOG_infile_schema`.
 :License: Apache License, Version 2.0
 
 
-Copyright 2010-2013 Doug Latornell and The University of British Columbia
+Copyright 2010-2014 Doug Latornell and The University of British Columbia
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

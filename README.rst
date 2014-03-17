@@ -58,7 +58,7 @@ Issue tracker: http://bjossa.eos.ubc.ca:9000/SOG/report (login required)
 License
 =======
 
-The SOG command processor code and the SOG documentation are copyright 2010-2013 by Doug Latornell and The University of British Columbia.
+The SOG command processor code and the SOG documentation are copyright 2010-2014 by Doug Latornell and The University of British Columbia.
 
 They are licensed under the Apache License, Version 2.0.
 http://www.apache.org/licenses/LICENSE-2.0
