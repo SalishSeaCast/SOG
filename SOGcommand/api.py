@@ -26,11 +26,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 from subprocess import Popen
-from . import run_processor
+
+from . import (
+    batch_processor,
+    run_processor,
+)
 from .infile_processor import read_infile
 
 
-__all__ = ['Args', 'read_infile', 'run']
+__all__ = ['Args', 'batch', 'read_infile', 'run']
 
 
 class Args(object):
@@ -93,3 +97,31 @@ def run(
     cmd = run_processor.prepare(args)
     proc = Popen(cmd, shell=True)
     return proc
+
+
+def batch(batchfile, dry_run=False, debug=False):
+    """Run a collection of SOG jobs in batch mode.
+
+    :arg batchfile: Path/filename of the batch job description file to use.
+    :type batchfile: str
+
+    :arg dry_run: Don't do anything,
+                  just report what would be done.
+                  Defaults to :kbd:`False`.
+    :type dry_run: boolean
+
+    :arg debug: Show extra information about the building of the job commands
+                and their execution.
+                Defaults to :kbd:`False`.
+    :type debug: boolean
+
+    :returns: Return code from batch run;
+              zero if all runs succeed,
+              otherwise,
+              maximum of return codes from failed jobs.
+    :rtype: int
+    """
+    batch = batch_processor.BatchProcessor(batchfile, debug)
+    batch.prepare()
+    returncode = batch.run(dry_run)
+    return returncode

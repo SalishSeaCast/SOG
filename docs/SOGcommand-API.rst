@@ -29,6 +29,8 @@ The API allows software that runs :program:`SOG`
 so that :program:`SOG` commands can be used dirctly,
 rather than by way of a subprocess.
 
-.. autofunction:: SOGcommand.api.run
+.. autofunction:: SOGcommand.api.batch
 
 .. autofunction:: SOGcommand.api.read_infile
+
+.. autofunction:: SOGcommand.api.run
