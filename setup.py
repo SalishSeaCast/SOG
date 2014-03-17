@@ -55,7 +55,7 @@ install_requires = [
 
 setup(
     name='SOGcommand',
-    version='1.3.2',
+    version='1.3.3',
     description='Command processor for SOG.',
     long_description=detailed_description,
     author='Doug Latornell',
