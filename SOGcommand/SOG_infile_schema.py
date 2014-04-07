@@ -288,7 +288,6 @@ class SOG_Infile(colander.MappingSchema):
     hoffmueller_interval = _SOG_RealDP(name='Hoffmueller interval')
     user_profile_file_base = _SOG_String(name='user_profile_base')
     user_hoffmueller_file = _SOG_String(name='user Hoffmueller file')
-    salinity_diagnostic_file = _SOG_String(name='salinity check file')
     constant_temperature = _SOG_Boolean(name='temp_constant')
     salinity_fit_coefficients = _SOG_RealDP_List(name='salinity')
     temperature_fit_coefficients = _SOG_RealDP_List(name='temperature')
@@ -609,7 +608,7 @@ class SOG_Infile(colander.MappingSchema):
 
 # List of keys, in order, to create a SOG infile
 SOG_KEYS = [
-    'salinity check file', 'latitude', 'pCO2_atm',
+    'latitude', 'pCO2_atm',
     'maxdepth',  'gridsize', 'lambda',
     'init datetime', 'end datetime', 'dt', 'chem_dt', 'max_iter',
     'vary%wind%enabled', 'vary%cf%enabled', 'vary%rivers%enabled',

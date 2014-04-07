@@ -259,10 +259,6 @@ class _ProfilesResults(colander.MappingSchema):
         infile_key='Hoffmueller interval', var_name='Hoff_interval',
         missing=_deferred_allow_missing)
 
-class _DiagnosticResults(colander.MappingSchema):
-    salinity_diagnostic_file = _SOG_String(
-        infile_key='salinity check file', var_name='salinity_file',
-        missing=deferred_allow_missing)
 
 class _BottomBoundaryConditions(colander.MappingSchema):
     constant_temperature = _Boolean(
@@ -1410,8 +1406,6 @@ class YAML_Infile(colander.MappingSchema):
         missing=_deferred_allow_missing)
     profiles_results = _ProfilesResults(
         missing=_deferred_allow_missing)
-    diagnostic_results = _DiagnosticResults(
-        missing=deferred_allow_missing)
     physics = _PhysicsParams(
         missing=_deferred_allow_missing)
     biology = _BiologyParams(
