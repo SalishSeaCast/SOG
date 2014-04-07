@@ -1409,15 +1409,9 @@ class YAML_Infile(colander.MappingSchema):
     timeseries_results = _TimeSeriesResults(
         missing=_deferred_allow_missing)
     profiles_results = _ProfilesResults(
-<<<<<<< variant A
         missing=_deferred_allow_missing)
->>>>>>> variant B
-        missing=deferred_allow_missing)
     diagnostic_results = _DiagnosticResults(
         missing=deferred_allow_missing)
-####### Ancestor
-        missing=deferred_allow_missing)
-======= end
     physics = _PhysicsParams(
         missing=_deferred_allow_missing)
     biology = _BiologyParams(
