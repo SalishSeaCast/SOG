@@ -5,7 +5,7 @@ SOG command processor
 :Author: Doug Latornell <djl@douglatornell.ca>
 :License: Apache License, Version 2.0
 
-Copyright 2010-2013 Doug Latornell and The University of British Columbia
+Copyright 2010-2014 Doug Latornell and The University of British Columbia
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ install_requires = [
 
 setup(
     name='SOGcommand',
-    version='1.3.2',
+    version='1.3.3',
     description='Command processor for SOG.',
     long_description=detailed_description,
     author='Doug Latornell',

@@ -11,6 +11,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import datetime
 import os
 import sys
 
@@ -42,7 +43,10 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'SOG'
-copyright = u'2010-2013, Doug Latornell and The University of British Columbia'
+copyright = (
+    u'2010-{this_year}, '
+    'Doug Latornell and The University of British Columbia'
+    .format(this_year=datetime.date.today().year))
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
