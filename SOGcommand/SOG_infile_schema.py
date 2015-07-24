@@ -273,7 +273,6 @@ class SOG_Infile(colander.MappingSchema):
     user_bio_ts_out = _SOG_String()
     std_chem_ts_out = _SOG_String()
     user_chem_ts_out = _SOG_String()
-    salinity_checkfile = _SOG_String()
     num_profiles = _SOG_Int(name='noprof')
     profile_days = _SOG_IntList(name='profday')
     profile_times = _SOG_RealDP_List(name='proftime')
@@ -619,7 +618,7 @@ SOG_KEYS = [
     'initial chl split',
     'std_phys_ts_out', 'user_phys_ts_out',
     'std_bio_ts_out', 'user_bio_ts_out',
-    'std_chem_ts_out', 'user_chem_ts_out', 'salinity_checkfile',
+    'std_chem_ts_out', 'user_chem_ts_out',
     'noprof', 'profday', 'proftime', 'haloclinefile', 'profile_base',
     'Hoffmueller file', 'Hoffmueller start yr', 'Hoffmueller start day',
     'Hoffmueller start sec', 'Hoffmueller end yr', 'Hoffmueller end day',
