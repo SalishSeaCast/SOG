@@ -18,7 +18,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-HG_REPOS     = /ocean/sallen/hg_repos
+HG_REPOS     = ssh://hg@bitbucket.org/salishsea
 PROJECT_NAME = SOG-project
 
 .PHONY:	help env project
@@ -39,11 +39,4 @@ env:
 	hg clone SOG-code-ocean SOG-code-dev
 	hg clone $(HG_REPOS)/SOG-initial
 	hg clone $(HG_REPOS)/SOG-forcing
-	make project PROJECT_NAME=SOG-test/SOG-ocean-`date "+%Y-%m-%d"`
-	make project PROJECT_NAME=SOG-test/SOG-dev-`date "+%Y-%m-%d"`
-	(cd SOG-test && ln -s ../SOG-initial SOG-initial)
-	(cd SOG-test && ln -s ../SOG-forcing SOG-forcing)
-	make project
-
-project:
-	mkdir -p $(PROJECT_NAME)/profiles $(PROJECT_NAME)/timeseries
+	hg clone $(HG_REPOS)/SOG-runsets
