@@ -3,3 +3,5 @@ SOGcommand.egg-info
 build
 dist
 .tox
+Results/*
+Development/*

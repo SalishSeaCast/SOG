@@ -385,15 +385,15 @@ class _SalinityFit(colander.MappingSchema):
         missing=_deferred_allow_missing)
 
 
-class _RiverAlkalinityFit(colander.MappingSchema):
-    river_alkalinity_zero = _Float(
-        infile_key='river_Alk_0', var_name='river_Alk_0',
+class _RiverCO2Chemistry(colander.MappingSchema):
+    river_total_alkalinity_record = _Float(
+        infile_key='river_TA_record', var_name='river_TA_record',
         missing=_deferred_allow_missing)
-    river_alkalinity_decay = _Float(
-        infile_key='river_Alk_decay', var_name='river_Alk_decay',
+    river_total_alkalinity = _Float(
+        infile_key='river_TA', var_name='river_TA',
         missing=_deferred_allow_missing)
     river_pH = _Float(
-        infile_key='pH_riv', var_name='pH_riv',
+        infile_key='river_pH', var_name='river_pH',
         missing=_deferred_allow_missing)
 
 
@@ -404,7 +404,7 @@ class _FreshWater(colander.MappingSchema):
         missing=_deferred_allow_missing)
     salinity_fit = _SalinityFit(
         missing=_deferred_allow_missing)
-    river_alkalinity_fit = _RiverAlkalinityFit(
+    river_CO2_chemistry = _RiverCO2Chemistry(
         missing=_deferred_allow_missing)
 
 

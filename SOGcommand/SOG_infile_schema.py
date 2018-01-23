@@ -330,9 +330,9 @@ class SOG_Infile(colander.MappingSchema):
     alpha2 = _SOG_RealDP(name='calpha2')
     gamma = _SOG_RealDP(name='cgamma')
     beta = _SOG_RealDP(name='cbeta')
-    river_alkalinity_zero = _SOG_RealDP(name='river_Alk_0')
-    river_alkalinity_decay = _SOG_RealDP(name='river_Alk_decay')
-    river_pH = _SOG_RealDP(name='pH_riv')
+    river_TA_record = _SOG_RealDP(name='river_TA_record')
+    river_total_alkalinity = _SOG_RealDP(name='river_TA')
+    river_pH = _SOG_RealDP(name='river_pH')
     ialpha = _SOG_RealDP()
     ibeta = _SOG_RealDP()
     igamma = _SOG_RealDP()
@@ -631,7 +631,7 @@ SOG_KEYS = [
     'upwell_const', 'Qbar', 'F_SOG', 'F_RI', 'Fw_scale', 'Fw_surface',
     'Fw_depth', 'use_Fw_nutrients',
     'cbottom', 'calpha', 'calpha2', 'cgamma', 'cbeta',
-    'river_Alk_0', 'river_Alk_decay', 'pH_riv',
+    'river_TA_record', 'river_TA', 'river_pH',
     'northern_return_flow_on',
     'ialpha', 'ibeta', 'igamma', 'isigma', 'itheta', 'idl',
     'd',
