@@ -330,7 +330,7 @@ class SOG_Infile(colander.MappingSchema):
     alpha2 = _SOG_RealDP(name='calpha2')
     gamma = _SOG_RealDP(name='cgamma')
     beta = _SOG_RealDP(name='cbeta')
-    river_TA_record = _SOG_RealDP(name='river_TA_record')
+    river_TA_record = _SOG_Boolean(name='river_TA_record')
     river_total_alkalinity = _SOG_RealDP(name='river_TA')
     river_pH = _SOG_RealDP(name='river_pH')
     ialpha = _SOG_RealDP()

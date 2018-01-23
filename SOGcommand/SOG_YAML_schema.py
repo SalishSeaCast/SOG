@@ -386,7 +386,7 @@ class _SalinityFit(colander.MappingSchema):
 
 
 class _RiverCO2Chemistry(colander.MappingSchema):
-    river_total_alkalinity_record = _Float(
+    river_TA_record = _Boolean(
         infile_key='river_TA_record', var_name='river_TA_record',
         missing=_deferred_allow_missing)
     river_total_alkalinity = _Float(

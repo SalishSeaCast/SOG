@@ -4,4 +4,3 @@ build
 dist
 .tox
 Results/*
-Development/*
