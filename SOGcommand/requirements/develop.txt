@@ -1,7 +1,7 @@
 # Packages required to hack on SOG and SOGcommand
 
 -r production.txt
-Jinja2==2.7
+Jinja2==2.11.3
 Pygments==1.6
 Sphinx==1.2b1
 coverage==3.6
